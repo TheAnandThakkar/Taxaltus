@@ -15,10 +15,10 @@ const SOURCES = [
 ];
 
 const SOCIAL_LINKS = [
-  { label: "Twitter / X", icon: "logo-twitter" as const, url: "https://x.com/TheAnandThakkar" },
-  { label: "LinkedIn", icon: "logo-linkedin" as const, url: "https://www.linkedin.com/in/theanandthakkar/" },
-  { label: "GitHub", icon: "logo-github" as const, url: "https://github.com/TheAnandThakkar" },
-  { label: "Website", icon: "globe-outline" as const, url: "https://www.anandthakkar.com/" },
+  { label: "Twitter / X", icon: "logo-twitter" as const, url: "https://x.com/TheAnandThakkar", color: "#1DA1F2", bg: "#1DA1F2" },
+  { label: "LinkedIn", icon: "logo-linkedin" as const, url: "https://www.linkedin.com/in/theanandthakkar/", color: "#0A66C2", bg: "#0A66C2" },
+  { label: "GitHub", icon: "logo-github" as const, url: "https://github.com/TheAnandThakkar", color: "#333333", bg: "#333333" },
+  { label: "Website", icon: "globe-outline" as const, url: "https://www.anandthakkar.com/", color: Colors.palette.teal, bg: Colors.palette.teal },
 ];
 
 export default function SettingsScreen() {
@@ -190,7 +190,7 @@ export default function SettingsScreen() {
             <Text style={styles.devInitials}>AT</Text>
           </View>
           <Text style={[styles.devName, { color: colors.text }]}>Anand Thakkar</Text>
-          <Text style={[styles.devRole, { color: colors.textSecondary }]}>Developer & Creator</Text>
+          <Text style={[styles.devRole, { color: colors.textSecondary }]}>Software Developer & Tech Creator</Text>
           <View style={styles.socialLinks}>
             {SOCIAL_LINKS.map((link, i) => (
               <Pressable
@@ -198,12 +198,12 @@ export default function SettingsScreen() {
                 onPress={() => Linking.openURL(link.url)}
                 style={({ pressed }) => [
                   styles.socialBtn,
-                  { backgroundColor: colors.background, opacity: pressed ? 0.7 : 1 },
+                  { backgroundColor: link.bg + "12", borderColor: link.bg + "25", opacity: pressed ? 0.7 : 1 },
                 ]}
                 hitSlop={4}
               >
-                <Ionicons name={link.icon} size={18} color={Colors.palette.navy} />
-                <Text style={[styles.socialLabel, { color: colors.text }]}>{link.label}</Text>
+                <Ionicons name={link.icon} size={18} color={link.color} />
+                <Text style={[styles.socialLabel, { color: link.color }]}>{link.label}</Text>
               </Pressable>
             ))}
           </View>
@@ -412,6 +412,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 10,
+    borderWidth: 1,
   },
   socialLabel: {
     fontSize: 13,

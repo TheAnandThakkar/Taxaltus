@@ -14,12 +14,6 @@ const SOURCES = [
   { label: "Income Tax Act, 1961", url: "https://www.incometax.gov.in" },
 ];
 
-const SOCIAL_LINKS = [
-  { label: "Twitter / X", icon: "logo-twitter" as const, url: "https://x.com/TheAnandThakkar", color: "#1DA1F2", bg: "#1DA1F2" },
-  { label: "LinkedIn", icon: "logo-linkedin" as const, url: "https://www.linkedin.com/in/theanandthakkar/", color: "#0A66C2", bg: "#0A66C2" },
-  { label: "GitHub", icon: "logo-github" as const, url: "https://github.com/TheAnandThakkar", color: "#333333", bg: "#333333" },
-  { label: "Website", icon: "globe-outline" as const, url: "https://www.anandthakkar.com/", color: Colors.palette.teal, bg: Colors.palette.teal },
-];
 
 export default function SettingsScreen() {
   const { colors } = useTheme();
@@ -184,31 +178,6 @@ export default function SettingsScreen() {
           </View>
         </View>
 
-        <Text style={[styles.sectionTitle, { color: colors.text }]}>Developer</Text>
-        <View style={[styles.devCard, { backgroundColor: colors.cardBg, borderColor: colors.border }]}>
-          <View style={[styles.devAvatarWrap, { backgroundColor: Colors.palette.navy }]}>
-            <Text style={styles.devInitials}>AT</Text>
-          </View>
-          <Text style={[styles.devName, { color: colors.text }]}>Anand Thakkar</Text>
-          <Text style={[styles.devRole, { color: colors.textSecondary }]}>Software Developer & Tech Creator</Text>
-          <View style={styles.socialLinks}>
-            {SOCIAL_LINKS.map((link, i) => (
-              <Pressable
-                key={i}
-                onPress={() => Linking.openURL(link.url)}
-                style={({ pressed }) => [
-                  styles.socialBtn,
-                  { backgroundColor: link.bg + "12", borderColor: link.bg + "25", opacity: pressed ? 0.7 : 1 },
-                ]}
-                hitSlop={4}
-              >
-                <Ionicons name={link.icon} size={18} color={link.color} />
-                <Text style={[styles.socialLabel, { color: link.color }]}>{link.label}</Text>
-              </Pressable>
-            ))}
-          </View>
-        </View>
-
       </ScrollView>
     </View>
   );
@@ -343,55 +312,6 @@ const styles = StyleSheet.create({
   },
   aboutValue: {
     fontSize: 14,
-    fontFamily: "Inter_500Medium",
-  },
-  devCard: {
-    borderRadius: 16,
-    borderWidth: 1,
-    padding: 20,
-    alignItems: "center",
-    marginBottom: 20,
-  },
-  devAvatarWrap: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 12,
-  },
-  devInitials: {
-    fontSize: 20,
-    fontFamily: "Inter_700Bold",
-    color: "#fff",
-  },
-  devName: {
-    fontSize: 18,
-    fontFamily: "Inter_700Bold",
-    marginBottom: 2,
-  },
-  devRole: {
-    fontSize: 13,
-    fontFamily: "Inter_400Regular",
-    marginBottom: 16,
-  },
-  socialLinks: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 8,
-    justifyContent: "center",
-  },
-  socialBtn: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 6,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 10,
-    borderWidth: 1,
-  },
-  socialLabel: {
-    fontSize: 13,
     fontFamily: "Inter_500Medium",
   },
   notifRow: {

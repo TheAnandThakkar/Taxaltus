@@ -27,11 +27,12 @@ A production-ready Indian tax education mobile app for salaried employees built 
 - `app/learn/quiz.tsx` - Interactive 10-question quiz
 - `app/regime/index.tsx` - Old vs New tax regime comparison (slabs + feature table)
 - `app/bookmarks/index.tsx` - Saved items & recently viewed
+- `app/checklist/index.tsx` - Tax prep checklist with persistent progress
 - `app/settings/index.tsx` - Disclaimer, sources, about
 
 ### Key Files
 - `data/content.ts` - All educational content (static, offline-first)
-- `contexts/AppContext.tsx` - Bookmarks, recently viewed, disclaimer state
+- `contexts/AppContext.tsx` - Bookmarks, recently viewed, disclaimer state, checklist progress
 - `constants/colors.ts` - Theme colors
 - `lib/useTheme.ts` - Dark mode hook
 - `components/ui/BookmarkButton.tsx` - Reusable bookmark toggle

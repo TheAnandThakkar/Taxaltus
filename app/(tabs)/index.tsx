@@ -107,15 +107,15 @@ export default function Form16ExplorerScreen() {
           <Pressable
             onPress={() => {
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-              router.push("/bookmarks");
+              router.push("/checklist");
             }}
             style={({ pressed }) => [
               styles.quickCard,
-              { backgroundColor: Colors.palette.gold + "12", borderColor: Colors.palette.gold + "30", opacity: pressed ? 0.85 : 1 },
+              { backgroundColor: "#6366F1" + "12", borderColor: "#6366F1" + "30", opacity: pressed ? 0.85 : 1 },
             ]}
           >
-            <Ionicons name="bookmark-outline" size={20} color={Colors.palette.gold} />
-            <Text style={[styles.quickText, { color: Colors.palette.gold }]}>Saved Items</Text>
+            <Ionicons name="checkbox-outline" size={20} color="#6366F1" />
+            <Text style={[styles.quickText, { color: "#6366F1" }]}>Tax Prep Checklist</Text>
           </Pressable>
         </View>
 

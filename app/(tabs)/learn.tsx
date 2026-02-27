@@ -61,13 +61,13 @@ export default function LearnScreen() {
               router.push("/learn/quiz");
             }}
             style={({ pressed }) => [
-              styles.quizCard,
+              styles.actionCard,
               { backgroundColor: Colors.palette.teal, opacity: pressed ? 0.92 : 1 },
             ]}
           >
-            <Ionicons name="help-circle" size={28} color="#fff" />
-            <Text style={styles.quizTitle}>Quick Tax Quiz</Text>
-            <Text style={styles.quizSubtitle}>10 questions</Text>
+            <Ionicons name="help-circle" size={24} color="#fff" />
+            <Text style={styles.actionCardTitle}>Tax Quiz</Text>
+            <Text style={styles.actionCardSub}>10 questions</Text>
           </Pressable>
           <Pressable
             onPress={() => {
@@ -75,13 +75,27 @@ export default function LearnScreen() {
               router.push("/regime");
             }}
             style={({ pressed }) => [
-              styles.quizCard,
+              styles.actionCard,
               { backgroundColor: Colors.palette.gold, opacity: pressed ? 0.92 : 1 },
             ]}
           >
-            <Ionicons name="git-compare-outline" size={28} color="#fff" />
-            <Text style={styles.quizTitle}>Old vs New</Text>
-            <Text style={styles.quizSubtitle}>Regime comparison</Text>
+            <Ionicons name="git-compare-outline" size={24} color="#fff" />
+            <Text style={styles.actionCardTitle}>Old vs New</Text>
+            <Text style={styles.actionCardSub}>Regime</Text>
+          </Pressable>
+          <Pressable
+            onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+              router.push("/checklist");
+            }}
+            style={({ pressed }) => [
+              styles.actionCard,
+              { backgroundColor: "#6366F1", opacity: pressed ? 0.92 : 1 },
+            ]}
+          >
+            <Ionicons name="checkbox-outline" size={24} color="#fff" />
+            <Text style={styles.actionCardTitle}>Checklist</Text>
+            <Text style={styles.actionCardSub}>Tax prep</Text>
           </Pressable>
         </View>
 
@@ -180,22 +194,23 @@ const styles = StyleSheet.create({
   },
   actionCards: {
     flexDirection: "row",
-    gap: 10,
+    gap: 8,
     marginBottom: 28,
   },
-  quizCard: {
+  actionCard: {
     flex: 1,
-    borderRadius: 16,
-    padding: 16,
-    gap: 6,
+    borderRadius: 14,
+    padding: 14,
+    gap: 4,
   },
-  quizTitle: {
-    fontSize: 16,
+  actionCardTitle: {
+    fontSize: 14,
     fontFamily: "Inter_700Bold",
     color: "#fff",
+    marginTop: 4,
   },
-  quizSubtitle: {
-    fontSize: 12,
+  actionCardSub: {
+    fontSize: 11,
     fontFamily: "Inter_400Regular",
     color: "rgba(255,255,255,0.75)",
   },

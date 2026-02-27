@@ -5,10 +5,14 @@ interface AppContextValue {
   bookmarks: string[];
   recentlyViewed: string[];
   hasSeenDisclaimer: boolean;
+  checkedItems: string[];
   toggleBookmark: (id: string) => void;
   isBookmarked: (id: string) => boolean;
   addRecentlyViewed: (id: string) => void;
   setDisclaimerSeen: () => void;
+  toggleChecked: (id: string) => void;
+  isChecked: (id: string) => boolean;
+  resetChecklist: () => void;
   isDark: boolean;
 }
 
@@ -17,23 +21,27 @@ const AppContext = createContext<AppContextValue | null>(null);
 const BOOKMARKS_KEY = "@taxaltus_bookmarks";
 const RECENT_KEY = "@taxaltus_recent";
 const DISCLAIMER_KEY = "@taxaltus_disclaimer";
+const CHECKLIST_KEY = "@taxaltus_checklist";
 
 export function AppProvider({ children, isDark }: { children: ReactNode; isDark: boolean }) {
   const [bookmarks, setBookmarks] = useState<string[]>([]);
   const [recentlyViewed, setRecentlyViewed] = useState<string[]>([]);
   const [hasSeenDisclaimer, setHasSeenDisclaimer] = useState(false);
+  const [checkedItems, setCheckedItems] = useState<string[]>([]);
 
   useEffect(() => {
     (async () => {
       try {
-        const [bk, rc, ds] = await Promise.all([
+        const [bk, rc, ds, cl] = await Promise.all([
           AsyncStorage.getItem(BOOKMARKS_KEY),
           AsyncStorage.getItem(RECENT_KEY),
           AsyncStorage.getItem(DISCLAIMER_KEY),
+          AsyncStorage.getItem(CHECKLIST_KEY),
         ]);
         if (bk) setBookmarks(JSON.parse(bk));
         if (rc) setRecentlyViewed(JSON.parse(rc));
         if (ds === "true") setHasSeenDisclaimer(true);
+        if (cl) setCheckedItems(JSON.parse(cl));
       } catch {}
     })();
   }, []);
@@ -62,18 +70,37 @@ export function AppProvider({ children, isDark }: { children: ReactNode; isDark:
     AsyncStorage.setItem(DISCLAIMER_KEY, "true");
   }, []);
 
+  const toggleChecked = useCallback((id: string) => {
+    setCheckedItems((prev) => {
+      const next = prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id];
+      AsyncStorage.setItem(CHECKLIST_KEY, JSON.stringify(next));
+      return next;
+    });
+  }, []);
+
+  const isChecked = useCallback((id: string) => checkedItems.includes(id), [checkedItems]);
+
+  const resetChecklist = useCallback(() => {
+    setCheckedItems([]);
+    AsyncStorage.setItem(CHECKLIST_KEY, JSON.stringify([]));
+  }, []);
+
   const value = useMemo(
     () => ({
       bookmarks,
       recentlyViewed,
       hasSeenDisclaimer,
+      checkedItems,
       toggleBookmark,
       isBookmarked,
       addRecentlyViewed,
       setDisclaimerSeen,
+      toggleChecked,
+      isChecked,
+      resetChecklist,
       isDark,
     }),
-    [bookmarks, recentlyViewed, hasSeenDisclaimer, toggleBookmark, isBookmarked, addRecentlyViewed, setDisclaimerSeen, isDark]
+    [bookmarks, recentlyViewed, hasSeenDisclaimer, checkedItems, toggleBookmark, isBookmarked, addRecentlyViewed, setDisclaimerSeen, toggleChecked, isChecked, resetChecklist, isDark]
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

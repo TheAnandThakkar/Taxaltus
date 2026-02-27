@@ -24,6 +24,7 @@ function RootLayoutNav() {
       <Stack.Screen name="settings/index" options={{ headerShown: false, presentation: "card" }} />
       <Stack.Screen name="regime/index" options={{ headerShown: false, presentation: "card" }} />
       <Stack.Screen name="bookmarks/index" options={{ headerShown: false, presentation: "card" }} />
+      <Stack.Screen name="checklist/index" options={{ headerShown: false, presentation: "card" }} />
     </Stack>
   );
 }

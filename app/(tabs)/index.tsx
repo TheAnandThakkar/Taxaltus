@@ -42,7 +42,7 @@ function SpecimenRow({ field, onPress, colors }: { field: typeof SPECIMEN_FIELDS
 }
 
 export default function Form16ExplorerScreen() {
-  const { colors, isDark } = useTheme();
+  const { colors } = useTheme();
   const { hasSeenDisclaimer, setDisclaimerSeen } = useApp();
   const insets = useSafeAreaInsets();
   const [search, setSearch] = useState("");

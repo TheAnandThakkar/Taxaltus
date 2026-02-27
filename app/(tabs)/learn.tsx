@@ -38,7 +38,7 @@ const TDS_STEPS = [
 ];
 
 export default function LearnScreen() {
-  const { colors, isDark } = useTheme();
+  const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const topPad = Platform.OS === "web" ? 67 : insets.top;
 

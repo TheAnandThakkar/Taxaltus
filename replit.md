@@ -8,7 +8,7 @@ A production-ready Indian tax education mobile app for salaried employees built 
 - **Backend**: Express server on port 5000 (serves API + static landing page)
 - **State**: React Context + AsyncStorage (no database)
 - **Styling**: Inter font family, Navy (#1B2A4A) / Teal (#0D9488) / Gold (#D97706) theme
-- **Dark Mode**: Full support via useColorScheme
+- **Theme**: Light mode only (no dark mode)
 
 ## App Structure
 
@@ -28,7 +28,7 @@ A production-ready Indian tax education mobile app for salaried employees built 
 - `app/regime/index.tsx` - Old vs New tax regime comparison (slabs + feature table)
 - `app/bookmarks/index.tsx` - Saved items & recently viewed
 - `app/checklist/index.tsx` - Tax prep checklist with persistent progress
-- `app/settings/index.tsx` - Disclaimer, sources, about
+- `app/settings/index.tsx` - Disclaimer, Rate & Review, sources, about, developer profile
 
 ### Key Files
 - `data/content.ts` - All educational content (static, offline-first)

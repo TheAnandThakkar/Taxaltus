@@ -13,7 +13,6 @@ interface AppContextValue {
   toggleChecked: (id: string) => void;
   isChecked: (id: string) => boolean;
   resetChecklist: () => void;
-  isDark: boolean;
 }
 
 const AppContext = createContext<AppContextValue | null>(null);
@@ -23,7 +22,7 @@ const RECENT_KEY = "@taxaltus_recent";
 const DISCLAIMER_KEY = "@taxaltus_disclaimer";
 const CHECKLIST_KEY = "@taxaltus_checklist";
 
-export function AppProvider({ children, isDark }: { children: ReactNode; isDark: boolean }) {
+export function AppProvider({ children }: { children: ReactNode }) {
   const [bookmarks, setBookmarks] = useState<string[]>([]);
   const [recentlyViewed, setRecentlyViewed] = useState<string[]>([]);
   const [hasSeenDisclaimer, setHasSeenDisclaimer] = useState(false);
@@ -98,9 +97,8 @@ export function AppProvider({ children, isDark }: { children: ReactNode; isDark:
       toggleChecked,
       isChecked,
       resetChecklist,
-      isDark,
     }),
-    [bookmarks, recentlyViewed, hasSeenDisclaimer, checkedItems, toggleBookmark, isBookmarked, addRecentlyViewed, setDisclaimerSeen, toggleChecked, isChecked, resetChecklist, isDark]
+    [bookmarks, recentlyViewed, hasSeenDisclaimer, checkedItems, toggleBookmark, isBookmarked, addRecentlyViewed, setDisclaimerSeen, toggleChecked, isChecked, resetChecklist]
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

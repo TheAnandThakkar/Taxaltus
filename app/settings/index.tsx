@@ -13,6 +13,13 @@ const SOURCES = [
   { label: "Income Tax Act, 1961", url: "https://www.incometax.gov.in" },
 ];
 
+const SOCIAL_LINKS = [
+  { label: "Twitter / X", icon: "logo-twitter" as const, url: "https://x.com/TheAnandThakkar" },
+  { label: "LinkedIn", icon: "logo-linkedin" as const, url: "https://www.linkedin.com/in/theanandthakkar/" },
+  { label: "GitHub", icon: "logo-github" as const, url: "https://github.com/TheAnandThakkar" },
+  { label: "Website", icon: "globe-outline" as const, url: "https://www.anandthakkar.com/" },
+];
+
 export default function SettingsScreen() {
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
@@ -32,7 +39,7 @@ export default function SettingsScreen() {
 
       <ScrollView
         style={styles.scroll}
-        contentContainerStyle={[styles.scrollContent, { paddingBottom: insets.bottom + 40 }]}
+        contentContainerStyle={[styles.scrollContent, { paddingBottom: Platform.OS === "web" ? 34 + 40 : insets.bottom + 40 }]}
         showsVerticalScrollIndicator={false}
       >
         <View style={[styles.card, { backgroundColor: colors.cardBg, borderColor: colors.border }]}>
@@ -47,6 +54,49 @@ export default function SettingsScreen() {
             This app never asks for salary amounts, PAN, Aadhaar, employer details, or Form 16 uploads. It does not compute user-specific tax. All examples use generic, illustrative numbers.
           </Text>
         </View>
+
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>Rate & Review</Text>
+        <View style={styles.storeCards}>
+          <Pressable
+            onPress={() => Linking.openURL("https://play.google.com/store/apps")}
+            style={({ pressed }) => [
+              styles.storeCard,
+              { backgroundColor: colors.cardBg, borderColor: colors.border, opacity: pressed ? 0.85 : 1 },
+            ]}
+          >
+            <View style={[styles.storeIconWrap, { backgroundColor: "#34A853" + "15" }]}>
+              <Ionicons name="logo-google-playstore" size={24} color="#34A853" />
+            </View>
+            <Text style={[styles.storeLabel, { color: colors.text }]}>Google Play</Text>
+            <View style={styles.starsRow}>
+              {[1, 2, 3, 4, 5].map((s) => (
+                <Ionicons key={s} name="star" size={12} color={Colors.palette.gold} />
+              ))}
+            </View>
+            <Text style={[styles.storeAction, { color: Colors.palette.teal }]}>Rate on Play Store</Text>
+          </Pressable>
+          <Pressable
+            onPress={() => Linking.openURL("https://apps.apple.com")}
+            style={({ pressed }) => [
+              styles.storeCard,
+              { backgroundColor: colors.cardBg, borderColor: colors.border, opacity: pressed ? 0.85 : 1 },
+            ]}
+          >
+            <View style={[styles.storeIconWrap, { backgroundColor: "#007AFF" + "15" }]}>
+              <Ionicons name="logo-apple-appstore" size={24} color="#007AFF" />
+            </View>
+            <Text style={[styles.storeLabel, { color: colors.text }]}>App Store</Text>
+            <View style={styles.starsRow}>
+              {[1, 2, 3, 4, 5].map((s) => (
+                <Ionicons key={s} name="star" size={12} color={Colors.palette.gold} />
+              ))}
+            </View>
+            <Text style={[styles.storeAction, { color: Colors.palette.teal }]}>Rate on App Store</Text>
+          </Pressable>
+        </View>
+        <Text style={[styles.rateNote, { color: colors.textSecondary }]}>
+          Your ratings and reviews help other salaried employees discover Taxaltus
+        </Text>
 
         <Text style={[styles.sectionTitle, { color: colors.text }]}>Official Sources</Text>
         {SOURCES.map((source, i) => (
@@ -83,6 +133,31 @@ export default function SettingsScreen() {
           <View style={[styles.aboutRow, { borderBottomWidth: 0 }]}>
             <Text style={[styles.aboutLabel, { color: colors.textSecondary }]}>Content</Text>
             <Text style={[styles.aboutValue, { color: colors.text }]}>Offline-first, no tracking</Text>
+          </View>
+        </View>
+
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>Developer</Text>
+        <View style={[styles.devCard, { backgroundColor: colors.cardBg, borderColor: colors.border }]}>
+          <View style={[styles.devAvatarWrap, { backgroundColor: Colors.palette.navy }]}>
+            <Text style={styles.devInitials}>AT</Text>
+          </View>
+          <Text style={[styles.devName, { color: colors.text }]}>Anand Thakkar</Text>
+          <Text style={[styles.devRole, { color: colors.textSecondary }]}>Developer & Creator</Text>
+          <View style={styles.socialLinks}>
+            {SOCIAL_LINKS.map((link, i) => (
+              <Pressable
+                key={i}
+                onPress={() => Linking.openURL(link.url)}
+                style={({ pressed }) => [
+                  styles.socialBtn,
+                  { backgroundColor: colors.background, opacity: pressed ? 0.7 : 1 },
+                ]}
+                hitSlop={4}
+              >
+                <Ionicons name={link.icon} size={18} color={Colors.palette.navy} />
+                <Text style={[styles.socialLabel, { color: colors.text }]}>{link.label}</Text>
+              </Pressable>
+            ))}
           </View>
         </View>
       </ScrollView>
@@ -147,6 +222,45 @@ const styles = StyleSheet.create({
     fontFamily: "Inter_700Bold",
     marginBottom: 12,
   },
+  storeCards: {
+    flexDirection: "row",
+    gap: 10,
+    marginBottom: 8,
+  },
+  storeCard: {
+    flex: 1,
+    borderRadius: 16,
+    borderWidth: 1,
+    padding: 16,
+    alignItems: "center",
+    gap: 8,
+  },
+  storeIconWrap: {
+    width: 48,
+    height: 48,
+    borderRadius: 14,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  storeLabel: {
+    fontSize: 14,
+    fontFamily: "Inter_600SemiBold",
+  },
+  starsRow: {
+    flexDirection: "row",
+    gap: 2,
+  },
+  storeAction: {
+    fontSize: 12,
+    fontFamily: "Inter_600SemiBold",
+  },
+  rateNote: {
+    fontSize: 12,
+    fontFamily: "Inter_400Regular",
+    textAlign: "center",
+    marginBottom: 24,
+    lineHeight: 18,
+  },
   sourceItem: {
     flexDirection: "row",
     alignItems: "center",
@@ -180,6 +294,54 @@ const styles = StyleSheet.create({
   },
   aboutValue: {
     fontSize: 14,
+    fontFamily: "Inter_500Medium",
+  },
+  devCard: {
+    borderRadius: 16,
+    borderWidth: 1,
+    padding: 20,
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  devAvatarWrap: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 12,
+  },
+  devInitials: {
+    fontSize: 20,
+    fontFamily: "Inter_700Bold",
+    color: "#fff",
+  },
+  devName: {
+    fontSize: 18,
+    fontFamily: "Inter_700Bold",
+    marginBottom: 2,
+  },
+  devRole: {
+    fontSize: 13,
+    fontFamily: "Inter_400Regular",
+    marginBottom: 16,
+  },
+  socialLinks: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
+    justifyContent: "center",
+  },
+  socialBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 10,
+  },
+  socialLabel: {
+    fontSize: 13,
     fontFamily: "Inter_500Medium",
   },
 });

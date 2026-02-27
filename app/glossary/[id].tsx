@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from "react";
-import { View, Text, StyleSheet, ScrollView, Pressable, Platform, Linking } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Pressable, Platform, Linking, Share } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useLocalSearchParams, router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
@@ -42,7 +42,19 @@ export default function TermDetailScreen() {
           <Pressable onPress={() => router.back()} hitSlop={12}>
             <Ionicons name="arrow-back" size={24} color="#fff" />
           </Pressable>
-          <BookmarkButton id={term.id} />
+          <View style={styles.headerActions}>
+            <Pressable
+              onPress={() => {
+                Share.share({
+                  message: `${term.term}\n\n${term.shortDef}\n\n${term.longDef}\n\nLearn more on Taxaltus`,
+                });
+              }}
+              hitSlop={12}
+            >
+              <Ionicons name="share-outline" size={22} color="#fff" />
+            </Pressable>
+            <BookmarkButton id={term.id} />
+          </View>
         </View>
         <Text style={styles.headerTitle}>{term.term}</Text>
         <Text style={styles.headerShortDef}>{term.shortDef}</Text>
@@ -121,6 +133,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 16,
+  },
+  headerActions: {
+    flexDirection: "row" as const,
+    alignItems: "center" as const,
+    gap: 16,
   },
   headerTitle: {
     fontSize: 24,

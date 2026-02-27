@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from "react";
-import { View, Text, StyleSheet, ScrollView, Pressable, Platform, Linking } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Pressable, Platform, Linking, Share } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useLocalSearchParams, router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
@@ -38,7 +38,19 @@ export default function SectionDetailScreen() {
           <Pressable onPress={() => router.back()} hitSlop={12}>
             <Ionicons name="arrow-back" size={24} color="#fff" />
           </Pressable>
-          <BookmarkButton id={section.id} />
+          <View style={styles.headerActions}>
+            <Pressable
+              onPress={() => {
+                Share.share({
+                  message: `${section.sectionCode} - ${section.title}\n\nLimit: ${section.maxLimit}\n\n${section.explanation}\n\nLearn more on Taxaltus`,
+                });
+              }}
+              hitSlop={12}
+            >
+              <Ionicons name="share-outline" size={22} color="#fff" />
+            </Pressable>
+            <BookmarkButton id={section.id} />
+          </View>
         </View>
         <View style={styles.headerBadges}>
           <View style={[styles.codeBadge, { backgroundColor: Colors.palette.teal }]}>
@@ -122,6 +134,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 16,
+  },
+  headerActions: {
+    flexDirection: "row" as const,
+    alignItems: "center" as const,
+    gap: 16,
   },
   headerBadges: {
     flexDirection: "row",

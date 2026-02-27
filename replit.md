@@ -20,21 +20,25 @@ A production-ready Indian tax education mobile app for salaried employees built 
 - **Learn** (`app/(tabs)/learn.tsx`) - Visual guides, quiz, TDS lifecycle, key tax dates
 
 ### Detail Screens
-- `app/form16/[id].tsx` - Form 16 field detail with FAQs
-- `app/sections/[id].tsx` - Deduction section detail
+- `app/form16/[id].tsx` - Form 16 field detail with FAQs + share button
+- `app/sections/[id].tsx` - Deduction section detail + share button
 - `app/heads/[id].tsx` - Head of income detail
-- `app/glossary/[id].tsx` - Glossary term detail
+- `app/glossary/[id].tsx` - Glossary term detail + share button
 - `app/learn/quiz.tsx` - Interactive 10-question quiz
 - `app/regime/index.tsx` - Old vs New tax regime comparison (slabs + feature table)
 - `app/bookmarks/index.tsx` - Saved items & recently viewed
 - `app/checklist/index.tsx` - Tax prep checklist with persistent progress
 - `app/estimator/index.tsx` - Tax estimator comparing old vs new regime tax payable
 - `app/specimen/index.tsx` - Full Form 16 specimen viewer (Part A + Part B with illustrative data)
-- `app/settings/index.tsx` - Disclaimer, Rate & Review, sources, about, developer profile
+- `app/itr-selector/index.tsx` - Step-by-step ITR form selector wizard (ITR-1/2/3/4)
+- `app/investment-deadlines/index.tsx` - Tax-saving investment deadlines timeline with lock-in periods
+- `app/budget-changes/index.tsx` - FY 2024-25 budget changes summary with before/after comparisons
+- `app/settings/index.tsx` - Disclaimer, notification toggle, Rate & Review, sources, about, developer profile
 
 ### Key Files
 - `data/content.ts` - All educational content (static, offline-first)
-- `contexts/AppContext.tsx` - Bookmarks, recently viewed, disclaimer state, checklist progress
+- `contexts/AppContext.tsx` - Bookmarks, recently viewed, disclaimer state, checklist progress, notification preferences
+- `expo-notifications` - Local push notifications for tax deadline reminders (Android channel: "tax-reminders")
 - `constants/colors.ts` - Theme colors
 - `lib/useTheme.ts` - Dark mode hook
 - `components/ui/BookmarkButton.tsx` - Reusable bookmark toggle

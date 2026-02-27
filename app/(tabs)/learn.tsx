@@ -119,6 +119,70 @@ export default function LearnScreen() {
           </Pressable>
         </View>
 
+        <Pressable
+          onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+            router.push("/itr-selector");
+          }}
+          style={({ pressed }) => [
+            styles.itrBanner,
+            { backgroundColor: colors.cardBg, borderColor: colors.border, opacity: pressed ? 0.92 : 1 },
+          ]}
+        >
+          <View style={[styles.itrBannerIcon, { backgroundColor: "#6366F1" + "15" }]}>
+            <Ionicons name="document-text-outline" size={22} color="#6366F1" />
+          </View>
+          <View style={styles.itrBannerText}>
+            <Text style={[styles.itrBannerTitle, { color: colors.text }]}>ITR Form Selector</Text>
+            <Text style={[styles.itrBannerSub, { color: colors.textSecondary }]}>
+              Find the right ITR form for your income
+            </Text>
+          </View>
+          <Ionicons name="chevron-forward" size={18} color={colors.textSecondary} />
+        </Pressable>
+
+        <Pressable
+          onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+            router.push("/budget-changes");
+          }}
+          style={({ pressed }) => [
+            styles.budgetBanner,
+            { opacity: pressed ? 0.92 : 1 },
+          ]}
+        >
+          <View style={styles.budgetBannerLeft}>
+            <Ionicons name="newspaper-outline" size={22} color="#fff" />
+            <View>
+              <Text style={styles.budgetBannerTitle}>What Changed This Year</Text>
+              <Text style={styles.budgetBannerSub}>FY 2024-25 Budget highlights</Text>
+            </View>
+          </View>
+          <Ionicons name="arrow-forward" size={18} color="rgba(255,255,255,0.7)" />
+        </Pressable>
+
+        <Pressable
+          onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+            router.push("/investment-deadlines");
+          }}
+          style={({ pressed }) => [
+            styles.deadlinesBanner,
+            { backgroundColor: colors.cardBg, borderColor: colors.border, opacity: pressed ? 0.92 : 1 },
+          ]}
+        >
+          <View style={[styles.deadlinesBannerIcon, { backgroundColor: Colors.palette.teal + "15" }]}>
+            <Ionicons name="calendar-outline" size={22} color={Colors.palette.teal} />
+          </View>
+          <View style={styles.deadlinesBannerText}>
+            <Text style={[styles.deadlinesBannerTitle, { color: colors.text }]}>Investment Deadlines</Text>
+            <Text style={[styles.deadlinesBannerSub, { color: colors.textSecondary }]}>
+              Tax-saving deadlines & lock-in periods
+            </Text>
+          </View>
+          <Ionicons name="chevron-forward" size={18} color={colors.textSecondary} />
+        </Pressable>
+
         <Text style={[styles.sectionTitle, { color: colors.text }]}>Flow of Salary Taxation</Text>
         <Text style={[styles.sectionDesc, { color: colors.textSecondary }]}>
           How salary income is processed step by step to arrive at tax payable
@@ -241,7 +305,61 @@ const styles = StyleSheet.create({
   actionCards: {
     flexDirection: "row",
     gap: 8,
+    marginBottom: 10,
+  },
+  budgetBanner: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: "#6366F1",
+    borderRadius: 14,
+    padding: 16,
     marginBottom: 28,
+  },
+  budgetBannerLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    flex: 1,
+  },
+  budgetBannerTitle: {
+    fontSize: 15,
+    fontFamily: "Inter_700Bold",
+    color: "#fff",
+  },
+  budgetBannerSub: {
+    fontSize: 12,
+    fontFamily: "Inter_400Regular",
+    color: "rgba(255,255,255,0.75)",
+    marginTop: 1,
+  },
+  itrBanner: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderRadius: 14,
+    borderWidth: 1,
+    padding: 14,
+    marginBottom: 28,
+    gap: 12,
+  },
+  itrBannerIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: 12,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  itrBannerText: {
+    flex: 1,
+  },
+  itrBannerTitle: {
+    fontSize: 15,
+    fontFamily: "Inter_600SemiBold",
+  },
+  itrBannerSub: {
+    fontSize: 12,
+    fontFamily: "Inter_400Regular",
+    marginTop: 2,
   },
   actionCard: {
     flex: 1,
@@ -372,5 +490,33 @@ const styles = StyleSheet.create({
   dateDesc: {
     fontSize: 12,
     fontFamily: "Inter_400Regular",
+  },
+  deadlinesBanner: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderRadius: 14,
+    borderWidth: 1,
+    padding: 14,
+    marginBottom: 28,
+    gap: 12,
+  },
+  deadlinesBannerIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: 12,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  deadlinesBannerText: {
+    flex: 1,
+  },
+  deadlinesBannerTitle: {
+    fontSize: 15,
+    fontFamily: "Inter_600SemiBold",
+  },
+  deadlinesBannerSub: {
+    fontSize: 12,
+    fontFamily: "Inter_400Regular",
+    marginTop: 2,
   },
 });

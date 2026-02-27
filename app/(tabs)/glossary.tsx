@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { View, Text, StyleSheet, SectionList, Pressable, Platform } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
@@ -9,11 +10,22 @@ import { SearchInput } from "@/components/ui/SearchInput";
 import { glossary } from "@/data/content";
 import Colors from "@/constants/colors";
 
+const LETTER_COLORS = [
+  Colors.palette.teal,
+  Colors.palette.indigo,
+  Colors.palette.gold,
+  Colors.palette.pink,
+  Colors.palette.purple,
+  Colors.palette.cyan,
+  Colors.palette.orange,
+  Colors.palette.emerald,
+  Colors.palette.rose,
+];
+
 export default function GlossaryScreen() {
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const [search, setSearch] = useState("");
-  const topPad = Platform.OS === "web" ? 67 : insets.top;
 
   const filtered = useMemo(() => {
     const items = search.trim()
@@ -40,39 +52,59 @@ export default function GlossaryScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <View style={[styles.header, { backgroundColor: Colors.palette.navy, paddingTop: topPad + 12 }]}>
+      <LinearGradient
+        colors={Colors.gradients.headerVibrant as any}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={[styles.header, { paddingTop: (Platform.OS === "web" ? 67 : insets.top) + 12 }]}
+      >
         <Text style={styles.headerTitle}>Glossary</Text>
         <Text style={styles.headerSubtitle}>Tax terms explained simply</Text>
         <View style={styles.searchWrapper}>
           <SearchInput value={search} onChangeText={setSearch} placeholder="Search terms (TDS, PAN, HRA...)" />
         </View>
-      </View>
+      </LinearGradient>
 
       <SectionList
         sections={filtered}
         keyExtractor={(item) => item.id}
-        renderSectionHeader={({ section }) => (
-          <View style={[styles.sectionHeader, { backgroundColor: colors.background }]}>
-            <Text style={[styles.sectionLetter, { color: colors.tint }]}>{section.title}</Text>
-          </View>
-        )}
-        renderItem={({ item }) => (
-          <Pressable
-            onPress={() => handlePress(item.id)}
-            style={({ pressed }) => [
-              styles.item,
-              { backgroundColor: colors.cardBg, borderColor: colors.border, opacity: pressed ? 0.92 : 1 },
-            ]}
-          >
-            <View style={styles.itemContent}>
-              <Text style={[styles.term, { color: colors.text }]}>{item.term}</Text>
-              <Text style={[styles.shortDef, { color: colors.textSecondary }]} numberOfLines={2}>
-                {item.shortDef}
-              </Text>
+        renderSectionHeader={({ section }) => {
+          const letterIndex = section.title.charCodeAt(0) % LETTER_COLORS.length;
+          const letterColor = LETTER_COLORS[letterIndex];
+          return (
+            <View style={[styles.sectionHeader, { backgroundColor: colors.background }]}>
+              <View style={[styles.letterBadge, { backgroundColor: letterColor + "15" }]}>
+                <Text style={[styles.sectionLetter, { color: letterColor }]}>{section.title}</Text>
+              </View>
             </View>
-            <Ionicons name="chevron-forward" size={16} color={colors.textSecondary} />
-          </Pressable>
-        )}
+          );
+        }}
+        renderItem={({ item, index }) => {
+          const itemColor = LETTER_COLORS[(item.term.charCodeAt(0) + index) % LETTER_COLORS.length];
+          return (
+            <Pressable
+              onPress={() => handlePress(item.id)}
+              style={({ pressed }) => [
+                styles.item,
+                {
+                  backgroundColor: colors.cardBg,
+                  borderColor: colors.border,
+                  borderLeftColor: itemColor,
+                  borderLeftWidth: 3,
+                  transform: [{ scale: pressed ? 0.98 : 1 }],
+                },
+              ]}
+            >
+              <View style={styles.itemContent}>
+                <Text style={[styles.term, { color: colors.text }]}>{item.term}</Text>
+                <Text style={[styles.shortDef, { color: colors.textSecondary }]} numberOfLines={2}>
+                  {item.shortDef}
+                </Text>
+              </View>
+              <Ionicons name="chevron-forward" size={16} color={itemColor + "80"} />
+            </Pressable>
+          );
+        }}
         contentContainerStyle={[styles.list, { paddingBottom: Platform.OS === "web" ? 34 + 84 : insets.bottom + 90 }]}
         showsVerticalScrollIndicator={false}
         stickySectionHeadersEnabled
@@ -94,7 +126,7 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
   },
   headerTitle: {
-    fontSize: 26,
+    fontSize: 28,
     fontFamily: "Inter_700Bold",
     color: "#fff",
     letterSpacing: -0.5,
@@ -102,8 +134,8 @@ const styles = StyleSheet.create({
   headerSubtitle: {
     fontSize: 13,
     fontFamily: "Inter_400Regular",
-    color: "rgba(255,255,255,0.65)",
-    marginTop: 2,
+    color: "rgba(255,255,255,0.7)",
+    marginTop: 4,
     marginBottom: 16,
   },
   searchWrapper: { marginBottom: 4 },
@@ -113,6 +145,13 @@ const styles = StyleSheet.create({
   sectionHeader: {
     paddingVertical: 8,
     paddingHorizontal: 4,
+  },
+  letterBadge: {
+    width: 32,
+    height: 32,
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
   },
   sectionLetter: {
     fontSize: 16,

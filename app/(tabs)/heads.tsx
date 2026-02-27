@@ -1,6 +1,5 @@
 import React, { useCallback } from "react";
 import { View, Text, StyleSheet, FlatList, Pressable, Platform } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
@@ -17,25 +16,18 @@ const HEAD_ICONS: Record<string, keyof typeof Ionicons.glyphMap> = {
   "h-other-sources": "layers-outline",
 };
 
-const HEAD_GRADIENTS: readonly (readonly string[])[] = [
-  Colors.gradients.teal,
-  Colors.gradients.gold,
-  Colors.gradients.indigo,
-  Colors.gradients.pink,
-  Colors.gradients.purple,
-];
-
 const HEAD_COLORS = [
   Colors.palette.teal,
   Colors.palette.gold,
-  Colors.palette.indigo,
-  Colors.palette.pink,
-  Colors.palette.purple,
+  "#6366F1",
+  "#EC4899",
+  "#8B5CF6",
 ];
 
 export default function HeadsScreen() {
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
+  const topPad = Platform.OS === "web" ? 67 : insets.top;
 
   const handlePress = useCallback((id: string) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -45,33 +37,23 @@ export default function HeadsScreen() {
   const renderItem = useCallback(
     ({ item, index }: { item: typeof headsOfIncome[0]; index: number }) => {
       const accentColor = HEAD_COLORS[index % HEAD_COLORS.length];
-      const gradient = HEAD_GRADIENTS[index % HEAD_GRADIENTS.length];
       return (
         <Pressable
           onPress={() => handlePress(item.id)}
           style={({ pressed }) => [
             styles.card,
-            {
-              backgroundColor: colors.cardBg,
-              borderColor: colors.border,
-              transform: [{ scale: pressed ? 0.98 : 1 }],
-            },
+            { backgroundColor: colors.cardBg, borderColor: colors.border, opacity: pressed ? 0.92 : 1 },
           ]}
         >
           <View style={styles.cardHeader}>
-            <LinearGradient
-              colors={gradient as any}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.iconCircle}
-            >
+            <View style={[styles.iconCircle, { backgroundColor: accentColor + "15" }]}>
               <Ionicons
                 name={HEAD_ICONS[item.id] || "layers-outline"}
                 size={24}
-                color="#fff"
+                color={accentColor}
               />
-            </LinearGradient>
-            <Ionicons name="chevron-forward" size={16} color={accentColor + "80"} />
+            </View>
+            <Ionicons name="chevron-forward" size={16} color={colors.textSecondary} />
           </View>
           <Text style={[styles.cardTitle, { color: colors.text }]}>{item.name}</Text>
           <Text style={[styles.cardDesc, { color: colors.textSecondary }]} numberOfLines={3}>
@@ -79,7 +61,7 @@ export default function HeadsScreen() {
           </Text>
           <View style={styles.tagRow}>
             {item.includes.slice(0, 3).map((inc) => (
-              <View key={inc} style={[styles.tag, { backgroundColor: accentColor + "12" }]}>
+              <View key={inc} style={[styles.tag, { backgroundColor: accentColor + "10" }]}>
                 <Text style={[styles.tagText, { color: accentColor }]} numberOfLines={1}>
                   {inc}
                 </Text>
@@ -99,15 +81,10 @@ export default function HeadsScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <LinearGradient
-        colors={Colors.gradients.headerVibrant as any}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={[styles.header, { paddingTop: (Platform.OS === "web" ? 67 : insets.top) + 12 }]}
-      >
+      <View style={[styles.header, { backgroundColor: Colors.palette.navy, paddingTop: topPad + 12 }]}>
         <Text style={styles.headerTitle}>Heads of Income</Text>
         <Text style={styles.headerSubtitle}>Five categories under which all income is classified</Text>
-      </LinearGradient>
+      </View>
 
       <FlatList
         data={headsOfIncome}
@@ -127,7 +104,7 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   headerTitle: {
-    fontSize: 28,
+    fontSize: 26,
     fontFamily: "Inter_700Bold",
     color: "#fff",
     letterSpacing: -0.5,
@@ -135,8 +112,8 @@ const styles = StyleSheet.create({
   headerSubtitle: {
     fontSize: 13,
     fontFamily: "Inter_400Regular",
-    color: "rgba(255,255,255,0.7)",
-    marginTop: 4,
+    color: "rgba(255,255,255,0.65)",
+    marginTop: 2,
   },
   list: {
     paddingHorizontal: 16,
@@ -180,7 +157,7 @@ const styles = StyleSheet.create({
   tag: {
     paddingHorizontal: 10,
     paddingVertical: 5,
-    borderRadius: 10,
+    borderRadius: 8,
     marginRight: 6,
     marginBottom: 4,
     maxWidth: 140,

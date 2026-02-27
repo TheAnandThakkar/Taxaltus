@@ -13,35 +13,6 @@ const palette = {
   black: "#0F172A",
   danger: "#EF4444",
   success: "#10B981",
-  indigo: "#6366F1",
-  indigoLight: "#818CF8",
-  pink: "#EC4899",
-  pinkLight: "#F472B6",
-  purple: "#8B5CF6",
-  purpleLight: "#A78BFA",
-  orange: "#F97316",
-  orangeLight: "#FB923C",
-  cyan: "#06B6D4",
-  cyanLight: "#22D3EE",
-  rose: "#F43F5E",
-  roseLight: "#FB7185",
-  emerald: "#10B981",
-  emeraldLight: "#34D399",
-  lime: "#84CC16",
-};
-
-const gradients = {
-  header: ["#1B2A4A", "#2D4A7A"] as const,
-  headerVibrant: ["#1B2A4A", "#1E3A6E", "#2D4A7A"] as const,
-  teal: ["#0D9488", "#06B6D4"] as const,
-  gold: ["#D97706", "#F59E0B"] as const,
-  indigo: ["#6366F1", "#818CF8"] as const,
-  pink: ["#EC4899", "#F472B6"] as const,
-  purple: ["#8B5CF6", "#A78BFA"] as const,
-  sunset: ["#F97316", "#F43F5E"] as const,
-  ocean: ["#0D9488", "#6366F1"] as const,
-  forest: ["#10B981", "#06B6D4"] as const,
-  candy: ["#EC4899", "#8B5CF6"] as const,
 };
 
 const Colors = {
@@ -82,7 +53,6 @@ const Colors = {
     searchBg: "#1E293B",
   },
   palette,
-  gradients,
 };
 
 export default Colors;

@@ -1,6 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { View, Text, StyleSheet, ScrollView, Pressable, Platform, Modal } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
@@ -9,7 +8,6 @@ import { useTheme } from "@/lib/useTheme";
 import { useApp } from "@/contexts/AppContext";
 import { SearchInput } from "@/components/ui/SearchInput";
 import { form16Fields } from "@/data/content";
-import { getTodaysTip } from "@/data/daily-tips";
 import Colors from "@/constants/colors";
 
 const SPECIMEN_FIELDS = form16Fields.map((f, i) => ({
@@ -17,41 +15,19 @@ const SPECIMEN_FIELDS = form16Fields.map((f, i) => ({
   row: i,
 }));
 
-const QUICK_ACTIONS = [
-  { label: "Old vs New", icon: "git-compare-outline" as const, route: "/regime", gradient: Colors.gradients.teal },
-  { label: "Checklist", icon: "checkbox-outline" as const, route: "/checklist", gradient: Colors.gradients.indigo },
-  { label: "Quiz", icon: "help-circle-outline" as const, route: "/learn/quiz", gradient: Colors.gradients.sunset },
-  { label: "Saved", icon: "bookmark-outline" as const, route: "/bookmarks", gradient: Colors.gradients.purple },
-];
-
-const FIELD_COLORS = [
-  Colors.palette.teal,
-  Colors.palette.indigo,
-  Colors.palette.gold,
-  Colors.palette.pink,
-  Colors.palette.purple,
-  Colors.palette.cyan,
-  Colors.palette.orange,
-  Colors.palette.emerald,
-];
-
-function SpecimenRow({ field, index, onPress, colors }: { field: typeof SPECIMEN_FIELDS[0]; index: number; onPress: () => void; colors: any }) {
-  const accentColor = FIELD_COLORS[index % FIELD_COLORS.length];
+function SpecimenRow({ field, onPress, colors }: { field: typeof SPECIMEN_FIELDS[0]; onPress: () => void; colors: any }) {
   return (
     <Pressable
       onPress={onPress}
       style={({ pressed }) => [
         styles.specimenRow,
         {
-          backgroundColor: colors.cardBg,
+          backgroundColor: pressed ? colors.chipBg : colors.cardBg,
           borderColor: colors.border,
-          borderLeftColor: accentColor,
-          borderLeftWidth: 3,
-          transform: [{ scale: pressed ? 0.98 : 1 }],
         },
       ]}
     >
-      <View style={[styles.specimenKey, { backgroundColor: accentColor }]}>
+      <View style={[styles.specimenKey, { backgroundColor: colors.tint }]}>
         <Text style={styles.specimenKeyText}>{field.specimenKey}</Text>
       </View>
       <View style={styles.specimenContent}>
@@ -60,7 +36,7 @@ function SpecimenRow({ field, index, onPress, colors }: { field: typeof SPECIMEN
         </Text>
         <Text style={[styles.specimenPart, { color: colors.textSecondary }]}>{field.partLabel}</Text>
       </View>
-      <Ionicons name="chevron-forward" size={16} color={accentColor + "80"} />
+      <Ionicons name="chevron-forward" size={16} color={colors.textSecondary} />
     </Pressable>
   );
 }
@@ -71,7 +47,7 @@ export default function Form16ExplorerScreen() {
   const insets = useSafeAreaInsets();
   const [search, setSearch] = useState("");
   const [showDisclaimer, setShowDisclaimer] = useState(false);
-  const todayTip = getTodaysTip();
+  const topPad = Platform.OS === "web" ? 67 : insets.top;
 
   useEffect(() => {
     if (!hasSeenDisclaimer) {
@@ -92,100 +68,62 @@ export default function Form16ExplorerScreen() {
     router.push({ pathname: "/form16/[id]", params: { id } });
   }, []);
 
-  const getGreeting = () => {
-    const hour = new Date().getHours();
-    if (hour < 12) return "Good Morning";
-    if (hour < 17) return "Good Afternoon";
-    return "Good Evening";
-  };
-
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <LinearGradient
-        colors={Colors.gradients.headerVibrant as any}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={[styles.header, { paddingTop: (Platform.OS === "web" ? 67 : insets.top) + 12 }]}
-      >
+      <View style={[styles.header, { backgroundColor: Colors.palette.navy, paddingTop: topPad + 12 }]}>
         <View style={styles.headerTop}>
           <View>
-            <Text style={styles.greeting}>{getGreeting()} 👋</Text>
-            <Text style={styles.headerTitle}>Taxaltus</Text>
+            <Text style={styles.headerTitle}>Form 16 Explorer</Text>
+            <Text style={styles.headerSubtitle}>Tap any field to learn more</Text>
           </View>
-          <Pressable
-            onPress={() => router.push("/settings")}
-            hitSlop={12}
-            style={({ pressed }) => [styles.settingsBtn, { opacity: pressed ? 0.7 : 1 }]}
-          >
-            <Ionicons name="settings-outline" size={22} color="rgba(255,255,255,0.85)" />
+          <Pressable onPress={() => router.push("/settings")} hitSlop={12}>
+            <Ionicons name="settings-outline" size={22} color="rgba(255,255,255,0.8)" />
           </Pressable>
         </View>
         <View style={styles.searchWrapper}>
           <SearchInput value={search} onChangeText={setSearch} placeholder="Search fields (HRA, 80C, TDS...)" />
         </View>
-      </LinearGradient>
+      </View>
 
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={[styles.scrollContent, { paddingBottom: Platform.OS === "web" ? 34 + 84 : insets.bottom + 90 }]}
         showsVerticalScrollIndicator={false}
       >
-        <Pressable
-          onPress={() => {
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-          }}
-          style={styles.tipCardWrapper}
-        >
-          <LinearGradient
-            colors={Colors.gradients.ocean as any}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={styles.tipCard}
+        <View style={styles.quickActions}>
+          <Pressable
+            onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              router.push("/regime");
+            }}
+            style={({ pressed }) => [
+              styles.quickCard,
+              { backgroundColor: Colors.palette.teal + "12", borderColor: Colors.palette.teal + "30", opacity: pressed ? 0.85 : 1 },
+            ]}
           >
-            <View style={styles.tipHeader}>
-              <Text style={styles.tipEmoji}>{todayTip.emoji}</Text>
-              <View style={styles.tipBadge}>
-                <Text style={styles.tipBadgeText}>TIP OF THE DAY</Text>
-              </View>
-            </View>
-            <Text style={styles.tipText}>{todayTip.tip}</Text>
-            <Text style={styles.tipCategory}>{todayTip.category}</Text>
-          </LinearGradient>
-        </Pressable>
-
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.quickScroll} contentContainerStyle={styles.quickScrollContent}>
-          {QUICK_ACTIONS.map((action) => (
-            <Pressable
-              key={action.route}
-              onPress={() => {
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                router.push(action.route as any);
-              }}
-              style={({ pressed }) => [{ transform: [{ scale: pressed ? 0.95 : 1 }] }]}
-            >
-              <LinearGradient
-                colors={action.gradient as any}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={styles.quickCard}
-              >
-                <Ionicons name={action.icon} size={22} color="#fff" />
-                <Text style={styles.quickText}>{action.label}</Text>
-              </LinearGradient>
-            </Pressable>
-          ))}
-        </ScrollView>
+            <Ionicons name="git-compare-outline" size={20} color={Colors.palette.teal} />
+            <Text style={[styles.quickText, { color: Colors.palette.teal }]}>Old vs New Regime</Text>
+          </Pressable>
+          <Pressable
+            onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              router.push("/checklist");
+            }}
+            style={({ pressed }) => [
+              styles.quickCard,
+              { backgroundColor: "#6366F1" + "12", borderColor: "#6366F1" + "30", opacity: pressed ? 0.85 : 1 },
+            ]}
+          >
+            <Ionicons name="checkbox-outline" size={20} color="#6366F1" />
+            <Text style={[styles.quickText, { color: "#6366F1" }]}>Tax Prep Checklist</Text>
+          </Pressable>
+        </View>
 
         <View style={[styles.specimenHeader, { borderColor: colors.border, backgroundColor: colors.cardBg }]}>
           <View style={styles.specimenHeaderRow}>
-            <View style={styles.specimenHeaderLeft}>
-              <View style={[styles.formBadge, { backgroundColor: Colors.palette.teal }]}>
-                <Ionicons name="document-text" size={14} color="#fff" />
-              </View>
-              <Text style={[styles.specimenHeaderTitle, { color: colors.tint }]}>FORM NO. 16</Text>
-            </View>
-            <View style={[styles.badge, { backgroundColor: Colors.palette.gold + "15" }]}>
-              <Text style={[styles.badgeText, { color: Colors.palette.gold }]}>SPECIMEN</Text>
+            <Text style={[styles.specimenHeaderTitle, { color: colors.tint }]}>FORM NO. 16</Text>
+            <View style={[styles.badge, { backgroundColor: colors.chipBg }]}>
+              <Text style={[styles.badgeText, { color: colors.tint }]}>SPECIMEN</Text>
             </View>
           </View>
           <Text style={[styles.specimenHeaderSub, { color: colors.textSecondary }]}>
@@ -193,11 +131,10 @@ export default function Form16ExplorerScreen() {
           </Text>
         </View>
 
-        {filtered.map((field, index) => (
+        {filtered.map((field) => (
           <SpecimenRow
             key={field.id}
             field={field}
-            index={index}
             onPress={() => handleFieldPress(field.id)}
             colors={colors}
           />
@@ -214,12 +151,9 @@ export default function Form16ExplorerScreen() {
       <Modal visible={showDisclaimer} transparent animationType="fade">
         <View style={styles.modalOverlay}>
           <View style={[styles.modalContent, { backgroundColor: colors.surface }]}>
-            <LinearGradient
-              colors={Colors.gradients.teal as any}
-              style={styles.disclaimerIconGradient}
-            >
-              <Ionicons name="shield-checkmark" size={36} color="#fff" />
-            </LinearGradient>
+            <View style={[styles.disclaimerIcon, { backgroundColor: Colors.palette.teal + "15" }]}>
+              <Ionicons name="shield-checkmark" size={40} color={Colors.palette.teal} />
+            </View>
             <Text style={[styles.disclaimerTitle, { color: colors.text }]}>Welcome to Taxaltus</Text>
             <Text style={[styles.disclaimerBody, { color: colors.textSecondary }]}>
               Taxaltus provides educational information only and does not offer tax advice. For personal tax filing decisions, consult a qualified professional or official government resources.
@@ -233,16 +167,12 @@ export default function Form16ExplorerScreen() {
                 setDisclaimerSeen();
                 setShowDisclaimer(false);
               }}
-              style={({ pressed }) => [{ transform: [{ scale: pressed ? 0.97 : 1 }], width: "100%" }]}
+              style={({ pressed }) => [
+                styles.disclaimerBtn,
+                { backgroundColor: Colors.palette.teal, opacity: pressed ? 0.9 : 1 },
+              ]}
             >
-              <LinearGradient
-                colors={Colors.gradients.teal as any}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
-                style={styles.disclaimerBtn}
-              >
-                <Text style={styles.disclaimerBtnText}>I Understand</Text>
-              </LinearGradient>
+              <Text style={styles.disclaimerBtnText}>I Understand</Text>
             </Pressable>
           </View>
         </View>
@@ -263,25 +193,17 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     marginBottom: 16,
   },
-  greeting: {
-    fontSize: 14,
-    fontFamily: "Inter_400Regular",
-    color: "rgba(255,255,255,0.7)",
-    marginBottom: 2,
-  },
   headerTitle: {
-    fontSize: 28,
+    fontSize: 26,
     fontFamily: "Inter_700Bold",
     color: "#fff",
     letterSpacing: -0.5,
   },
-  settingsBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: "rgba(255,255,255,0.1)",
-    justifyContent: "center",
-    alignItems: "center",
+  headerSubtitle: {
+    fontSize: 13,
+    fontFamily: "Inter_400Regular",
+    color: "rgba(255,255,255,0.65)",
+    marginTop: 2,
   },
   searchWrapper: {
     marginBottom: 4,
@@ -290,69 +212,6 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingHorizontal: 16,
     paddingTop: 16,
-  },
-  tipCardWrapper: {
-    marginBottom: 16,
-  },
-  tipCard: {
-    borderRadius: 20,
-    padding: 18,
-  },
-  tipHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 10,
-  },
-  tipEmoji: {
-    fontSize: 28,
-  },
-  tipBadge: {
-    backgroundColor: "rgba(255,255,255,0.2)",
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 20,
-  },
-  tipBadgeText: {
-    fontSize: 10,
-    fontFamily: "Inter_700Bold",
-    color: "#fff",
-    letterSpacing: 1,
-  },
-  tipText: {
-    fontSize: 14,
-    fontFamily: "Inter_500Medium",
-    color: "#fff",
-    lineHeight: 22,
-    marginBottom: 8,
-  },
-  tipCategory: {
-    fontSize: 11,
-    fontFamily: "Inter_600SemiBold",
-    color: "rgba(255,255,255,0.6)",
-    textTransform: "uppercase",
-    letterSpacing: 0.5,
-  },
-  quickScroll: {
-    marginBottom: 16,
-    marginHorizontal: -16,
-  },
-  quickScrollContent: {
-    paddingHorizontal: 16,
-    gap: 10,
-  },
-  quickCard: {
-    width: 90,
-    height: 80,
-    borderRadius: 16,
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 6,
-  },
-  quickText: {
-    fontSize: 11,
-    fontFamily: "Inter_600SemiBold",
-    color: "#fff",
   },
   specimenHeader: {
     borderWidth: 1,
@@ -365,20 +224,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
-  specimenHeaderLeft: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-  },
-  formBadge: {
-    width: 28,
-    height: 28,
-    borderRadius: 8,
-    justifyContent: "center",
-    alignItems: "center",
-  },
   specimenHeaderTitle: {
-    fontSize: 16,
+    fontSize: 18,
     fontFamily: "Inter_700Bold",
     letterSpacing: 1,
   },
@@ -395,7 +242,7 @@ const styles = StyleSheet.create({
   specimenHeaderSub: {
     fontSize: 12,
     fontFamily: "Inter_400Regular",
-    marginTop: 8,
+    marginTop: 6,
   },
   specimenRow: {
     flexDirection: "row",
@@ -430,6 +277,24 @@ const styles = StyleSheet.create({
     fontFamily: "Inter_400Regular",
     marginTop: 2,
   },
+  quickActions: {
+    flexDirection: "row",
+    gap: 10,
+    marginBottom: 14,
+  },
+  quickCard: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    padding: 14,
+    borderRadius: 14,
+    borderWidth: 1,
+  },
+  quickText: {
+    fontSize: 13,
+    fontFamily: "Inter_600SemiBold",
+  },
   emptyState: {
     alignItems: "center",
     paddingTop: 60,
@@ -453,7 +318,7 @@ const styles = StyleSheet.create({
     maxWidth: 380,
     alignItems: "center",
   },
-  disclaimerIconGradient: {
+  disclaimerIcon: {
     width: 72,
     height: 72,
     borderRadius: 36,

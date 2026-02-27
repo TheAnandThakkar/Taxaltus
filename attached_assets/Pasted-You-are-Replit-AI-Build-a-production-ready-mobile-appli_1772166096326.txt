@@ -1,0 +1,148 @@
+You are Replit AI. Build a production-ready mobile application named “Taxaltus” (education-only). Main goal: help Indian salaried employees understand Form 16 and income tax terminology in simple language. This app MUST NOT provide personalized tax advice or recommendations. It should explain concepts, definitions, typical calculation methods, limits (like 80C max), and examples using neutral, generic numbers.
+
+TECH STACK
+- Expo (React Native) + TypeScript
+- React Navigation (stack + tabs)
+- Local content stored as JSON (no backend initially)
+- Optional: simple in-app analytics events (local logs only) without tracking personal data
+- Use clean UI, fast performance, and offline-first content
+
+CORE APP STRUCTURE (Bottom Tabs)
+1) Form 16 Explorer (interactive specimen)
+2) Deductions & Sections (80C, 80D, etc.)
+3) Heads of Income (Salary, House Property, Business/Profession, Capital Gains, Other Sources)
+4) Glossary (HRA, TDS, TCS, Advance Tax, etc.)
+5) Learn (short modules + visuals)
+
+KEY REQUIREMENTS
+A) Education-only Compliance
+- Show a prominent disclaimer on first launch and in Settings:
+  “Taxaltus provides educational information only and does not offer tax advice. For personal tax filing decisions, consult a qualified professional or official government resources.”
+- Never ask for salary amount, PAN, Aadhaar, employer details, or upload of Form 16.
+- Do not compute user-specific tax. Only show generic examples.
+
+B) Form 16 Explorer (Main Feature)
+- Create a “Form 16 Specimen” screen with:
+  - A simplified, clean “specimen layout” (not a real scanned PDF).
+  - Each field as a tappable hotspot (pressable UI).
+  - When user taps a field, navigate to “Field Detail” screen showing:
+    1) What it means (simple)
+    2) Why it matters
+    3) How it’s generally calculated (formula/explanation)
+    4) Taxability summary (generic)
+    5) Common mistakes / FAQs
+    6) Related sections / related head of income
+    7) Links to official resources (as external open URL)
+- Add search inside Form 16 Explorer: search fields like “HRA”, “80C”, “Standard Deduction”, “TDS”.
+
+Fields to include in specimen hotspots (minimum):
+- Gross Salary
+- Exempt Allowances (include HRA as a sub-item)
+- Standard Deduction
+- Professional Tax (if shown)
+- Income from Salary (after exemptions/deductions)
+- Deductions under Chapter VI-A (80C, 80D, 80CCD(1B), 80G, etc.)
+- Total Taxable Income
+- Tax on Total Income
+- Rebate u/s 87A (explain conceptually)
+- Surcharge/Cess (Health & Education Cess)
+- TDS (Tax Deducted at Source)
+- TAN/PAN references (explain what they are, no data entry)
+
+C) Heads of Income Mapping
+- For each Form-16 related field, show mapping:
+  - Salary head (main)
+  - Explain that other heads exist and when they apply:
+    1) Income from House Property
+    2) Profits & Gains of Business/Profession
+    3) Capital Gains (STCG vs LTCG concept)
+    4) Income from Other Sources
+- Provide “concept cards” for each head with:
+  - What counts as that head (examples)
+  - What typically does NOT count
+  - Common terms and typical tax treatment (generic and non-advisory)
+
+D) Deductions & Sections
+- Build a structured section list (80C, 80D, etc.) with:
+  - Max limit (where applicable) displayed clearly
+  - Included instruments/expenses list (generic categories)
+  - Example scenario (dummy numbers)
+  - “Common questions” accordion
+- IMPORTANT: Do not say “you should invest”, say “Common eligible items include…”
+
+E) Glossary
+- Alphabetical glossary with search
+- Each term has:
+  - Definition (simple)
+  - Where you see it (Form 16, AIS, 26AS, etc. as concept)
+  - Example
+  - Related terms
+
+F) Visual Learning
+- Provide simple visual components:
+  - “Flow of Salary Taxation” diagram-like stepper:
+    Gross Salary → Exemptions → Standard Deduction → Deductions (80C etc.) → Taxable Income → Tax → TDS
+  - “TDS lifecycle” explainer (what employer does, what employee sees)
+- Use lightweight visuals made with RN components (no heavy chart libs unless necessary).
+- Provide a “Quick Quiz” (5–10 MCQs) to make it engaging.
+
+CONTENT MODEL (Local JSON)
+Create /data/content.json with:
+- glossary: [{id, term, shortDef, longDef, example, relatedIds, officialLinks[]}]
+- form16Fields: [{id, label, specimenKey, description, calculation, taxability, faqs[], relatedSections[], headOfIncome, officialLinks[]}]
+- sections: [{id, sectionCode, title, maxLimit, includes[], explanation, example, faqs[], officialLinks[]}]
+- headsOfIncome: [{id, name, overview, includes[], excludes[], examples[], commonTerms[]}]
+- quizzes: [{id, question, options[], answerIndex, explanation, relatedIds[]}]
+
+APP SCREENS
+- Onboarding (disclaimer + “I Understand”)
+- Home (highlights + search)
+- Form16SpecimenScreen (interactive)
+- FieldDetailScreen
+- SectionsListScreen + SectionDetailScreen
+- HeadsListScreen + HeadDetailScreen
+- GlossaryScreen + TermDetailScreen
+- LearnScreen (modules + visuals)
+- QuizScreen (score + explanations)
+- Settings (disclaimer, sources, version)
+
+NAVIGATION & UX
+- Bottom tabs as described
+- Top search bar on key screens
+- “Related content” chips at bottom of each detail page
+- Bookmarks/Favorites (store locally using AsyncStorage)
+- Recently viewed items (local)
+- Dark mode support
+
+OFFICIAL LINKS (No scraping)
+Add a “Sources” page and use safe external links:
+- Income Tax Department main portal (as a generic official link)
+- Conceptual links like “What is TDS?” pointing to official pages if available
+If you can’t confirm exact URLs, include placeholders in JSON and show them as “Official resource (open)” and keep them editable.
+
+ENGINEERING REQUIREMENTS
+- TypeScript strict
+- Reusable components: Card, Chip, Accordion, SearchInput, HotspotOverlay
+- Data access layer: load JSON once, memoize, provide selectors
+- Unit-like checks: basic runtime validation for content.json structure (lightweight)
+- No network required for core experience
+- Provide clean folder structure and README with run steps
+
+DELIVERABLES
+1) A complete Expo RN project in the Replit workspace
+2) Seed content for at least:
+   - 20 glossary terms
+   - 15 Form 16 fields
+   - 12 sections/deductions
+   - 5 heads of income
+   - 10 quiz questions
+3) A polished UI with tappable specimen and smooth navigation
+4) README explaining how to run, how to add/edit content, and how to publish later
+
+STYLE
+- Minimal, modern, “instant hit” feel for youngsters
+- Simple language, friendly tone, no legalese
+- Use icons subtly, good spacing, consistent typography
+
+NOW IMPLEMENT IT.
+Start by scaffolding the Expo TypeScript app, then create the data/content.json, then screens + navigation, then specimen with hotspots, then bookmarks + search, then quiz, then settings + sources + disclaimer.

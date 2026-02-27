@@ -28,6 +28,7 @@ A production-ready Indian tax education mobile app for salaried employees built 
 - `app/regime/index.tsx` - Old vs New tax regime comparison (slabs + feature table)
 - `app/bookmarks/index.tsx` - Saved items & recently viewed
 - `app/checklist/index.tsx` - Tax prep checklist with persistent progress
+- `app/estimator/index.tsx` - Tax estimator comparing old vs new regime tax payable
 - `app/settings/index.tsx` - Disclaimer, Rate & Review, sources, about, developer profile
 
 ### Key Files

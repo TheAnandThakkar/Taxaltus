@@ -90,6 +90,26 @@ export default function Form16ExplorerScreen() {
         contentContainerStyle={[styles.scrollContent, { paddingBottom: Platform.OS === "web" ? 34 + 84 : insets.bottom + 90 }]}
         showsVerticalScrollIndicator={false}
       >
+        <Pressable
+          onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+            router.push("/estimator");
+          }}
+          style={({ pressed }) => [
+            styles.estimatorCard,
+            { opacity: pressed ? 0.92 : 1 },
+          ]}
+        >
+          <View style={styles.estimatorLeft}>
+            <Ionicons name="calculator" size={24} color="#fff" />
+            <View>
+              <Text style={styles.estimatorTitle}>Tax Estimator</Text>
+              <Text style={styles.estimatorSub}>Compare tax under old and new regime</Text>
+            </View>
+          </View>
+          <Ionicons name="arrow-forward" size={18} color="rgba(255,255,255,0.7)" />
+        </Pressable>
+
         <View style={styles.quickActions}>
           <Pressable
             onPress={() => {
@@ -276,6 +296,32 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: "Inter_400Regular",
     marginTop: 2,
+  },
+  estimatorCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: Colors.palette.teal,
+    borderRadius: 14,
+    padding: 16,
+    marginBottom: 10,
+  },
+  estimatorLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    flex: 1,
+  },
+  estimatorTitle: {
+    fontSize: 16,
+    fontFamily: "Inter_700Bold",
+    color: "#fff",
+  },
+  estimatorSub: {
+    fontSize: 12,
+    fontFamily: "Inter_400Regular",
+    color: "rgba(255,255,255,0.75)",
+    marginTop: 1,
   },
   quickActions: {
     flexDirection: "row",

@@ -54,6 +54,26 @@ export default function LearnScreen() {
         contentContainerStyle={[styles.scrollContent, { paddingBottom: Platform.OS === "web" ? 34 + 84 : insets.bottom + 90 }]}
         showsVerticalScrollIndicator={false}
       >
+        <Pressable
+          onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+            router.push("/estimator");
+          }}
+          style={({ pressed }) => [
+            styles.estimatorBanner,
+            { opacity: pressed ? 0.92 : 1 },
+          ]}
+        >
+          <View style={styles.estimatorBannerLeft}>
+            <Ionicons name="calculator" size={22} color="#fff" />
+            <View>
+              <Text style={styles.estimatorBannerTitle}>Tax Estimator</Text>
+              <Text style={styles.estimatorBannerSub}>Enter income, compare old vs new tax</Text>
+            </View>
+          </View>
+          <Ionicons name="arrow-forward" size={18} color="rgba(255,255,255,0.7)" />
+        </Pressable>
+
         <View style={styles.actionCards}>
           <Pressable
             onPress={() => {
@@ -191,6 +211,32 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingHorizontal: 16,
     paddingTop: 16,
+  },
+  estimatorBanner: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: Colors.palette.teal,
+    borderRadius: 14,
+    padding: 16,
+    marginBottom: 10,
+  },
+  estimatorBannerLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    flex: 1,
+  },
+  estimatorBannerTitle: {
+    fontSize: 15,
+    fontFamily: "Inter_700Bold",
+    color: "#fff",
+  },
+  estimatorBannerSub: {
+    fontSize: 12,
+    fontFamily: "Inter_400Regular",
+    color: "rgba(255,255,255,0.75)",
+    marginTop: 1,
   },
   actionCards: {
     flexDirection: "row",

@@ -1,12 +1,58 @@
-// template
-const tintColorLight = "#2f95dc";
-
-export default {
-  light: {
-    text: "#000",
-    background: "#fff",
-    tint: tintColorLight,
-    tabIconDefault: "#ccc",
-    tabIconSelected: tintColorLight,
-  },
+const palette = {
+  navy: "#1B2A4A",
+  navyLight: "#263B66",
+  teal: "#0D9488",
+  tealLight: "#14B8A6",
+  gold: "#D97706",
+  goldLight: "#F59E0B",
+  slate: "#64748B",
+  slateLight: "#94A3B8",
+  cream: "#FFF8F0",
+  offWhite: "#F8FAFC",
+  white: "#FFFFFF",
+  black: "#0F172A",
+  danger: "#EF4444",
+  success: "#10B981",
 };
+
+const Colors = {
+  light: {
+    text: palette.black,
+    textSecondary: palette.slate,
+    background: palette.offWhite,
+    surface: palette.white,
+    tint: palette.teal,
+    accent: palette.gold,
+    navyBg: palette.navy,
+    border: "#E2E8F0",
+    tabIconDefault: palette.slateLight,
+    tabIconSelected: palette.teal,
+    cardBg: palette.white,
+    headerBg: palette.navy,
+    headerText: palette.white,
+    chipBg: "#F0FDFA",
+    chipText: palette.teal,
+    searchBg: "#F1F5F9",
+  },
+  dark: {
+    text: "#F1F5F9",
+    textSecondary: "#94A3B8",
+    background: "#0F172A",
+    surface: "#1E293B",
+    tint: palette.tealLight,
+    accent: palette.goldLight,
+    navyBg: "#0F172A",
+    border: "#334155",
+    tabIconDefault: "#475569",
+    tabIconSelected: palette.tealLight,
+    cardBg: "#1E293B",
+    headerBg: "#1E293B",
+    headerText: "#F1F5F9",
+    chipBg: "#1E293B",
+    chipText: palette.tealLight,
+    searchBg: "#1E293B",
+  },
+  palette,
+};
+
+export default Colors;

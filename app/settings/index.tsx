@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, ScrollView, Pressable, Platform, Linking, Switch } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Pressable, Platform, Linking, Switch, Image } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
@@ -178,6 +178,14 @@ export default function SettingsScreen() {
           </View>
         </View>
 
+        <View style={styles.logoWrap}>
+          <Image
+            source={require("@/assets/images/taxaltus-logo-full.png")}
+            style={styles.logoImage}
+            resizeMode="contain"
+          />
+          <Text style={[styles.logoTagline, { color: colors.textSecondary }]}>Your Tax Education Companion</Text>
+        </View>
       </ScrollView>
     </View>
   );
@@ -313,6 +321,20 @@ const styles = StyleSheet.create({
   aboutValue: {
     fontSize: 14,
     fontFamily: "Inter_500Medium",
+  },
+  logoWrap: {
+    alignItems: "center",
+    paddingVertical: 24,
+    marginTop: 8,
+  },
+  logoImage: {
+    width: 180,
+    height: 50,
+    marginBottom: 8,
+  },
+  logoTagline: {
+    fontSize: 12,
+    fontFamily: "Inter_400Regular",
   },
   notifRow: {
     flexDirection: "row",

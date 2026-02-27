@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, ScrollView, Pressable, Platform, Linking, Switch, Image } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Pressable, Platform, Linking, Switch } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
@@ -209,30 +209,6 @@ export default function SettingsScreen() {
           </View>
         </View>
 
-        <Text style={[styles.sectionTitle, { color: colors.text }]}>Built With</Text>
-        <Pressable
-          onPress={() => Linking.openURL("https://replit.com")}
-          style={({ pressed }) => [
-            styles.replitCard,
-            { backgroundColor: colors.cardBg, borderColor: colors.border, opacity: pressed ? 0.85 : 1 },
-          ]}
-        >
-          <View style={[styles.replitIconWrap, { backgroundColor: "#F26207" + "15" }]}>
-            <Image
-              source={{ uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/New_Replit_Logo.svg/120px-New_Replit_Logo.svg.png" }}
-              style={styles.replitLogo}
-              resizeMode="contain"
-            />
-          </View>
-          <Text style={[styles.replitTitle, { color: colors.text }]}>Replit</Text>
-          <Text style={[styles.replitDesc, { color: colors.textSecondary }]}>
-            This app was built with the help of Replit — an amazing platform that makes software development accessible to everyone. A huge thanks to the Replit team for making tools that empower creators.
-          </Text>
-          <View style={[styles.replitLink, { backgroundColor: "#F26207" + "12" }]}>
-            <Text style={[styles.replitLinkText, { color: "#F26207" }]}>Visit replit.com</Text>
-            <Ionicons name="open-outline" size={14} color="#F26207" />
-          </View>
-        </Pressable>
       </ScrollView>
     </View>
   );
@@ -417,49 +393,6 @@ const styles = StyleSheet.create({
   socialLabel: {
     fontSize: 13,
     fontFamily: "Inter_500Medium",
-  },
-  replitCard: {
-    borderRadius: 16,
-    borderWidth: 1,
-    padding: 20,
-    alignItems: "center",
-    marginBottom: 20,
-  },
-  replitIconWrap: {
-    width: 56,
-    height: 56,
-    borderRadius: 16,
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 12,
-  },
-  replitLogo: {
-    width: 32,
-    height: 32,
-  },
-  replitTitle: {
-    fontSize: 18,
-    fontFamily: "Inter_700Bold",
-    marginBottom: 8,
-  },
-  replitDesc: {
-    fontSize: 13,
-    fontFamily: "Inter_400Regular",
-    lineHeight: 20,
-    textAlign: "center",
-    marginBottom: 14,
-  },
-  replitLink: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 6,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 10,
-  },
-  replitLinkText: {
-    fontSize: 13,
-    fontFamily: "Inter_600SemiBold",
   },
   notifRow: {
     flexDirection: "row",

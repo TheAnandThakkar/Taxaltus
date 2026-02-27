@@ -139,7 +139,16 @@ export default function Form16ExplorerScreen() {
           </Pressable>
         </View>
 
-        <View style={[styles.specimenHeader, { borderColor: colors.border, backgroundColor: colors.cardBg }]}>
+        <Pressable
+          onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            router.push("/specimen");
+          }}
+          style={({ pressed }) => [
+            styles.specimenHeader,
+            { borderColor: colors.border, backgroundColor: colors.cardBg, opacity: pressed ? 0.85 : 1 },
+          ]}
+        >
           <View style={styles.specimenHeaderRow}>
             <Text style={[styles.specimenHeaderTitle, { color: colors.tint }]}>FORM NO. 16</Text>
             <View style={[styles.badge, { backgroundColor: colors.chipBg }]}>
@@ -149,7 +158,11 @@ export default function Form16ExplorerScreen() {
           <Text style={[styles.specimenHeaderSub, { color: colors.textSecondary }]}>
             Certificate under section 203 of the Income-tax Act, 1961
           </Text>
-        </View>
+          <View style={styles.specimenTapHint}>
+            <Ionicons name="eye-outline" size={14} color={colors.tint} />
+            <Text style={[styles.specimenTapText, { color: colors.tint }]}>Tap to view full specimen</Text>
+          </View>
+        </Pressable>
 
         {filtered.map((field) => (
           <SpecimenRow
@@ -263,6 +276,16 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: "Inter_400Regular",
     marginTop: 6,
+  },
+  specimenTapHint: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    marginTop: 10,
+  },
+  specimenTapText: {
+    fontSize: 12,
+    fontFamily: "Inter_500Medium",
   },
   specimenRow: {
     flexDirection: "row",

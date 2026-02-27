@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, ScrollView, Pressable, Platform, Linking, Switch } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Pressable, Platform, Linking, Switch, Image } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
@@ -218,7 +218,11 @@ export default function SettingsScreen() {
           ]}
         >
           <View style={[styles.replitIconWrap, { backgroundColor: "#F26207" + "15" }]}>
-            <Ionicons name="code-slash-outline" size={28} color="#F26207" />
+            <Image
+              source={{ uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/New_Replit_Logo.svg/120px-New_Replit_Logo.svg.png" }}
+              style={styles.replitLogo}
+              resizeMode="contain"
+            />
           </View>
           <Text style={[styles.replitTitle, { color: colors.text }]}>Replit</Text>
           <Text style={[styles.replitDesc, { color: colors.textSecondary }]}>
@@ -427,6 +431,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 12,
+  },
+  replitLogo: {
+    width: 32,
+    height: 32,
   },
   replitTitle: {
     fontSize: 18,

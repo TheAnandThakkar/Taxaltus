@@ -17,6 +17,17 @@ const FLOW_STEPS = [
   { label: "TDS Adjusted", icon: "checkmark-circle-outline" as const, desc: "Tax already deducted by employer" },
 ];
 
+const KEY_DATES = [
+  { date: "Jun 15", label: "Advance Tax (15%)", desc: "First installment of advance tax due" },
+  { date: "Jul 31", label: "ITR Due Date (Salaried)", desc: "Deadline for filing income tax return" },
+  { date: "Sep 15", label: "Advance Tax (45%)", desc: "Second installment of advance tax due" },
+  { date: "Dec 15", label: "Advance Tax (75%)", desc: "Third installment of advance tax due" },
+  { date: "Dec 31", label: "Belated/Revised Return", desc: "Last date for belated or revised return" },
+  { date: "Mar 15", label: "Advance Tax (100%)", desc: "Final installment of advance tax due" },
+  { date: "Mar 31", label: "FY Ends", desc: "Last day to make tax-saving investments" },
+  { date: "Jun 15*", label: "Form 16 Issued", desc: "Employer issues Form 16 by this date" },
+];
+
 const TDS_STEPS = [
   { step: "1", title: "Employer Estimates", desc: "At start of FY, employer estimates your annual tax based on declared investments" },
   { step: "2", title: "Monthly Deduction", desc: "Tax is divided equally across 12 months and deducted from salary each month" },
@@ -43,25 +54,36 @@ export default function LearnScreen() {
         contentContainerStyle={[styles.scrollContent, { paddingBottom: Platform.OS === "web" ? 34 + 84 : insets.bottom + 90 }]}
         showsVerticalScrollIndicator={false}
       >
-        <Pressable
-          onPress={() => {
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-            router.push("/learn/quiz");
-          }}
-          style={({ pressed }) => [
-            styles.quizCard,
-            { backgroundColor: Colors.palette.teal, opacity: pressed ? 0.92 : 1 },
-          ]}
-        >
-          <View style={styles.quizCardContent}>
-            <Ionicons name="help-circle" size={36} color="#fff" />
-            <View style={styles.quizCardText}>
-              <Text style={styles.quizTitle}>Quick Tax Quiz</Text>
-              <Text style={styles.quizSubtitle}>Test your knowledge with 10 questions</Text>
-            </View>
-          </View>
-          <Ionicons name="arrow-forward" size={20} color="#fff" />
-        </Pressable>
+        <View style={styles.actionCards}>
+          <Pressable
+            onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+              router.push("/learn/quiz");
+            }}
+            style={({ pressed }) => [
+              styles.quizCard,
+              { backgroundColor: Colors.palette.teal, opacity: pressed ? 0.92 : 1 },
+            ]}
+          >
+            <Ionicons name="help-circle" size={28} color="#fff" />
+            <Text style={styles.quizTitle}>Quick Tax Quiz</Text>
+            <Text style={styles.quizSubtitle}>10 questions</Text>
+          </Pressable>
+          <Pressable
+            onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+              router.push("/regime");
+            }}
+            style={({ pressed }) => [
+              styles.quizCard,
+              { backgroundColor: Colors.palette.gold, opacity: pressed ? 0.92 : 1 },
+            ]}
+          >
+            <Ionicons name="git-compare-outline" size={28} color="#fff" />
+            <Text style={styles.quizTitle}>Old vs New</Text>
+            <Text style={styles.quizSubtitle}>Regime comparison</Text>
+          </Pressable>
+        </View>
 
         <Text style={[styles.sectionTitle, { color: colors.text }]}>Flow of Salary Taxation</Text>
         <Text style={[styles.sectionDesc, { color: colors.textSecondary }]}>
@@ -109,6 +131,25 @@ export default function LearnScreen() {
             </View>
           </View>
         ))}
+
+        <Text style={[styles.sectionTitle, { color: colors.text, marginTop: 18 }]}>Key Tax Dates</Text>
+        <Text style={[styles.sectionDesc, { color: colors.textSecondary }]}>
+          Important deadlines for salaried taxpayers during a financial year
+        </Text>
+
+        <View style={[styles.datesContainer, { backgroundColor: colors.cardBg, borderColor: colors.border }]}>
+          {KEY_DATES.map((d, i) => (
+            <View key={i} style={[styles.dateRow, i < KEY_DATES.length - 1 && { borderBottomWidth: 1, borderColor: colors.border }]}>
+              <View style={[styles.dateBadge, { backgroundColor: "#6366F1" + "15" }]}>
+                <Text style={[styles.dateText, { color: "#6366F1" }]}>{d.date}</Text>
+              </View>
+              <View style={styles.dateContent}>
+                <Text style={[styles.dateLabel, { color: colors.text }]}>{d.label}</Text>
+                <Text style={[styles.dateDesc, { color: colors.textSecondary }]}>{d.desc}</Text>
+              </View>
+            </View>
+          ))}
+        </View>
       </ScrollView>
     </View>
   );
@@ -137,30 +178,26 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 16,
   },
-  quizCard: {
-    borderRadius: 16,
-    padding: 18,
+  actionCards: {
     flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    gap: 10,
     marginBottom: 28,
   },
-  quizCardContent: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 14,
+  quizCard: {
+    flex: 1,
+    borderRadius: 16,
+    padding: 16,
+    gap: 6,
   },
-  quizCardText: {},
   quizTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontFamily: "Inter_700Bold",
     color: "#fff",
   },
   quizSubtitle: {
-    fontSize: 13,
+    fontSize: 12,
     fontFamily: "Inter_400Regular",
-    color: "rgba(255,255,255,0.8)",
-    marginTop: 2,
+    color: "rgba(255,255,255,0.75)",
   },
   sectionTitle: {
     fontSize: 20,
@@ -240,5 +277,39 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: "Inter_400Regular",
     lineHeight: 18,
+  },
+  datesContainer: {
+    borderRadius: 16,
+    borderWidth: 1,
+    overflow: "hidden",
+  },
+  dateRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 14,
+  },
+  dateBadge: {
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 8,
+    marginRight: 14,
+    minWidth: 64,
+    alignItems: "center",
+  },
+  dateText: {
+    fontSize: 12,
+    fontFamily: "Inter_700Bold",
+  },
+  dateContent: {
+    flex: 1,
+  },
+  dateLabel: {
+    fontSize: 14,
+    fontFamily: "Inter_600SemiBold",
+    marginBottom: 1,
+  },
+  dateDesc: {
+    fontSize: 12,
+    fontFamily: "Inter_400Regular",
   },
 });

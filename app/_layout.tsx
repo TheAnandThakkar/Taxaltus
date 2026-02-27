@@ -22,6 +22,8 @@ function RootLayoutNav() {
       <Stack.Screen name="glossary/[id]" options={{ headerShown: false, presentation: "card" }} />
       <Stack.Screen name="learn/quiz" options={{ headerShown: false, presentation: "card" }} />
       <Stack.Screen name="settings/index" options={{ headerShown: false, presentation: "card" }} />
+      <Stack.Screen name="regime/index" options={{ headerShown: false, presentation: "card" }} />
+      <Stack.Screen name="bookmarks/index" options={{ headerShown: false, presentation: "card" }} />
     </Stack>
   );
 }

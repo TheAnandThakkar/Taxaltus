@@ -90,6 +90,35 @@ export default function Form16ExplorerScreen() {
         contentContainerStyle={[styles.scrollContent, { paddingBottom: Platform.OS === "web" ? 34 + 84 : insets.bottom + 90 }]}
         showsVerticalScrollIndicator={false}
       >
+        <View style={styles.quickActions}>
+          <Pressable
+            onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              router.push("/regime");
+            }}
+            style={({ pressed }) => [
+              styles.quickCard,
+              { backgroundColor: Colors.palette.teal + "12", borderColor: Colors.palette.teal + "30", opacity: pressed ? 0.85 : 1 },
+            ]}
+          >
+            <Ionicons name="git-compare-outline" size={20} color={Colors.palette.teal} />
+            <Text style={[styles.quickText, { color: Colors.palette.teal }]}>Old vs New Regime</Text>
+          </Pressable>
+          <Pressable
+            onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              router.push("/bookmarks");
+            }}
+            style={({ pressed }) => [
+              styles.quickCard,
+              { backgroundColor: Colors.palette.gold + "12", borderColor: Colors.palette.gold + "30", opacity: pressed ? 0.85 : 1 },
+            ]}
+          >
+            <Ionicons name="bookmark-outline" size={20} color={Colors.palette.gold} />
+            <Text style={[styles.quickText, { color: Colors.palette.gold }]}>Saved Items</Text>
+          </Pressable>
+        </View>
+
         <View style={[styles.specimenHeader, { borderColor: colors.border, backgroundColor: colors.cardBg }]}>
           <View style={styles.specimenHeaderRow}>
             <Text style={[styles.specimenHeaderTitle, { color: colors.tint }]}>FORM NO. 16</Text>
@@ -247,6 +276,24 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: "Inter_400Regular",
     marginTop: 2,
+  },
+  quickActions: {
+    flexDirection: "row",
+    gap: 10,
+    marginBottom: 14,
+  },
+  quickCard: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    padding: 14,
+    borderRadius: 14,
+    borderWidth: 1,
+  },
+  quickText: {
+    fontSize: 13,
+    fontFamily: "Inter_600SemiBold",
   },
   emptyState: {
     alignItems: "center",

@@ -8,6 +8,7 @@ channel = "stable-24_05"
 deploymentTarget = "cloudrun"
 build = ["sh", "-c", "npx vite build"]
 run = ["sh", "-c", "npx vite preview --port 5000 --host 0.0.0.0"]
+publicDir = "dist/public"
 
 [[ports]]
 localPort = 5000

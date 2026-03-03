@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 const NAV_LINKS = [
@@ -21,6 +21,22 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [toolsOpen, setToolsOpen] = useState(false);
   const location = useLocation();
+  const toolsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (toolsRef.current && !toolsRef.current.contains(e.target as Node)) {
+        setToolsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    setToolsOpen(false);
+    setMobileOpen(false);
+  }, [location.pathname]);
 
   const isActive = (path: string) => location.pathname === path || location.pathname.startsWith(path + "/");
 
@@ -46,27 +62,31 @@ export default function Navbar() {
               </Link>
             ))}
 
-            <div className="relative" onMouseEnter={() => setToolsOpen(true)} onMouseLeave={() => setToolsOpen(false)}>
-              <button className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1 ${
-                TOOL_LINKS.some(t => isActive(t.path)) ? "bg-white/15 text-white" : "text-white/70 hover:text-white hover:bg-white/10"
-              }`}>
+            <div className="relative" ref={toolsRef}>
+              <button
+                onClick={() => setToolsOpen(prev => !prev)}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1 ${
+                  toolsOpen || TOOL_LINKS.some(t => isActive(t.path)) ? "bg-white/15 text-white" : "text-white/70 hover:text-white hover:bg-white/10"
+                }`}
+              >
                 Tools
                 <svg className={`w-4 h-4 transition-transform ${toolsOpen ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
               </button>
               {toolsOpen && (
-                <div className="absolute right-0 top-full mt-1 w-56 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50">
-                  {TOOL_LINKS.map(link => (
-                    <Link
-                      key={link.path}
-                      to={link.path}
-                      className={`block px-4 py-2.5 text-sm transition-colors ${
-                        isActive(link.path) ? "bg-teal/5 text-teal font-medium" : "text-gray-700 hover:bg-gray-50"
-                      }`}
-                      onClick={() => setToolsOpen(false)}
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
+                <div className="absolute right-0 top-full pt-2 w-56 z-50">
+                  <div className="bg-white rounded-xl shadow-xl border border-gray-100 py-2">
+                    {TOOL_LINKS.map(link => (
+                      <Link
+                        key={link.path}
+                        to={link.path}
+                        className={`block px-4 py-2.5 text-sm transition-colors ${
+                          isActive(link.path) ? "bg-teal/5 text-teal font-medium" : "text-gray-700 hover:bg-gray-50"
+                        }`}
+                      >
+                        {link.label}
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>

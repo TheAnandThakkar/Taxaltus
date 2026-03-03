@@ -1,60 +1,98 @@
-# Taxaltus - Indian Tax Education App
+# Taxaltus - Indian Tax Education Website
 
 ## Overview
-A production-ready Indian tax education mobile app for salaried employees built with Expo React Native. Educational only - no personal data collection. Uses AsyncStorage for local persistence (bookmarks, recently viewed, disclaimer state).
+A responsive Indian tax education website for salaried employees built with Vite + React + TypeScript + Tailwind CSS. Educational only - no personal data collection. Uses localStorage for persistence (bookmarks, recently viewed, checklist progress). Hosted at taxaltus.com.
 
 ## Tech Stack
-- **Frontend**: Expo (React Native) with file-based routing (expo-router)
-- **Backend**: Express server on port 5000 (serves API + static landing page)
-- **State**: React Context + AsyncStorage (no database)
-- **Styling**: Inter font family, Navy (#1B2A4A) / Teal (#0D9488) / Gold (#D97706) theme
-- **Theme**: Light mode only (no dark mode)
+- **Frontend**: Vite + React 19 + TypeScript + React Router v6
+- **Styling**: Tailwind CSS v3 + Inter font from Google Fonts
+- **State**: React Context + localStorage (no database, no backend)
+- **Build**: Vite (dev server port 5000, output to dist/)
+- **Theme Colors**: Navy (#1B2A4A), Teal (#0D9488), Gold (#D97706)
 
-## App Structure
+## Project Structure
+```
+src/
+  main.tsx           - Entry point (React root with BrowserRouter + AppProvider)
+  App.tsx            - All routes declared
+  index.css          - Tailwind directives + custom component classes
+  contexts/
+    AppContext.tsx    - Bookmarks, checklist, recently viewed (localStorage)
+  data/
+    content.ts       - All educational content (glossary, form16Fields, sections, headsOfIncome, quizzes)
+  components/
+    Navbar.tsx       - Sticky navbar with desktop nav + mobile hamburger + Tools dropdown
+    Footer.tsx       - Footer with links, disclaimer, copyright
+    Layout.tsx       - Layout wrapper (Navbar + Outlet + Footer, scroll-to-top on route change)
+    ui/
+      SearchInput.tsx  - Reusable search input with clear button
+      Accordion.tsx    - FAQ accordion (open/close)
+      PageHeader.tsx   - Page title + subtitle + breadcrumbs (navy bg)
+  pages/
+    Home.tsx                - Landing page (hero, feature cards, quick links, tax dates, CTA)
+    Form16Explorer.tsx      - Searchable list of Form 16 fields with Part A/B filter
+    Form16Detail.tsx        - Individual Form 16 field detail (description, FAQs, related)
+    Specimen.tsx            - Form 16 specimen viewer (Part A/B tabs, illustrative data)
+    Deductions.tsx          - Chapter VI-A deduction sections (searchable grid)
+    SectionDetail.tsx       - Individual deduction section detail
+    HeadsOfIncome.tsx       - 5 heads of income overview
+    HeadDetail.tsx          - Individual head of income detail
+    Glossary.tsx            - A-Z searchable tax glossary
+    GlossaryDetail.tsx      - Individual glossary term detail
+    Learn.tsx               - Educational hub (salary taxation flow, TDS lifecycle, dates, tool links)
+    Quiz.tsx                - 10-question interactive tax quiz with scoring
+    Estimator.tsx           - Old vs New regime tax calculator (FY 2024-25)
+    ItrSelector.tsx         - Step-by-step ITR form recommendation wizard
+    RegimeComparison.tsx    - Side-by-side regime slab/feature comparison
+    Checklist.tsx           - Persistent tax prep checklist with progress bar
+    InvestmentDeadlines.tsx - Timeline of deadlines + lock-in periods table
+    BudgetChanges.tsx       - FY 2024-25 budget changes with before/after
+    Bookmarks.tsx           - Saved bookmarks + recently viewed items
+    About.tsx               - Disclaimer, official sources, app info
+```
 
-### Tab Navigation (5 tabs)
-- **Form 16 Explorer** (`app/(tabs)/index.tsx`) - Specimen Form 16 with searchable fields, quick action cards
-- **Deductions** (`app/(tabs)/deductions.tsx`) - Chapter VI-A sections reference
-- **Heads of Income** (`app/(tabs)/heads.tsx`) - 5 heads of income breakdown
-- **Glossary** (`app/(tabs)/glossary.tsx`) - 20 tax terms with search
-- **Learn** (`app/(tabs)/learn.tsx`) - Visual guides, quiz, TDS lifecycle, key tax dates
+## Routes
+- `/` - Home
+- `/form16` - Form 16 Explorer
+- `/form16/:id` - Form 16 Field Detail
+- `/form16/specimen` - Specimen Viewer
+- `/deductions` - Deductions Guide
+- `/deductions/:id` - Section Detail
+- `/heads` - Heads of Income
+- `/heads/:id` - Head Detail
+- `/glossary` - Tax Glossary
+- `/glossary/:id` - Term Detail
+- `/learn` - Learn Hub
+- `/quiz` - Tax Quiz
+- `/estimator` - Tax Estimator
+- `/itr-selector` - ITR Form Selector
+- `/regime` - Regime Comparison
+- `/checklist` - Tax Prep Checklist
+- `/investment-deadlines` - Investment Deadlines
+- `/budget-changes` - Budget Changes
+- `/bookmarks` - Bookmarks
+- `/about` - About
 
-### Detail Screens
-- `app/form16/[id].tsx` - Form 16 field detail with FAQs + share button
-- `app/sections/[id].tsx` - Deduction section detail + share button
-- `app/heads/[id].tsx` - Head of income detail
-- `app/glossary/[id].tsx` - Glossary term detail + share button
-- `app/learn/quiz.tsx` - Interactive 10-question quiz
-- `app/regime/index.tsx` - Old vs New tax regime comparison (slabs + feature table)
-- `app/bookmarks/index.tsx` - Saved items & recently viewed
-- `app/checklist/index.tsx` - Tax prep checklist with persistent progress
-- `app/estimator/index.tsx` - Tax estimator comparing old vs new regime tax payable
-- `app/specimen/index.tsx` - Full Form 16 specimen viewer (Part A + Part B with illustrative data)
-- `app/itr-selector/index.tsx` - Step-by-step ITR form selector wizard (ITR-1/2/3/4)
-- `app/investment-deadlines/index.tsx` - Tax-saving investment deadlines timeline with lock-in periods
-- `app/budget-changes/index.tsx` - FY 2024-25 budget changes summary with before/after comparisons
-- `app/settings/index.tsx` - Disclaimer, notification toggle, Rate & Review, sources, about, developer profile
-
-### Key Files
-- `data/content.ts` - All educational content (static, offline-first)
-- `contexts/AppContext.tsx` - Bookmarks, recently viewed, disclaimer state, checklist progress, notification preferences
-- `expo-notifications` - Local push notifications for tax deadline reminders (Android channel: "tax-reminders")
-- `constants/colors.ts` - Theme colors
-- `lib/useTheme.ts` - Dark mode hook
-- `components/ui/BookmarkButton.tsx` - Reusable bookmark toggle
-
-### Layout
-- `app/(tabs)/_layout.tsx` - NativeTabs with liquid glass (iOS 26+) + BlurView fallback
-- `app/_layout.tsx` - Root Stack with providers (QueryClient, AppProvider, ErrorBoundary)
+## Tailwind Custom Classes
+- `container-main` - Max-width container with responsive padding
+- `card` - White rounded card with border/shadow
+- `card-hover` - Card with hover effects
+- `btn-primary` - Teal filled button
+- `btn-outline` - Teal outline button
+- `section-title` - Large navy heading
+- `badge` - Small pill badge
 
 ## Important Notes
 - Educational only: Never collects PAN, Aadhaar, salary data
-- FY 2024-25: New regime standard deduction = 75,000; old regime = 50,000
+- FY 2024-25: New regime standard deduction = ₹75,000; old regime = ₹50,000
 - New regime is default from FY 2023-24
-- DO NOT use useBottomTabBarHeight() with NativeTabs
-- Content is entirely static/offline - no API calls for core features
-- Web insets: 67px top, 34px bottom (Platform.OS === "web" only)
+- Content is entirely static/offline - no API calls needed
+- All data in src/data/content.ts (glossary, form16Fields, sections, headsOfIncome, quizzes)
 
 ## Workflows
-- `Start Backend` - Express server (port 5000)
-- `Start Frontend` - Expo dev server (port 8081)
+- `Start application` - Vite dev server (port 5000, webview)
+
+## Assets
+- public/logo-full.png - Text logo
+- public/icon.png - App icon
+- public/favicon.png - Favicon

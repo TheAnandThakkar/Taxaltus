@@ -39,6 +39,10 @@ author = "agent"
 task = "workflow.run"
 args = "Start App"
 
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Start application"
+
 [[workflows.workflow]]
 name = "Start App"
 author = "agent"
@@ -53,22 +57,13 @@ task = "workflow.run"
 args = "Start Frontend"
 
 [[workflows.workflow]]
-name = "Start Backend"
+name = "Start application"
 author = "agent"
-mode = "sequential"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "npm run server:dev"
+args = "npx vite"
 waitForPort = 5000
 
-[[workflows.workflow]]
-name = "Start Frontend"
-author = "agent"
-mode = "sequential"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "npm run expo:dev"
-waitForPort = 8081
-ensurePreviewReachable = "/status"
+[workflows.workflow.metadata]
+outputType = "webview"

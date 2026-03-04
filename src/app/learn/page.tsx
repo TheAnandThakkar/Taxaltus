@@ -30,14 +30,14 @@ const TDS_LIFECYCLE = [
 ];
 
 const KEY_DATES = [
-  { date: "Jun 15", label: "Advance Tax Q1 (15%)", fy: "FY 2024-25" },
-  { date: "Jul 31", label: "ITR Filing Deadline", fy: "AY 2025-26" },
-  { date: "Sep 15", label: "Advance Tax Q2 (45%)", fy: "FY 2024-25" },
-  { date: "Oct 31", label: "Audit Cases ITR", fy: "AY 2025-26" },
-  { date: "Dec 15", label: "Advance Tax Q3 (75%)", fy: "FY 2024-25" },
-  { date: "Dec 31", label: "Belated/Revised Return", fy: "AY 2025-26" },
-  { date: "Mar 15", label: "Advance Tax Q4 (100%)", fy: "FY 2024-25" },
-  { date: "Mar 31", label: "Last Day for Tax-Saving Investments", fy: "FY 2024-25" },
+  { date: "Jun 15", label: "Advance Tax Q1 (15%)", fy: "FY 2026-27" },
+  { date: "Jul 31", label: "ITR Filing Deadline", fy: "AY 2027-28" },
+  { date: "Sep 15", label: "Advance Tax Q2 (45%)", fy: "FY 2026-27" },
+  { date: "Oct 31", label: "Audit Cases ITR", fy: "AY 2027-28" },
+  { date: "Dec 15", label: "Advance Tax Q3 (75%)", fy: "FY 2026-27" },
+  { date: "Dec 31", label: "Belated/Revised Return", fy: "AY 2027-28" },
+  { date: "Mar 15", label: "Advance Tax Q4 (100%)", fy: "FY 2026-27" },
+  { date: "Mar 31", label: "Last Day for Tax-Saving Investments", fy: "FY 2026-27" },
 ];
 
 const EXPLORE_CARDS = [
@@ -45,7 +45,7 @@ const EXPLORE_CARDS = [
   { title: "ITR Form Selector", desc: "Find the right ITR form for you", path: "/itr-selector", icon: "\uD83D\uDCDD", color: "bg-gold/10 border-gold/20" },
   { title: "Old vs New Regime", desc: "Compare tax regimes side by side", path: "/regime", icon: "\u2696\uFE0F", color: "bg-purple-50 border-purple-200" },
   { title: "Tax Prep Checklist", desc: "Track documents needed for filing", path: "/checklist", icon: "\u2705", color: "bg-emerald-50 border-emerald-200" },
-  { title: "Budget 2024 Changes", desc: "What changed for salaried employees", path: "/budget-changes", icon: "\uD83D\uDCC8", color: "bg-sky-50 border-sky-200" },
+  { title: "Latest Budget Changes", desc: "What changed for salaried employees", path: "/budget-impact", icon: "\uD83D\uDCC8", color: "bg-sky-50 border-sky-200" },
   { title: "Investment Deadlines", desc: "Key dates and lock-in periods", path: "/investment-deadlines", icon: "\uD83D\uDCC5", color: "bg-orange-50 border-orange-200" },
 ];
 
@@ -59,12 +59,12 @@ export default function Learn() {
 
       <section className="py-10 sm:py-14">
         <div className="container-main">
-        <div className="mb-4">
-          <Link href="/" className="inline-flex items-center gap-2 text-teal-700 hover:text-teal-800 font-medium bg-teal-50 hover:bg-teal-100 px-4 py-2 rounded-lg transition-colors">
-            <ArrowLeft className="w-4 h-4" />
-            Back to Home
-          </Link>
-        </div>
+          <div className="mb-4">
+            <Link href="/" className="inline-flex items-center gap-2 text-teal-700 hover:text-teal-800 font-medium bg-teal-50 hover:bg-teal-100 px-4 py-2 rounded-lg transition-colors">
+              <ArrowLeft className="w-4 h-4" />
+              Back to Home
+            </Link>
+          </div>
           <h2 className="section-title mb-2">Flow of Salary Taxation</h2>
           <p className="text-gray-500 mb-8">
             How your salary gets taxed, from CTC to final tax payable
@@ -119,7 +119,7 @@ export default function Learn() {
         <div className="container-main">
           <h2 className="section-title mb-2">Understanding Capital Gains</h2>
           <p className="text-gray-600 mb-8">
-            Quick overview of taxes on your investments (Stocks & Mutual Funds) post-Budget 2024.
+            Quick overview of taxes on your investments (Stocks & Mutual Funds) post-Latest Budget.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -160,7 +160,7 @@ export default function Learn() {
         <div className="container-main">
           <h2 className="section-title mb-2 text-center">Key Tax Dates</h2>
           <p className="text-gray-500 mb-8 text-center">
-            Important deadlines for FY 2024-25 (AY 2025-26)
+            Important deadlines for FY 2026-27 (AY 2027-28)
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             {KEY_DATES.map((d, i) => (

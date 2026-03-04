@@ -147,7 +147,7 @@ const FEATURES = [
   { title: "AIS / Form 26AS", desc: "Understand every section of your Annual Information Statement", path: "/ais-explainer", icon: "📊", color: "bg-purple-50 border-purple-200" },
   { title: "Tax Notice Decoder", desc: "Got a notice from IT dept? Find out what it means and what to do", path: "/tax-notice-decoder", icon: "📬", color: "bg-amber-50 border-amber-200" },
   { title: "ITR Mistakes Guide", desc: "8 common mistakes salaried employees make — and how to avoid them", path: "/itr-mistakes", icon: "⚠️", color: "bg-orange-50 border-orange-200" },
-  { title: "Budget 2024 Impact", desc: "See exactly how Budget 2024 changed your personal tax", path: "/budget-impact", icon: "📈", color: "bg-indigo-50 border-indigo-200" },
+  { title: "Budget Impact", desc: "See exactly how the latest Budget changed your personal tax", path: "/budget-impact", icon: "📈", color: "bg-indigo-50 border-indigo-200" },
   { title: "Deductions Guide", desc: "Explore all Chapter VI-A deductions — 80C, 80D, NPS, and more", path: "/deductions", icon: "💰", color: "bg-indigo/5 border-indigo/20" },
   { title: "Old vs New Regime", desc: "Side-by-side comparison of tax slabs, exemptions, and features", path: "/regime", icon: "⚖️", color: "bg-purple-50 border-purple-200" },
   { title: "Tax Prep Checklist", desc: "Track all documents and steps needed before filing your return", path: "/checklist", icon: "✅", color: "bg-sky-50 border-sky-200" },
@@ -155,7 +155,7 @@ const FEATURES = [
 
 const QUICK_LINKS = [
   { title: "Tax Glossary", desc: "A-Z of tax terms explained simply", path: "/glossary" },
-  { title: "Budget 2024 Changes", desc: "What changed for salaried employees", path: "/budget-changes" },
+  { title: "Latest Budget Changes", desc: "What changed for salaried employees", path: "/budget-impact" },
   { title: "Investment Deadlines", desc: "Key dates and lock-in periods", path: "/investment-deadlines" },
   { title: "Tax Quiz", desc: "Test your tax knowledge", path: "/quiz" },
   { title: "Capital Gains Calc", desc: "Calculate STCG and LTCG on equity, property, gold", path: "/capital-gains" },
@@ -173,7 +173,7 @@ export default function Home() {
         <div className="container-main">
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 bg-white/10 rounded-full px-4 py-1.5 mb-6">
-              <span className="text-sm font-medium text-teal">FY 2024-25</span>
+              <span className="text-sm font-medium text-teal">FY 2026-27</span>
               <span className="text-white/40">•</span>
               <span className="text-sm text-white/60">Educational Only</span>
             </div>
@@ -263,9 +263,9 @@ export default function Home() {
         <div className="container-main text-center">
           <h2 className="text-3xl font-bold mb-4">Ready to Explore?</h2>
           <p className="text-white/70 mb-8 max-w-lg mx-auto">Start with the Tax Estimator to see how much you could save, or dive into the Form 16 Explorer to understand your salary structure.</p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Link href="/estimator" className="bg-white text-teal font-semibold px-6 py-3 rounded-xl hover:bg-white/90 transition-colors">Tax Estimator</Link>
-            <Link href="/form16/specimen" className="border-2 border-white/30 text-white font-semibold px-6 py-3 rounded-xl hover:bg-white/10 transition-colors">View Form 16 Specimen</Link>
+          <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-4">
+            <Link href="/estimator" className="bg-white text-teal font-semibold px-6 py-3 rounded-xl hover:bg-white/90 transition-colors w-full sm:w-64 text-center">Tax Estimator</Link>
+            <Link href="/form16/specimen" className="border-2 border-white/30 text-white font-semibold px-6 py-3 rounded-xl hover:bg-white/10 transition-colors w-full sm:w-64 text-center">View Form 16 Specimen</Link>
           </div>
         </div>
       </section>

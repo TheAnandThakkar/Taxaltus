@@ -30,7 +30,7 @@ export const JARGON: Record<string, { short: string; detail?: string }> = {
         detail: "Covers medical insurance for yourself, spouse, children (₹25K), and parents (additional ₹25K/₹50K). Only under Old Regime."
     },
     "Section 87A": {
-        short: "A tax rebate available to individuals with taxable income up to ₹7 lakh (New Regime) or ₹5 lakh (Old Regime), making their tax effectively zero.",
+        short: "A tax rebate available to individuals with taxable income up to ₹12 lakh (New Regime) or ₹5 lakh (Old Regime), making their tax effectively zero.",
         detail: "The rebate equals the tax payable — so if your tax is ₹10,000 and you qualify, your tax becomes ₹0. If income crosses the threshold, NO rebate applies and full tax is charged."
     },
     "HRA": {
@@ -50,12 +50,12 @@ export const JARGON: Record<string, { short: string; detail?: string }> = {
         detail: "Calculated as (Last basic × 15/26 × years of service). Exempt from tax up to ₹20 lakh. Regulated by the Payment of Gratuity Act."
     },
     "Assessment Year": {
-        short: "The year in which you file your return for the previous year's income. E.g., AY 2025-26 is for income earned in FY 2024-25.",
-        detail: "Always one year ahead of the Financial Year. When someone says 'file ITR for AY 2025-26', they mean for income you earned between April 2024 and March 2025."
+        short: "The year in which you file your return for the previous year's income. E.g., AY 2027-28 is for income earned in FY 2026-27.",
+        detail: "Always one year ahead of the Financial Year. When someone says 'file ITR for AY 2027-28', they mean for income you earned between April 2026 and March 2027."
     },
     "Financial Year": {
         short: "The 12-month period from April 1 to March 31 during which income is earned.",
-        detail: "India's government financial year differs from calendar year. FY 2024-25 = April 1, 2024 to March 31, 2025."
+        detail: "India's government financial year differs from calendar year. FY 2026-27 = April 1, 2026 to March 31, 2027."
     },
     "Form 16": {
         short: "A certificate issued by your employer showing total salary paid and TDS deducted during the financial year.",
@@ -67,7 +67,7 @@ export const JARGON: Record<string, { short: string; detail?: string }> = {
     },
     "New Tax Regime": {
         short: "A simplified tax structure with lower slab rates but without most deductions like 80C, 80D, HRA.",
-        detail: "Default from FY 2024-25 onwards. Only deductions allowed: Standard Deduction (₹75K), employer NPS contribution (80CCD(2)), and a few others."
+        detail: "Default tax regime. Only deductions allowed: Standard Deduction (₹75K), employer NPS contribution (80CCD(2)), and a few others."
     },
     "Old Tax Regime": {
         short: "The traditional tax structure with higher slab rates but allowing deductions like 80C, 80D, HRA, home loan interest.",
@@ -87,7 +87,7 @@ export const JARGON: Record<string, { short: string; detail?: string }> = {
     },
     "LTCG": {
         short: "Long-Term Capital Gain. Profit from selling an asset held for more than a specified period (12–36 months depending on asset type).",
-        detail: "Taxed at 12.5% for equity/MF (exempt up to ₹1.25L/year). Property & gold: 12.5% without indexation (post-Budget 2024)."
+        detail: "Taxed at 12.5% for equity/MF (exempt up to ₹1.25L/year). Property & gold: 12.5% without indexation."
     },
     "STCG": {
         short: "Short-Term Capital Gain. Profit from selling an asset before the long-term holding threshold.",
@@ -111,7 +111,7 @@ export const JARGON: Record<string, { short: string; detail?: string }> = {
     },
     "LTA": {
         short: "Leave Travel Allowance. Part of salary for domestic travel during leave — 2 journeys exempt per 4-year block.",
-        detail: "Current block: 2022–2025. Only economy class air or AC train travel by shortest route qualifies. International trips not eligible."
+        detail: "Current block: 2026–2029. Only economy class air or AC train travel by shortest route qualifies. International trips not eligible."
     },
     "NPS": {
         short: "National Pension System. A government pension scheme — contributions get additional 80CCD deduction beyond 80C limit.",

@@ -10,12 +10,13 @@ function fmt(n: number) {
 }
 
 function calcNewTax(income: number) {
-    if (income <= 300000) return 0;
-    if (income <= 700000) return (income - 300000) * 0.05;
-    if (income <= 1000000) return 20000 + (income - 700000) * 0.10;
-    if (income <= 1200000) return 50000 + (income - 1000000) * 0.15;
-    if (income <= 1500000) return 80000 + (income - 1200000) * 0.20;
-    return 150000 + (income - 1500000) * 0.30;
+    if (income <= 400000) return 0;
+    if (income <= 800000) return (income - 400000) * 0.05;
+    if (income <= 1200000) return 20000 + (income - 800000) * 0.10;
+    if (income <= 1600000) return 60000 + (income - 1200000) * 0.15;
+    if (income <= 2000000) return 120000 + (income - 1600000) * 0.20;
+    if (income <= 2400000) return 200000 + (income - 2000000) * 0.25;
+    return 300000 + (income - 2400000) * 0.30;
 }
 
 function calcOldTax(income: number) {
@@ -64,8 +65,8 @@ export default function AdvanceTaxPage() {
 
         const rawTax = regime === "new" ? calcNewTax(taxableIncome) : calcOldTax(taxableIncome);
 
-        // Section 87A rebate (up to ₹25,000 for new regime ≤ ₹7L, ₹12,500 for old regime ≤ ₹5L)
-        const rebate = regime === "new" ? (taxableIncome <= 700000 ? Math.min(rawTax, 25000) : 0)
+        // Section 87A rebate (up to ₹60,000 for new regime ≤ ₹12L, ₹12,500 for old regime ≤ ₹5L)
+        const rebate = regime === "new" ? (taxableIncome <= 1200000 ? Math.min(rawTax, 60000) : 0)
             : (taxableIncome <= 500000 ? Math.min(rawTax, 12500) : 0);
 
         const taxAfterRebate = Math.max(0, rawTax - rebate);
@@ -203,6 +204,10 @@ export default function AdvanceTaxPage() {
 
                 <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mt-8 text-sm text-gray-600">
                     <strong>Note:</strong> For purely salaried employees where all tax is deducted via TDS, advance tax is generally not required. This tool is most useful for those with income from freelancing, rent, capital gains, or business.
+                </div>
+
+                <div className="bg-amber-50 border border-amber-200 rounded-lg p-5 mt-6 text-sm text-amber-800">
+                    <strong>Disclaimer:</strong> This calculator provides an approximate estimate of advance tax instalments based on the tax laws for <strong>FY 2026-27</strong>. Please consult a qualified tax professional or Chartered Accountant for accurate guidance and compliance to avoid penalties.
                 </div>
             </div>
         </div>

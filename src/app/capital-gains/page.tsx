@@ -222,8 +222,8 @@ export default function CapitalGainsPage() {
                     </div>
                 </div>
 
-                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mt-8 text-sm text-gray-600">
-                    <strong>Disclaimer:</strong> Rates are based on Budget 2024 provisions. Does not account for indexation, surcharge, or state-level taxes. Verify with a tax professional for large transactions.
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-5 mt-8 text-sm text-gray-800">
+                    <strong>Disclaimer:</strong> Rates are based on <strong>FY 2026-27</strong> provisions. The calculator provides standard estimations and does not account for specific complex cases like indexation variations, surcharge, or state-level impacts. Always verify your actual tax liability with a qualified Chartered Accountant (CA) or tax professional for high-value transactions.
                 </div>
             </div>
         </div>

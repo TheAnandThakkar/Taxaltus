@@ -39,13 +39,20 @@ export default function CTCCalculatorPage() {
 
         // Assume TDS as rough estimate (15% of gross annual as tax)
         const annualGross = grossMonthly * 12;
-        const estimatedAnnualTax = annualGross > 1200000
-            ? (annualGross - 1200000) * 0.3 + 80000
-            : annualGross > 1000000
-                ? (annualGross - 1000000) * 0.15 + 50000
-                : annualGross > 700000
-                    ? (annualGross - 700000) * 0.1 + 20000
-                    : 0;
+        const taxableForTds = Math.max(0, annualGross - 75000); // Standard deduction
+
+        let estimatedAnnualTax = taxableForTds > 2400000 ? (taxableForTds - 2400000) * 0.3 + 300000
+            : taxableForTds > 2000000 ? (taxableForTds - 2000000) * 0.25 + 200000
+                : taxableForTds > 1600000 ? (taxableForTds - 1600000) * 0.20 + 120000
+                    : taxableForTds > 1200000 ? (taxableForTds - 1200000) * 0.15 + 60000
+                        : taxableForTds > 800000 ? (taxableForTds - 800000) * 0.10 + 20000
+                            : taxableForTds > 400000 ? (taxableForTds - 400000) * 0.05
+                                : 0;
+
+        // Section 87A Rebate New Regime
+        if (taxableForTds <= 1200000) {
+            estimatedAnnualTax = Math.max(0, estimatedAnnualTax - 60000);
+        }
         const cess = estimatedAnnualTax * 0.04;
         const monthlyTDS = (estimatedAnnualTax + cess) / 12;
 
@@ -198,6 +205,10 @@ export default function CTCCalculatorPage() {
                             <p className="text-xs text-gray-400 text-center">*TDS estimate based on New Regime. Actual will vary based on investments and declarations.</p>
                         </div>
                     )}
+                </div>
+
+                <div className="bg-amber-50 border border-amber-200 rounded-lg p-5 mt-8 text-sm text-amber-800">
+                    <strong>Disclaimer:</strong> This calculator gives an estimate of your CTC breakdown and TDS applicable for <strong>FY 2026-27</strong>. Actual TDS and take-home salary may vary depending on your employer's policies, investment declarations, and other specific deductions. Consult your HR or a tax professional for precise details.
                 </div>
             </div>
         </div>

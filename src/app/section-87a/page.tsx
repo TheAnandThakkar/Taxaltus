@@ -10,12 +10,13 @@ function fmt(n: number) {
 }
 
 function calcNewTax(income: number) {
-    if (income <= 300000) return 0;
-    if (income <= 700000) return (income - 300000) * 0.05;
-    if (income <= 1000000) return 20000 + (income - 700000) * 0.1;
-    if (income <= 1200000) return 50000 + (income - 1000000) * 0.15;
-    if (income <= 1500000) return 80000 + (income - 1200000) * 0.2;
-    return 150000 + (income - 1500000) * 0.3;
+    if (income <= 400000) return 0;
+    if (income <= 800000) return (income - 400000) * 0.05;
+    if (income <= 1200000) return 20000 + (income - 800000) * 0.10;
+    if (income <= 1600000) return 60000 + (income - 1200000) * 0.15;
+    if (income <= 2000000) return 120000 + (income - 1600000) * 0.20;
+    if (income <= 2400000) return 200000 + (income - 2000000) * 0.25;
+    return 300000 + (income - 2400000) * 0.30;
 }
 
 function calcOldTax(income: number) {
@@ -37,8 +38,8 @@ export default function Section87APage() {
         const taxable = Math.max(0, inc - stdDed);
 
         const rawTax = regime === "new" ? calcNewTax(taxable) : calcOldTax(taxable);
-        const threshold = regime === "new" ? 700000 : 500000;
-        const maxRebate = regime === "new" ? 25000 : 12500;
+        const threshold = regime === "new" ? 1200000 : 500000;
+        const maxRebate = regime === "new" ? 60000 : 12500;
 
         const qualifies = taxable <= threshold;
         const rebate = qualifies ? Math.min(rawTax, maxRebate) : 0;
@@ -68,9 +69,9 @@ export default function Section87APage() {
                     <div className="flex items-start gap-3">
                         <span className="text-3xl">🚫</span>
                         <div>
-                            <h2 className="text-lg font-bold text-red-700 mb-1">Common Myth: "If my income is under ₹7L, I pay zero tax"</h2>
+                            <h2 className="text-lg font-bold text-red-700 mb-1">Common Myth: "If my income is under ₹12L, I pay zero tax"</h2>
                             <p className="text-red-600 text-sm leading-relaxed">
-                                <strong>Partially correct — but dangerously oversimplified.</strong> The ₹7L threshold applies to your <strong>taxable income</strong> (after standard deduction), not your gross salary. And if your income exceeds ₹7L by even ₹1, the rebate disappears entirely and you pay full tax on the entire amount.
+                                <strong>Partially correct — but dangerously oversimplified.</strong> The ₹12L threshold applies to your <strong>taxable income</strong> (after standard deduction), not your gross salary. And if your income exceeds ₹12L by even ₹1, the rebate disappears entirely and you pay full tax on the entire amount.
                             </p>
                         </div>
                     </div>
@@ -84,14 +85,14 @@ export default function Section87APage() {
                             Section 87A provides a <strong>tax rebate</strong> — meaning if your tax liability is below a threshold, the government waives it completely. It&apos;s not a deduction from income; it&apos;s a direct reduction in tax payable.
                         </p>
                         <ul className="mt-4 space-y-2 text-sm text-gray-600">
-                            <li className="flex gap-2"><span className="text-teal">→</span> <strong>New Regime:</strong> Rebate up to ₹25,000 if taxable income ≤ ₹7 lakh</li>
+                            <li className="flex gap-2"><span className="text-teal">→</span> <strong>New Regime:</strong> Rebate up to ₹60,000 if taxable income ≤ ₹12 lakh</li>
                             <li className="flex gap-2"><span className="text-teal">→</span> <strong>Old Regime:</strong> Rebate up to ₹12,500 if taxable income ≤ ₹5 lakh</li>
                         </ul>
                     </div>
                     <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6">
                         <h3 className="font-bold text-amber-800 mb-3 text-lg">⚠️ The Cliff Effect</h3>
                         <p className="text-sm text-amber-700 leading-relaxed">
-                            If your taxable income is ₹7,00,001 under New Regime — you get <strong>zero rebate</strong> and pay full tax (~₹25,010). But if it&apos;s ₹7,00,000 — you pay <strong>₹0</strong>. A ₹1 difference = ₹25,000 more in tax!
+                            If your taxable income is ₹12,00,001 under New Regime — you get <strong>zero rebate</strong> and pay full tax (~₹60,000). But if it&apos;s ₹12,00,000 — you pay <strong>₹0</strong>. A ₹1 difference = ₹60,000 more in tax!
                         </p>
                         <p className="text-xs text-amber-600 mt-2">This makes year-end tax planning and investment timing crucial.</p>
                     </div>
@@ -163,6 +164,9 @@ export default function Section87APage() {
                             </div>
                         )}
                     </div>
+                </div>
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-5 mt-8 text-sm text-gray-800">
+                    <strong>Disclaimer:</strong> This calculator provides an approximate estimate of the Section 87A rebate based on the tax laws for <strong>FY 2026-27</strong>. Please consult a qualified tax professional or Chartered Accountant for precise calculations and to ensure tax compliance.
                 </div>
             </div>
         </div>

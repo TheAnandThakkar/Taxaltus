@@ -52,12 +52,12 @@ export default function HRACalculator() {
             />
 
             <div className="container-main py-8 sm:py-12">
-        <div className="mb-4">
-          <Link href="/" className="inline-flex items-center gap-2 text-teal-700 hover:text-teal-800 font-medium bg-teal-50 hover:bg-teal-100 px-4 py-2 rounded-lg transition-colors">
-            <ArrowLeft className="w-4 h-4" />
-            Back to Home
-          </Link>
-        </div>
+                <div className="mb-4">
+                    <Link href="/" className="inline-flex items-center gap-2 text-teal-700 hover:text-teal-800 font-medium bg-teal-50 hover:bg-teal-100 px-4 py-2 rounded-lg transition-colors">
+                        <ArrowLeft className="w-4 h-4" />
+                        Back to Home
+                    </Link>
+                </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
@@ -218,9 +218,12 @@ export default function HRACalculator() {
                                 <Info className="w-4 h-4 text-gold" />
                                 Important Note
                             </h3>
-                            <p className="text-xs text-gray-700 leading-relaxed">
+                            <p className="text-xs text-gray-700 leading-relaxed mb-3">
                                 If you opt for the <strong>New Tax Regime</strong> (default since FY 2023-24), the HRA exemption is <strong>not available</strong>. This calculator is only relevant if you are filing your returns under the Old Tax Regime.
                             </p>
+                            <div className="bg-white/50 border border-gold/20 rounded p-3 text-xs text-gray-800">
+                                <strong>Disclaimer:</strong> This calculator provides an estimate of HRA exemption for <strong>FY 2026-27</strong>. Please consult a qualified tax professional or Chartered Accountant for exact tax planning and compliance.
+                            </div>
                         </div>
                     </div>
 

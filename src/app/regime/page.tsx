@@ -12,12 +12,13 @@ const oldSlabs = [
 ];
 
 const newSlabs = [
-  { range: "Up to ₹3,00,000", rate: "Nil" },
-  { range: "₹3,00,001 – ₹7,00,000", rate: "5%" },
-  { range: "₹7,00,001 – ₹10,00,000", rate: "10%" },
-  { range: "₹10,00,001 – ₹12,00,000", rate: "15%" },
-  { range: "₹12,00,001 – ₹15,00,000", rate: "20%" },
-  { range: "Above ₹15,00,000", rate: "30%" },
+  { range: "Up to ₹4,00,000", rate: "Nil" },
+  { range: "₹4,00,001 – ₹8,00,000", rate: "5%" },
+  { range: "₹8,00,001 – ₹12,00,000", rate: "10%" },
+  { range: "₹12,00,001 – ₹16,00,000", rate: "15%" },
+  { range: "₹16,00,001 – ₹20,00,000", rate: "20%" },
+  { range: "₹20,00,001 – ₹24,00,000", rate: "25%" },
+  { range: "Above ₹24,00,000", rate: "30%" },
 ];
 
 const deductions = [
@@ -40,7 +41,7 @@ export default function RegimeComparison() {
     <div>
       <PageHeader
         title="Old vs New Tax Regime"
-        subtitle="A comprehensive side-by-side comparison to help you choose the right tax regime for FY 2024-25."
+        subtitle="A comprehensive side-by-side comparison to help you choose the right tax regime for FY 2026-27."
         breadcrumbs={[{ label: "Regime Comparison" }]}
       />
 
@@ -53,7 +54,7 @@ export default function RegimeComparison() {
         </div>
 
         <section>
-          <h2 className="text-2xl font-bold text-navy mb-6">Tax Slab Comparison – FY 2024-25</h2>
+          <h2 className="text-2xl font-bold text-navy mb-6">Tax Slab Comparison – FY 2026-27</h2>
           <div className="grid md:grid-cols-2 gap-6">
             <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
               <div className="bg-navy text-white px-6 py-4">
@@ -123,22 +124,20 @@ export default function RegimeComparison() {
                       <td className="px-6 py-3 font-medium text-gray-800">{d.name}</td>
                       <td className="px-6 py-3">
                         <span
-                          className={`inline-block px-2.5 py-1 rounded-full text-xs font-semibold ${
-                            d.old === "Not Available"
+                          className={`inline-block px-2.5 py-1 rounded-full text-xs font-semibold ${d.old === "Not Available"
                               ? "bg-red-50 text-red-600"
                               : "bg-green-50 text-green-700"
-                          }`}
+                            }`}
                         >
                           {d.old}
                         </span>
                       </td>
                       <td className="px-6 py-3">
                         <span
-                          className={`inline-block px-2.5 py-1 rounded-full text-xs font-semibold ${
-                            d.new === "Not Available"
+                          className={`inline-block px-2.5 py-1 rounded-full text-xs font-semibold ${d.new === "Not Available"
                               ? "bg-red-50 text-red-600"
                               : "bg-green-50 text-green-700"
-                          }`}
+                            }`}
                         >
                           {d.new}
                         </span>
@@ -211,7 +210,7 @@ export default function RegimeComparison() {
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-teal mt-1">•</span>
-                  <span>Your income is up to ₹7 lakh (effectively zero tax with rebate)</span>
+                  <span>Your income is up to ₹12 lakh (effectively zero tax with Section 87A rebate)</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-teal mt-1">•</span>

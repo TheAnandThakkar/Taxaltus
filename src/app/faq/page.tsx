@@ -21,7 +21,7 @@ const FAQS: FAQItem[] = [
     {
         category: "General",
         question: "What is the deadline for filing Income Tax Returns?",
-        answer: "For individuals (salaried employees) whose accounts are not required to be audited, the deadline is generally July 31st of the Assessment Year (e.g., July 31, 2025, for FY 2024-25). Missing the deadline may result in a belated return with a penalty u/s 234F (up to ₹5,000)."
+        answer: "For individuals (salaried employees) whose accounts are not required to be audited, the deadline is generally July 31st of the Assessment Year (e.g., July 31, 2027, for FY 2026-27). Missing the deadline may result in a belated return with a penalty u/s 234F."
     },
     {
         category: "Regimes",
@@ -31,7 +31,7 @@ const FAQS: FAQItem[] = [
     {
         category: "Regimes",
         question: "Does the New Tax Regime support Section 80C deductions?",
-        answer: "No. The New Tax Regime removes about 70 exemptions and deductions, including Section 80C (PPF, ELSS, LIC), Section 80D (Health Insurance), and HRA. However, it recently retained the Standard Deduction of ₹50,000 (increased to ₹75,000 from FY 2024-25)."
+        answer: "No. The New Tax Regime removes about 70 exemptions and deductions, including Section 80C (PPF, ELSS, LIC), Section 80D (Health Insurance), and HRA. However, it does apply a Standard Deduction of ₹75,000 for salaried employees."
     },
     {
         category: "Documents & Forms",
@@ -65,12 +65,12 @@ export default function FAQ() {
             />
 
             <div className="container-main py-10 sm:py-14">
-        <div className="mb-4">
-          <Link href="/" className="inline-flex items-center gap-2 text-teal-700 hover:text-teal-800 font-medium bg-teal-50 hover:bg-teal-100 px-4 py-2 rounded-lg transition-colors">
-            <ArrowLeft className="w-4 h-4" />
-            Back to Home
-          </Link>
-        </div>
+                <div className="mb-4">
+                    <Link href="/" className="inline-flex items-center gap-2 text-teal-700 hover:text-teal-800 font-medium bg-teal-50 hover:bg-teal-100 px-4 py-2 rounded-lg transition-colors">
+                        <ArrowLeft className="w-4 h-4" />
+                        Back to Home
+                    </Link>
+                </div>
                 <div className="bg-navy rounded-2xl p-8 sm:p-12 text-white text-center mb-10 shadow-lg relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-teal/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
                     <div className="relative z-10 flex flex-col items-center">

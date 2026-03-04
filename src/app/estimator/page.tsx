@@ -86,12 +86,16 @@ export default function Estimator() {
     const oldStd = 50000;
     const oldOtherDed = c80 + d80 + hraVal + other;
     const oldTaxable = Math.max(0, income - oldStd - oldOtherDed);
-    const oldTax = calcOldRegimeTax(oldTaxable);
+    const oldRawTax = calcOldRegimeTax(oldTaxable);
+    const oldRebate = oldTaxable <= 500000 ? Math.min(oldRawTax, 12500) : 0;
+    const oldTax = Math.max(0, oldRawTax - oldRebate);
     const oldCess = oldTax * 0.04;
 
     const newStd = 75000;
     const newTaxable = Math.max(0, income - newStd);
-    const newTax = calcNewRegimeTax(newTaxable);
+    const newRawTax = calcNewRegimeTax(newTaxable);
+    const newRebate = newTaxable <= 1200000 ? Math.min(newRawTax, 60000) : 0;
+    const newTax = Math.max(0, newRawTax - newRebate);
     const newCess = newTax * 0.04;
 
     setOldResult({
@@ -161,7 +165,7 @@ export default function Estimator() {
     <div>
       <PageHeader
         title="Tax Estimator"
-        subtitle="Compare your tax liability under Old vs New regime for FY 2024-25"
+        subtitle="Compare your tax liability under Old vs New regime for FY 2026-27"
         breadcrumbs={[{ label: "Tax Estimator" }]}
       />
 
@@ -173,11 +177,10 @@ export default function Estimator() {
           </Link>
         </div>
 
-        <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-8 text-sm text-amber-800">
+        <div className="bg-amber-50 border border-amber-200 rounded-lg p-5 mb-8 text-sm text-amber-800">
           <strong>Disclaimer:</strong> This calculator is for educational and
           informational purposes only. It provides an approximate estimate based
-          on the tax slabs for FY 2024-25. Consult a qualified tax professional
-          for accurate tax planning.
+          on the tax laws for <strong>FY 2026-27</strong>. Please consult a qualified tax professional or Chartered Accountant for accurate tax planning and compliance.
         </div>
 
         <div className="bg-white rounded-xl shadow-sm border p-6 sm:p-8 mb-10">

@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-gray-50 text-gray-900 antialiased;
+}
+
+@layer components {
+  .container-main {
+    @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  .card {
+    @apply bg-white rounded-2xl border border-gray-100 shadow-sm;
+  }
+  .card-hover {
+    @apply card transition-all duration-200 hover:shadow-md hover:border-gray-200;
+  }
+  .btn-primary {
+    @apply bg-teal text-white font-semibold px-6 py-3 rounded-xl transition-all duration-200 hover:bg-teal/90 active:scale-[0.98];
+  }
+  .btn-outline {
+    @apply border-2 border-teal text-teal font-semibold px-6 py-3 rounded-xl transition-all duration-200 hover:bg-teal/5;
+  }
+  .section-title {
+    @apply text-2xl sm:text-3xl font-bold text-navy;
+  }
+  .badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold;
+  }
+}
+
+@media print {
+  nav, footer, .btn-primary, .btn-outline, button {
+    display: none !important;
+  }
+  
+  body, main {
+    background: white !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    overflow: visible !important;
+  }
+
+  .container-main {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .printable-area {
+    box-shadow: none !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}

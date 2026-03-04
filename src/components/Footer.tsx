@@ -1,38 +1,54 @@
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 export default function Footer() {
   return (
     <footer className="bg-navy text-white/70 mt-auto">
       <div className="container-main py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div className="md:col-span-1">
-            <Link to="/" className="flex items-center gap-2 mb-3">
+          <div>
+            <Link href="/" className="flex items-center gap-2 mb-3">
               <img src="/icon.png" alt="Taxaltus" className="h-8 w-8 rounded-lg" />
               <span className="text-white font-bold text-lg">Taxaltus</span>
             </Link>
             <p className="text-sm leading-relaxed">Your Tax Education Companion for Indian salaried employees.</p>
           </div>
 
-          <div>
-            <h4 className="text-white font-semibold text-sm mb-3">Explore</h4>
-            <div className="space-y-2">
-              <Link to="/form16" className="block text-sm hover:text-white transition-colors">Form 16 Explorer</Link>
-              <Link to="/deductions" className="block text-sm hover:text-white transition-colors">Deductions</Link>
-              <Link to="/glossary" className="block text-sm hover:text-white transition-colors">Glossary</Link>
-              <Link to="/learn" className="block text-sm hover:text-white transition-colors">Learn</Link>
+          {/* Explore + Guides stacked */}
+          <div className="space-y-6">
+            <div>
+              <h4 className="text-white font-semibold text-sm mb-3">Explore</h4>
+              <div className="space-y-2">
+                <Link href="/form16" className="block text-sm hover:text-white transition-colors">Form 16 Explorer</Link>
+                <Link href="/deductions" className="block text-sm hover:text-white transition-colors">Deductions</Link>
+                <Link href="/glossary" className="block text-sm hover:text-white transition-colors">Glossary</Link>
+                <Link href="/learn" className="block text-sm hover:text-white transition-colors">Learn</Link>
+                <Link href="/faq" className="block text-sm hover:text-white transition-colors">FAQ</Link>
+              </div>
+            </div>
+            <div>
+              <h4 className="text-white font-semibold text-sm mb-3">Guides</h4>
+              <div className="space-y-2">
+                <Link href="/salary-slip" className="block text-sm hover:text-white transition-colors">Salary Slip Explained</Link>
+                <Link href="/form12bb" className="block text-sm hover:text-white transition-colors">Form 12BB Guide</Link>
+                <Link href="/budget-changes" className="block text-sm hover:text-white transition-colors">Budget Changes</Link>
+              </div>
             </div>
           </div>
 
+          {/* Tools — standalone */}
           <div>
             <h4 className="text-white font-semibold text-sm mb-3">Tools</h4>
             <div className="space-y-2">
-              <Link to="/estimator" className="block text-sm hover:text-white transition-colors">Tax Estimator</Link>
-              <Link to="/itr-selector" className="block text-sm hover:text-white transition-colors">ITR Form Selector</Link>
-              <Link to="/regime" className="block text-sm hover:text-white transition-colors">Regime Comparison</Link>
-              <Link to="/checklist" className="block text-sm hover:text-white transition-colors">Tax Prep Checklist</Link>
+              <Link href="/estimator" className="block text-sm hover:text-white transition-colors">Tax Estimator</Link>
+              <Link href="/capital-gains" className="block text-sm hover:text-white transition-colors">Capital Gains Calc</Link>
+              <Link href="/advance-tax" className="block text-sm hover:text-white transition-colors">Advance Tax Calc</Link>
+              <Link href="/hra-calculator" className="block text-sm hover:text-white transition-colors">HRA Calculator</Link>
+              <Link href="/regime" className="block text-sm hover:text-white transition-colors">Regime Comparison</Link>
+              <Link href="/checklist" className="block text-sm hover:text-white transition-colors">Tax Prep Checklist</Link>
             </div>
           </div>
 
+          {/* Official Sources — standalone */}
           <div>
             <h4 className="text-white font-semibold text-sm mb-3">Official Sources</h4>
             <div className="space-y-2">

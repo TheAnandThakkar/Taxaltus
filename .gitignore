@@ -1,11 +1,14 @@
-# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
-
 # dependencies
 node_modules/
 
-# Expo
-.expo/
+# Next.js
+.next/
+out/
 dist/
+next-env.d.ts
+
+# Expo (legacy)
+.expo/
 web-build/
 expo-env.d.ts
 

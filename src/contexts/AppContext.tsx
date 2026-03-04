@@ -19,6 +19,7 @@ const RECENT_KEY = "taxaltus_recent";
 const CHECKLIST_KEY = "taxaltus_checklist";
 
 function loadJson(key: string): string[] {
+  if (typeof window === "undefined") return [];
   try {
     const v = localStorage.getItem(key);
     return v ? JSON.parse(v) : [];
@@ -28,13 +29,29 @@ function loadJson(key: string): string[] {
 }
 
 export function AppProvider({ children }: { children: ReactNode }) {
-  const [bookmarks, setBookmarks] = useState<string[]>(() => loadJson(BOOKMARKS_KEY));
-  const [recentlyViewed, setRecentlyViewed] = useState<string[]>(() => loadJson(RECENT_KEY));
-  const [checkedItems, setCheckedItems] = useState<string[]>(() => loadJson(CHECKLIST_KEY));
+  const [isMounted, setIsMounted] = useState(false);
+  const [bookmarks, setBookmarks] = useState<string[]>([]);
+  const [recentlyViewed, setRecentlyViewed] = useState<string[]>([]);
+  const [checkedItems, setCheckedItems] = useState<string[]>([]);
 
-  useEffect(() => { localStorage.setItem(BOOKMARKS_KEY, JSON.stringify(bookmarks)); }, [bookmarks]);
-  useEffect(() => { localStorage.setItem(RECENT_KEY, JSON.stringify(recentlyViewed)); }, [recentlyViewed]);
-  useEffect(() => { localStorage.setItem(CHECKLIST_KEY, JSON.stringify(checkedItems)); }, [checkedItems]);
+  useEffect(() => {
+    setBookmarks(loadJson(BOOKMARKS_KEY));
+    setRecentlyViewed(loadJson(RECENT_KEY));
+    setCheckedItems(loadJson(CHECKLIST_KEY));
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (isMounted) localStorage.setItem(BOOKMARKS_KEY, JSON.stringify(bookmarks));
+  }, [bookmarks, isMounted]);
+
+  useEffect(() => {
+    if (isMounted) localStorage.setItem(RECENT_KEY, JSON.stringify(recentlyViewed));
+  }, [recentlyViewed, isMounted]);
+
+  useEffect(() => {
+    if (isMounted) localStorage.setItem(CHECKLIST_KEY, JSON.stringify(checkedItems));
+  }, [checkedItems, isMounted]);
 
   const toggleBookmark = useCallback((id: string) => {
     setBookmarks(prev => prev.includes(id) ? prev.filter(b => b !== id) : [...prev, id]);
@@ -56,6 +73,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const isChecked = useCallback((id: string) => checkedItems.includes(id), [checkedItems]);
 
   const resetChecklist = useCallback(() => { setCheckedItems([]); }, []);
+
+  // Don't render children until mounted to prevent hydration errors from mismatched UI states
+  if (!isMounted) return null;
 
   return (
     <AppContext.Provider value={{

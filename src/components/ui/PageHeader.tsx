@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 interface Props {
   title: string;
@@ -12,12 +12,12 @@ export default function PageHeader({ title, subtitle, breadcrumbs }: Props) {
       <div className="container-main">
         {breadcrumbs && (
           <nav className="flex items-center gap-2 text-sm text-white/50 mb-4">
-            <Link to="/" className="hover:text-white/80 transition-colors">Home</Link>
+            <Link href="/" className="hover:text-white/80 transition-colors">Home</Link>
             {breadcrumbs.map((bc, i) => (
               <span key={i} className="flex items-center gap-2">
                 <span>/</span>
                 {bc.path ? (
-                  <Link to={bc.path} className="hover:text-white/80 transition-colors">{bc.label}</Link>
+                  <Link href={bc.path} className="hover:text-white/80 transition-colors">{bc.label}</Link>
                 ) : (
                   <span className="text-white/70">{bc.label}</span>
                 )}

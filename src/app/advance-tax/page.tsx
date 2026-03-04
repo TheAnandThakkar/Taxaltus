@@ -1,0 +1,210 @@
+"use client";
+
+import { useState, useMemo } from "react";
+import PageHeader from "@/components/ui/PageHeader";
+import Link from "next/link";
+import { ArrowLeft, CalendarDays, Info } from "lucide-react";
+
+function fmt(n: number) {
+    return "₹" + Math.round(n).toLocaleString("en-IN");
+}
+
+function calcNewTax(income: number) {
+    if (income <= 300000) return 0;
+    if (income <= 700000) return (income - 300000) * 0.05;
+    if (income <= 1000000) return 20000 + (income - 700000) * 0.10;
+    if (income <= 1200000) return 50000 + (income - 1000000) * 0.15;
+    if (income <= 1500000) return 80000 + (income - 1200000) * 0.20;
+    return 150000 + (income - 1500000) * 0.30;
+}
+
+function calcOldTax(income: number) {
+    if (income <= 250000) return 0;
+    if (income <= 500000) return (income - 250000) * 0.05;
+    if (income <= 1000000) return 12500 + (income - 500000) * 0.20;
+    return 112500 + (income - 1000000) * 0.30;
+}
+
+// Dynamically compute advance tax due dates for current FY
+function getInstallments(annualTax: number) {
+    const now = new Date();
+    const fyStartYear = now.getMonth() <= 2 ? now.getFullYear() - 1 : now.getFullYear();
+    const y1 = fyStartYear;
+    const y2 = fyStartYear + 1;
+
+    return [
+        { label: "1st Instalment", dueDate: `15 Jun ${y1}`, pct: 15, cumPct: 15 },
+        { label: "2nd Instalment", dueDate: `15 Sep ${y1}`, pct: 30, cumPct: 45 },
+        { label: "3rd Instalment", dueDate: `15 Dec ${y1}`, pct: 30, cumPct: 75 },
+        { label: "4th Instalment", dueDate: `15 Mar ${y2}`, pct: 25, cumPct: 100 },
+    ].map(inst => ({
+        ...inst,
+        amount: Math.round((annualTax * inst.pct) / 100),
+        cumAmount: Math.round((annualTax * inst.cumPct) / 100),
+    }));
+}
+
+export default function AdvanceTaxPage() {
+    const [regime, setRegime] = useState<"new" | "old">("new");
+    const [income, setIncome] = useState("");
+    const [deductions80c, setDeductions80c] = useState("");
+    const [otherDeductions, setOtherDeductions] = useState("");
+    const [tdsAlreadyDeducted, setTdsAlreadyDeducted] = useState("");
+
+    const result = useMemo(() => {
+        const gross = parseFloat(income) || 0;
+        if (!gross) return null;
+
+        const stdDed = regime === "old" ? 50000 : 75000;
+        const ded80c = regime === "old" ? Math.min(parseFloat(deductions80c) || 0, 150000) : 0;
+        const otherDed = regime === "old" ? Math.min(parseFloat(otherDeductions) || 0, 100000) : 0;
+        const tds = parseFloat(tdsAlreadyDeducted) || 0;
+
+        const taxableIncome = Math.max(0, gross - stdDed - ded80c - otherDed);
+
+        const rawTax = regime === "new" ? calcNewTax(taxableIncome) : calcOldTax(taxableIncome);
+
+        // Section 87A rebate (up to ₹25,000 for new regime ≤ ₹7L, ₹12,500 for old regime ≤ ₹5L)
+        const rebate = regime === "new" ? (taxableIncome <= 700000 ? Math.min(rawTax, 25000) : 0)
+            : (taxableIncome <= 500000 ? Math.min(rawTax, 12500) : 0);
+
+        const taxAfterRebate = Math.max(0, rawTax - rebate);
+        const cess = taxAfterRebate * 0.04;
+        const annualTax = taxAfterRebate + cess;
+        const advanceTaxPayable = Math.max(0, annualTax - tds);
+
+        return {
+            gross, taxableIncome, rawTax, rebate, taxAfterRebate, cess, annualTax, tds,
+            advanceTaxPayable,
+            installments: getInstallments(advanceTaxPayable),
+            needsAdvanceTax: advanceTaxPayable > 10000,
+        };
+    }, [regime, income, deductions80c, otherDeductions, tdsAlreadyDeducted]);
+
+    return (
+        <div>
+            <PageHeader
+                title="Advance Tax Calculator"
+                subtitle="Calculate your quarterly advance tax installments for the current financial year"
+                breadcrumbs={[{ label: "Advance Tax" }]}
+            />
+            <div className="container-main py-10 sm:py-14">
+                <div className="mb-5">
+                    <Link href="/" className="inline-flex items-center gap-2 text-teal-700 hover:text-teal-800 font-medium bg-teal-50 hover:bg-teal-100 px-4 py-2 rounded-lg transition-colors">
+                        <ArrowLeft className="w-4 h-4" />
+                        Back to Home
+                    </Link>
+                </div>
+
+                <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-8 text-sm text-blue-800 flex gap-3">
+                    <Info className="w-4 h-4 mt-0.5 shrink-0 text-blue-600" />
+                    <div>
+                        <strong>Who needs to pay Advance Tax?</strong> Any individual with tax liability exceeding ₹10,000 after TDS must pay advance tax in quarterly instalments. This includes salaried employees with significant non-salary income (capital gains, rent, interest, freelance, etc).
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div className="space-y-5">
+                        {/* Regime */}
+                        <div>
+                            <label className="block text-sm font-semibold text-gray-700 mb-2">Tax Regime</label>
+                            <div className="grid grid-cols-2 gap-3">
+                                {(["new", "old"] as const).map(r => (
+                                    <button key={r} onClick={() => setRegime(r)}
+                                        className={`py-3 rounded-xl text-sm font-semibold border-2 transition-colors ${regime === r ? "bg-navy text-white border-navy" : "bg-white text-gray-600 border-gray-200 hover:border-navy/50"}`}>
+                                        {r === "new" ? "New (Default)" : "Old (Deductions)"}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Estimated Annual Gross Income (₹)</label>
+                            <input type="number" value={income} onChange={e => setIncome(e.target.value)} placeholder="e.g. 1200000"
+                                className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-teal/40" />
+                        </div>
+
+                        {regime === "old" && (
+                            <>
+                                <div>
+                                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">80C Investments (₹, max ₹1.5L)</label>
+                                    <input type="number" value={deductions80c} onChange={e => setDeductions80c(e.target.value)} placeholder="150000"
+                                        className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-teal/40" />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">Other Deductions (HRA, 80D, etc.) (₹)</label>
+                                    <input type="number" value={otherDeductions} onChange={e => setOtherDeductions(e.target.value)} placeholder="e.g. 50000"
+                                        className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-teal/40" />
+                                </div>
+                            </>
+                        )}
+
+                        <div>
+                            <label className="block text-sm font-semibold text-gray-700 mb-1.5">TDS Already Deducted (₹)</label>
+                            <input type="number" value={tdsAlreadyDeducted} onChange={e => setTdsAlreadyDeducted(e.target.value)} placeholder="e.g. 80000"
+                                className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-teal/40" />
+                        </div>
+                    </div>
+
+                    {/* Results */}
+                    <div>
+                        {!result ? (
+                            <div className="rounded-2xl border-2 border-dashed border-gray-200 h-full flex items-center justify-center min-h-[300px]">
+                                <p className="text-gray-400 text-sm text-center px-8">Enter your projected income details to see your advance tax installment schedule.</p>
+                            </div>
+                        ) : !result.needsAdvanceTax ? (
+                            <div className="bg-emerald-50 border-2 border-emerald-200 rounded-2xl p-8 text-center">
+                                <div className="text-4xl mb-3">✅</div>
+                                <h3 className="text-xl font-bold text-emerald-700 mb-2">No Advance Tax Required</h3>
+                                <p className="text-emerald-600 text-sm">Your estimated advance tax payable after TDS is <strong>{fmt(result.advanceTaxPayable)}</strong>, which is below the ₹10,000 threshold.</p>
+                            </div>
+                        ) : (
+                            <div className="space-y-4">
+                                <div className="bg-white border-2 border-teal/30 rounded-2xl overflow-hidden shadow-sm">
+                                    <div className="bg-navy text-white px-5 py-3">
+                                        <p className="text-sm opacity-70">Total Advance Tax Payable This Year</p>
+                                        <p className="text-3xl font-bold">{fmt(result.advanceTaxPayable)}</p>
+                                    </div>
+                                    <div className="divide-y divide-gray-100 text-sm">
+                                        {[
+                                            { label: "Gross Income", value: fmt(result.gross) },
+                                            { label: "Taxable Income", value: fmt(result.taxableIncome) },
+                                            { label: "Annual Tax + Cess", value: fmt(result.annualTax) },
+                                            { label: "Less: TDS Deducted", value: `-${fmt(result.tds)}` },
+                                        ].map((r, i) => (
+                                            <div key={i} className="flex justify-between px-5 py-2.5">
+                                                <span className="text-gray-500">{r.label}</span>
+                                                <span className="font-medium text-navy">{r.value}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <h3 className="font-bold text-navy flex items-center gap-2">
+                                    <CalendarDays className="w-4 h-4 text-teal" />
+                                    Quarterly Payment Schedule
+                                </h3>
+                                {result.installments.map((inst, i) => (
+                                    <div key={i} className="flex items-center justify-between bg-white border border-gray-100 rounded-xl px-5 py-4 shadow-sm">
+                                        <div>
+                                            <p className="font-semibold text-navy text-sm">{inst.label}</p>
+                                            <p className="text-xs text-gray-400 mt-0.5">Due: {inst.dueDate} ({inst.pct}% of total)</p>
+                                        </div>
+                                        <div className="text-right">
+                                            <p className="font-bold text-teal">{fmt(inst.amount)}</p>
+                                            <p className="text-xs text-gray-400">Cumulative: {fmt(inst.cumAmount)}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mt-8 text-sm text-gray-600">
+                    <strong>Note:</strong> For purely salaried employees where all tax is deducted via TDS, advance tax is generally not required. This tool is most useful for those with income from freelancing, rent, capital gains, or business.
+                </div>
+            </div>
+        </div>
+    );
+}

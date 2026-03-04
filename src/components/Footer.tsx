@@ -28,8 +28,12 @@ export default function Footer() {
             <div>
               <h4 className="text-white font-semibold text-sm mb-3">Guides</h4>
               <div className="space-y-2">
+                <Link href="/first-time-filer" className="block text-sm hover:text-white transition-colors">First-Time Filer Guide</Link>
                 <Link href="/salary-slip" className="block text-sm hover:text-white transition-colors">Salary Slip Explained</Link>
+                <Link href="/ais-explainer" className="block text-sm hover:text-white transition-colors">AIS / Form 26AS</Link>
                 <Link href="/form12bb" className="block text-sm hover:text-white transition-colors">Form 12BB Guide</Link>
+                <Link href="/itr-mistakes" className="block text-sm hover:text-white transition-colors">ITR Mistakes to Avoid</Link>
+                <Link href="/tax-notice-decoder" className="block text-sm hover:text-white transition-colors">Tax Notice Decoder</Link>
                 <Link href="/budget-changes" className="block text-sm hover:text-white transition-colors">Budget Changes</Link>
               </div>
             </div>
@@ -40,8 +44,11 @@ export default function Footer() {
             <h4 className="text-white font-semibold text-sm mb-3">Tools</h4>
             <div className="space-y-2">
               <Link href="/estimator" className="block text-sm hover:text-white transition-colors">Tax Estimator</Link>
+              <Link href="/ctc-calculator" className="block text-sm hover:text-white transition-colors">CTC → Take-Home</Link>
               <Link href="/capital-gains" className="block text-sm hover:text-white transition-colors">Capital Gains Calc</Link>
               <Link href="/advance-tax" className="block text-sm hover:text-white transition-colors">Advance Tax Calc</Link>
+              <Link href="/section-87a" className="block text-sm hover:text-white transition-colors">Section 87A Checker</Link>
+              <Link href="/budget-impact" className="block text-sm hover:text-white transition-colors">Budget Impact Calc</Link>
               <Link href="/hra-calculator" className="block text-sm hover:text-white transition-colors">HRA Calculator</Link>
               <Link href="/regime" className="block text-sm hover:text-white transition-colors">Regime Comparison</Link>
               <Link href="/checklist" className="block text-sm hover:text-white transition-colors">Tax Prep Checklist</Link>

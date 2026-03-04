@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { Clock, Bell, BellOff } from "lucide-react";
+import { Clock, Bell, BellOff, Lightbulb } from "lucide-react";
+import { getJargonOfDay } from "@/data/jargon";
 
 function RemindMeButton({ label, iso }: { label: string; iso: string }) {
   const [status, setStatus] = useState<"idle" | "set" | "denied">("idle");
@@ -140,8 +141,14 @@ function MiniCountdown({ targetIsoStr }: { targetIsoStr: string }) {
 const FEATURES = [
   { title: "Form 16 Explorer", desc: "Understand every field in your Form 16 with detailed explanations", path: "/form16", icon: "📋", color: "bg-teal/5 border-teal/20" },
   { title: "Tax Estimator", desc: "Compare your tax under Old vs New regime with side-by-side breakdown", path: "/estimator", icon: "🧮", color: "bg-gold/10 border-gold/20" },
+  { title: "CTC → Take-Home", desc: "Enter your CTC and see exactly where every rupee goes before it reaches your bank", path: "/ctc-calculator", icon: "💼", color: "bg-emerald-50 border-emerald-200" },
+  { title: "Section 87A Guide", desc: "The most misunderstood rebate — with cliff effect explained and a live checker", path: "/section-87a", icon: "🚫", color: "bg-red-50 border-red-100" },
+  { title: "First-Time Filer", desc: "Step-by-step ITR filing guide in plain English — no jargon, no confusion", path: "/first-time-filer", icon: "🎓", color: "bg-blue-50 border-blue-200" },
+  { title: "AIS / Form 26AS", desc: "Understand every section of your Annual Information Statement", path: "/ais-explainer", icon: "📊", color: "bg-purple-50 border-purple-200" },
+  { title: "Tax Notice Decoder", desc: "Got a notice from IT dept? Find out what it means and what to do", path: "/tax-notice-decoder", icon: "📬", color: "bg-amber-50 border-amber-200" },
+  { title: "ITR Mistakes Guide", desc: "8 common mistakes salaried employees make — and how to avoid them", path: "/itr-mistakes", icon: "⚠️", color: "bg-orange-50 border-orange-200" },
+  { title: "Budget 2024 Impact", desc: "See exactly how Budget 2024 changed your personal tax", path: "/budget-impact", icon: "📈", color: "bg-indigo-50 border-indigo-200" },
   { title: "Deductions Guide", desc: "Explore all Chapter VI-A deductions — 80C, 80D, NPS, and more", path: "/deductions", icon: "💰", color: "bg-indigo/5 border-indigo/20" },
-  { title: "ITR Form Selector", desc: "Answer simple questions to find which ITR form you should file", path: "/itr-selector", icon: "📝", color: "bg-emerald-50 border-emerald-200" },
   { title: "Old vs New Regime", desc: "Side-by-side comparison of tax slabs, exemptions, and features", path: "/regime", icon: "⚖️", color: "bg-purple-50 border-purple-200" },
   { title: "Tax Prep Checklist", desc: "Track all documents and steps needed before filing your return", path: "/checklist", icon: "✅", color: "bg-sky-50 border-sky-200" },
 ];
@@ -151,7 +158,13 @@ const QUICK_LINKS = [
   { title: "Budget 2024 Changes", desc: "What changed for salaried employees", path: "/budget-changes" },
   { title: "Investment Deadlines", desc: "Key dates and lock-in periods", path: "/investment-deadlines" },
   { title: "Tax Quiz", desc: "Test your tax knowledge", path: "/quiz" },
+  { title: "Capital Gains Calc", desc: "Calculate STCG and LTCG on equity, property, gold", path: "/capital-gains" },
+  { title: "Advance Tax Calc", desc: "Quarterly installment schedule and amounts", path: "/advance-tax" },
+  { title: "HRA Calculator", desc: "Calculate your HRA exemption amount", path: "/hra-calculator" },
+  { title: "Salary Slip Guide", desc: "CTC, HRA, PF, TDS components explained", path: "/salary-slip" },
 ];
+
+const JOTD = getJargonOfDay();
 
 export default function Home() {
   return (
@@ -173,8 +186,25 @@ export default function Home() {
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
               <Link href="/estimator" className="btn-primary">Try Tax Estimator</Link>
-              <Link href="/form16" className="btn-outline border-white/30 text-white hover:bg-white/10">Explore Form 16</Link>
+              <Link href="/first-time-filer" className="btn-outline border-white/30 text-white hover:bg-white/10">First-Time Filer Guide</Link>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Jargon of the Day */}
+      <section className="py-6 bg-teal/5 border-b border-teal/10">
+        <div className="container-main">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <div className="flex items-center gap-2 shrink-0">
+              <Lightbulb className="w-5 h-5 text-teal" />
+              <span className="text-xs font-bold text-teal uppercase tracking-wider">Jargon of the Day</span>
+            </div>
+            <div className="flex-1 sm:border-l sm:border-teal/20 sm:pl-4">
+              <span className="font-bold text-navy">{JOTD.term}: </span>
+              <span className="text-gray-600 text-sm">{JOTD.short}</span>
+            </div>
+            <Link href="/glossary" className="text-xs text-teal font-semibold hover:underline shrink-0">See full glossary →</Link>
           </div>
         </div>
       </section>

@@ -6,9 +6,8 @@ export default function Footer() {
       <div className="container-main py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <Link href="/" className="flex items-center gap-2 mb-3">
-              <img src="/icon.png" alt="Taxaltus" className="h-8 w-8 rounded-lg" />
-              <span className="text-white font-bold text-lg">Taxaltus</span>
+            <Link href="/" className="flex items-center mb-3">
+              <img src="/logo.png" alt="Taxaltus" className="h-10 w-auto object-contain" />
             </Link>
             <p className="text-sm leading-relaxed">Your Tax Education Companion for Indian salaried employees.</p>
           </div>

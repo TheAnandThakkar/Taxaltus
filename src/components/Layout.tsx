@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import FeedbackWidget from "./FeedbackWidget";
 
 export default function Layout({ children }: { children?: React.ReactNode }) {
   const pathname = usePathname();
@@ -13,12 +14,13 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
   }, [pathname]);
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col relative w-full overflow-x-hidden">
       <Navbar />
       <main className="flex-1">
         {children}
       </main>
       <Footer />
+      <FeedbackWidget />
     </div>
   );
 }

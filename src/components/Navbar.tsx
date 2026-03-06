@@ -98,9 +98,8 @@ export default function Navbar() {
       <nav className="bg-navy sticky top-0 z-40 shadow-lg">
         <div className="container-main">
           <div className="flex items-center justify-between h-16">
-            <Link href="/" className="flex items-center gap-3" onClick={() => setMobileOpen(false)}>
-              <img src="/icon.png" alt="Taxaltus" className="h-9 w-9 rounded-lg" />
-              <span className="text-white font-bold text-lg tracking-wide">Taxaltus</span>
+            <Link href="/" className="flex items-center" onClick={() => setMobileOpen(false)}>
+              <img src="/logo.png" alt="Taxaltus" className="h-10 w-auto object-contain" />
             </Link>
 
             <div className="flex items-center gap-1 sm:gap-2">

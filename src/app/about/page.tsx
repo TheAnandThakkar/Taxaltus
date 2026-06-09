@@ -15,7 +15,7 @@ export default function About() {
     <div>
       <PageHeader
         title="About Taxaltus"
-        subtitle="Your trusted companion for understanding Indian income tax"
+        subtitle="A non-profit tax education initiative"
         breadcrumbs={[{ label: "About" }]}
       />
 
@@ -42,7 +42,7 @@ export default function About() {
               </li>
               <li className="flex items-start gap-3 bg-white/40 p-3 rounded-xl">
                 <span className="mt-1 flex-shrink-0 w-2 h-2 rounded-full bg-amber-400" />
-                <span><strong className="text-amber-900">Privacy First:</strong> No personal or financial data is ever collected, stored on servers, or transmitted. All calculations happen entirely within your local browser.</span>
+                <span><strong className="text-amber-900">Privacy First:</strong> Calculator inputs stay in your browser. If you voluntarily submit the update/reminder form, Taxaltus stores only the contact details and preferences you provide.</span>
               </li>
               <li className="flex items-start gap-3 bg-white/40 p-3 rounded-xl">
                 <span className="mt-1 flex-shrink-0 w-2 h-2 rounded-full bg-amber-400" />
@@ -50,7 +50,7 @@ export default function About() {
               </li>
               <li className="flex items-start gap-3 bg-white/40 p-3 rounded-xl">
                 <span className="mt-1 flex-shrink-0 w-2 h-2 rounded-full bg-amber-400" />
-                <span><strong className="text-amber-900">Dynamic Tax Laws:</strong> Tax rules and slabs are based on the latest FY 2024-25 framework but are subject to government amendments and individual edge cases.</span>
+                <span><strong className="text-amber-900">Dynamic Tax Laws:</strong> Tax rules and slabs are maintained for AY 2026-27 and AY 2027-28 based on official published rules, but tax law remains subject to government amendments and individual edge cases.</span>
               </li>
             </ul>
           </section>
@@ -90,7 +90,7 @@ export default function About() {
               alt="Taxaltus"
               className="h-12 sm:h-14 mx-auto mb-4 object-contain"
             />
-            <p className="text-gray-500 text-sm italic">Your Tax Education Companion</p>
+            <p className="text-gray-500 text-sm italic">A non-profit tax education initiative.</p>
           </section>
         </div>
       </div>

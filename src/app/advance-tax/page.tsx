@@ -4,40 +4,32 @@ import { useState, useMemo } from "react";
 import PageHeader from "@/components/ui/PageHeader";
 import Link from "next/link";
 import { ArrowLeft, CalendarDays, Info } from "lucide-react";
+import AssessmentYearSelect from "@/components/ui/AssessmentYearSelect";
+import OfficialSources from "@/components/ui/OfficialSources";
+import TrustBar from "@/components/ui/TrustBar";
+import {
+    AGE_GROUP_LABELS,
+    AgeGroup,
+    AssessmentYear,
+    DEFAULT_ASSESSMENT_YEAR,
+    calculateIncomeTax,
+    getTaxYearRules,
+} from "@/lib/taxYears";
 
 function fmt(n: number) {
     return "₹" + Math.round(n).toLocaleString("en-IN");
 }
 
-function calcNewTax(income: number) {
-    if (income <= 400000) return 0;
-    if (income <= 800000) return (income - 400000) * 0.05;
-    if (income <= 1200000) return 20000 + (income - 800000) * 0.10;
-    if (income <= 1600000) return 60000 + (income - 1200000) * 0.15;
-    if (income <= 2000000) return 120000 + (income - 1600000) * 0.20;
-    if (income <= 2400000) return 200000 + (income - 2000000) * 0.25;
-    return 300000 + (income - 2400000) * 0.30;
-}
-
-function calcOldTax(income: number) {
-    if (income <= 250000) return 0;
-    if (income <= 500000) return (income - 250000) * 0.05;
-    if (income <= 1000000) return 12500 + (income - 500000) * 0.20;
-    return 112500 + (income - 1000000) * 0.30;
-}
-
-// Dynamically compute advance tax due dates for current FY
-function getInstallments(annualTax: number) {
-    const now = new Date();
-    const fyStartYear = now.getMonth() <= 2 ? now.getFullYear() - 1 : now.getFullYear();
-    const y1 = fyStartYear;
-    const y2 = fyStartYear + 1;
+function getInstallments(annualTax: number, assessmentYear: AssessmentYear) {
+    const rules = getTaxYearRules(assessmentYear);
+    const fyStartYear = Number(rules.fyLabel.slice(3, 7));
+    const fyEndYear = fyStartYear + 1;
 
     return [
-        { label: "1st Instalment", dueDate: `15 Jun ${y1}`, pct: 15, cumPct: 15 },
-        { label: "2nd Instalment", dueDate: `15 Sep ${y1}`, pct: 30, cumPct: 45 },
-        { label: "3rd Instalment", dueDate: `15 Dec ${y1}`, pct: 30, cumPct: 75 },
-        { label: "4th Instalment", dueDate: `15 Mar ${y2}`, pct: 25, cumPct: 100 },
+        { label: "1st Instalment", dueDate: `15 Jun ${fyStartYear}`, pct: 15, cumPct: 15 },
+        { label: "2nd Instalment", dueDate: `15 Sep ${fyStartYear}`, pct: 30, cumPct: 45 },
+        { label: "3rd Instalment", dueDate: `15 Dec ${fyStartYear}`, pct: 30, cumPct: 75 },
+        { label: "4th Instalment", dueDate: `15 Mar ${fyEndYear}`, pct: 25, cumPct: 100 },
     ].map(inst => ({
         ...inst,
         amount: Math.round((annualTax * inst.pct) / 100),
@@ -46,47 +38,45 @@ function getInstallments(annualTax: number) {
 }
 
 export default function AdvanceTaxPage() {
+    const [assessmentYear, setAssessmentYear] = useState<AssessmentYear>(DEFAULT_ASSESSMENT_YEAR);
     const [regime, setRegime] = useState<"new" | "old">("new");
+    const [ageGroup, setAgeGroup] = useState<AgeGroup>("below60");
     const [income, setIncome] = useState("");
     const [deductions80c, setDeductions80c] = useState("");
     const [otherDeductions, setOtherDeductions] = useState("");
     const [tdsAlreadyDeducted, setTdsAlreadyDeducted] = useState("");
 
     const result = useMemo(() => {
+        const rules = getTaxYearRules(assessmentYear);
         const gross = parseFloat(income) || 0;
         if (!gross) return null;
 
-        const stdDed = regime === "old" ? 50000 : 75000;
+        const stdDed = rules.standardDeduction[regime];
         const ded80c = regime === "old" ? Math.min(parseFloat(deductions80c) || 0, 150000) : 0;
         const otherDed = regime === "old" ? Math.min(parseFloat(otherDeductions) || 0, 100000) : 0;
         const tds = parseFloat(tdsAlreadyDeducted) || 0;
 
         const taxableIncome = Math.max(0, gross - stdDed - ded80c - otherDed);
 
-        const rawTax = regime === "new" ? calcNewTax(taxableIncome) : calcOldTax(taxableIncome);
-
-        // Section 87A rebate (up to ₹60,000 for new regime ≤ ₹12L, ₹12,500 for old regime ≤ ₹5L)
-        const rebate = regime === "new" ? (taxableIncome <= 1200000 ? Math.min(rawTax, 60000) : 0)
-            : (taxableIncome <= 500000 ? Math.min(rawTax, 12500) : 0);
-
-        const taxAfterRebate = Math.max(0, rawTax - rebate);
-        const cess = taxAfterRebate * 0.04;
-        const annualTax = taxAfterRebate + cess;
+        const taxCalc = calculateIncomeTax({ assessmentYear, regime, taxableIncome, ageGroup });
+        const annualTax = taxCalc.totalTax;
         const advanceTaxPayable = Math.max(0, annualTax - tds);
 
         return {
-            gross, taxableIncome, rawTax, rebate, taxAfterRebate, cess, annualTax, tds,
+            gross, taxableIncome, rawTax: taxCalc.rawTax, rebate: taxCalc.rebate, taxAfterRebate: taxCalc.taxAfterRebate, cess: taxCalc.cess, annualTax, tds,
             advanceTaxPayable,
-            installments: getInstallments(advanceTaxPayable),
+            installments: getInstallments(advanceTaxPayable, assessmentYear),
             needsAdvanceTax: advanceTaxPayable > 10000,
         };
-    }, [regime, income, deductions80c, otherDeductions, tdsAlreadyDeducted]);
+    }, [assessmentYear, regime, ageGroup, income, deductions80c, otherDeductions, tdsAlreadyDeducted]);
+
+    const rules = getTaxYearRules(assessmentYear);
 
     return (
         <div>
             <PageHeader
                 title="Advance Tax Calculator"
-                subtitle="Calculate your quarterly advance tax installments for the current financial year"
+                subtitle={`Calculate quarterly advance tax installments for ${rules.fyLabel} (${rules.label})`}
                 breadcrumbs={[{ label: "Advance Tax" }]}
             />
             <div className="container-main py-10 sm:py-14">
@@ -95,6 +85,10 @@ export default function AdvanceTaxPage() {
                         <ArrowLeft className="w-4 h-4" />
                         Back to Home
                     </Link>
+                </div>
+
+                <div className="mb-6">
+                    <TrustBar />
                 </div>
 
                 <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-8 text-sm text-blue-800 flex gap-3">
@@ -106,6 +100,7 @@ export default function AdvanceTaxPage() {
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <div className="space-y-5">
+                        <AssessmentYearSelect value={assessmentYear} onChange={setAssessmentYear} />
                         {/* Regime */}
                         <div>
                             <label className="block text-sm font-semibold text-gray-700 mb-2">Tax Regime</label>
@@ -118,6 +113,18 @@ export default function AdvanceTaxPage() {
                                 ))}
                             </div>
                         </div>
+
+                        {regime === "old" && (
+                            <div>
+                                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Age Group</label>
+                                <select value={ageGroup} onChange={event => setAgeGroup(event.target.value as AgeGroup)}
+                                    className="w-full border border-gray-200 rounded-xl px-4 py-3 text-navy focus:outline-none focus:ring-2 focus:ring-teal/40 bg-white">
+                                    {Object.entries(AGE_GROUP_LABELS).map(([key, label]) => (
+                                        <option key={key} value={key}>{label}</option>
+                                    ))}
+                                </select>
+                            </div>
+                        )}
 
                         <div>
                             <label className="block text-sm font-semibold text-gray-700 mb-1.5">Estimated Annual Gross Income (₹)</label>
@@ -207,7 +214,10 @@ export default function AdvanceTaxPage() {
                 </div>
 
                 <div className="bg-amber-50 border border-amber-200 rounded-lg p-5 mt-6 text-sm text-amber-800">
-                    <strong>Disclaimer:</strong> This calculator provides an approximate estimate of advance tax instalments based on the tax laws for <strong>FY 2026-27</strong>. Please consult a qualified tax professional or Chartered Accountant for accurate guidance and compliance to avoid penalties.
+                    <strong>Disclaimer:</strong> This calculator provides an educational estimate of advance tax instalments based on the tax laws for <strong>{rules.fyLabel} ({rules.label})</strong>. Please consult a qualified tax professional or Chartered Accountant for personalised advice and compliance.
+                </div>
+                <div className="mt-6">
+                    <OfficialSources />
                 </div>
             </div>
         </div>

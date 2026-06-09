@@ -65,9 +65,69 @@ export default function sitemap(): MetadataRoute.Sitemap {
             priority: 0.7,
         },
         {
+            url: `${baseUrl}/form16-guided`,
+            lastModified: new Date(),
+            changeFrequency: 'monthly',
+            priority: 0.8,
+        },
+        {
+            url: `${baseUrl}/tax-examples`,
+            lastModified: new Date(),
+            changeFrequency: 'monthly',
+            priority: 0.8,
+        },
+        {
+            url: `${baseUrl}/tax-questions`,
+            lastModified: new Date(),
+            changeFrequency: 'monthly',
+            priority: 0.8,
+        },
+        {
+            url: `${baseUrl}/form12bb`,
+            lastModified: new Date(),
+            changeFrequency: 'yearly',
+            priority: 0.7,
+        },
+        {
+            url: `${baseUrl}/salary-slip`,
+            lastModified: new Date(),
+            changeFrequency: 'yearly',
+            priority: 0.7,
+        },
+        {
+            url: `${baseUrl}/tax-notice-decoder`,
+            lastModified: new Date(),
+            changeFrequency: 'monthly',
+            priority: 0.8,
+        },
+        {
+            url: `${baseUrl}/ais-explainer`,
+            lastModified: new Date(),
+            changeFrequency: 'yearly',
+            priority: 0.7,
+        },
+        {
+            url: `${baseUrl}/itr-selector`,
+            lastModified: new Date(),
+            changeFrequency: 'yearly',
+            priority: 0.7,
+        },
+        {
             url: `${baseUrl}/first-time-filer`,
             lastModified: new Date(),
             changeFrequency: 'yearly',
+            priority: 0.7,
+        },
+        {
+            url: `${baseUrl}/checklist`,
+            lastModified: new Date(),
+            changeFrequency: 'yearly',
+            priority: 0.7,
+        },
+        {
+            url: `${baseUrl}/investment-deadlines`,
+            lastModified: new Date(),
+            changeFrequency: 'monthly',
             priority: 0.7,
         },
         {
@@ -87,6 +147,36 @@ export default function sitemap(): MetadataRoute.Sitemap {
             lastModified: new Date(),
             changeFrequency: 'monthly',
             priority: 0.6,
+        },
+        {
+            url: `${baseUrl}/learn`,
+            lastModified: new Date(),
+            changeFrequency: 'monthly',
+            priority: 0.6,
+        },
+        {
+            url: `${baseUrl}/deductions`,
+            lastModified: new Date(),
+            changeFrequency: 'monthly',
+            priority: 0.6,
+        },
+        {
+            url: `${baseUrl}/budget-changes`,
+            lastModified: new Date(),
+            changeFrequency: 'yearly',
+            priority: 0.6,
+        },
+        {
+            url: `${baseUrl}/about`,
+            lastModified: new Date(),
+            changeFrequency: 'yearly',
+            priority: 0.5,
+        },
+        {
+            url: `${baseUrl}/disclaimer`,
+            lastModified: new Date(),
+            changeFrequency: 'yearly',
+            priority: 0.5,
         },
     ];
 

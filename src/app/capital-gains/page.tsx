@@ -4,6 +4,10 @@ import { useState, useMemo } from "react";
 import PageHeader from "@/components/ui/PageHeader";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import AssessmentYearSelect from "@/components/ui/AssessmentYearSelect";
+import { AssessmentYear, DEFAULT_ASSESSMENT_YEAR, getTaxYearRules } from "@/lib/taxYears";
+import OfficialSources from "@/components/ui/OfficialSources";
+import TrustBar from "@/components/ui/TrustBar";
 
 type AssetType = "equity" | "equity_mf" | "debt_mf" | "property" | "gold";
 
@@ -55,6 +59,7 @@ function fmt(n: number) {
 }
 
 export default function CapitalGainsPage() {
+    const [assessmentYear, setAssessmentYear] = useState<AssessmentYear>(DEFAULT_ASSESSMENT_YEAR);
     const [assetType, setAssetType] = useState<AssetType>("equity");
     const [buyPrice, setBuyPrice] = useState("");
     const [sellPrice, setSellPrice] = useState("");
@@ -62,6 +67,7 @@ export default function CapitalGainsPage() {
     const [units, setUnits] = useState("1");
 
     const info = ASSET_INFO[assetType];
+    const rules = getTaxYearRules(assessmentYear);
 
     const result = useMemo(() => {
         const bp = parseFloat(buyPrice) || 0;
@@ -116,7 +122,7 @@ export default function CapitalGainsPage() {
         <div>
             <PageHeader
                 title="Capital Gains Calculator"
-                subtitle="Calculate your STCG and LTCG tax on equity, mutual funds, property and gold"
+                subtitle={`Calculate STCG and LTCG tax for ${rules.fyLabel} (${rules.label})`}
                 breadcrumbs={[{ label: "Capital Gains" }]}
             />
             <div className="container-main py-10 sm:py-14">
@@ -127,9 +133,14 @@ export default function CapitalGainsPage() {
                     </Link>
                 </div>
 
+                <div className="mb-6">
+                    <TrustBar />
+                </div>
+
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     {/* Inputs */}
                     <div className="space-y-5">
+                        <AssessmentYearSelect value={assessmentYear} onChange={setAssessmentYear} />
                         <div>
                             <label className="block text-sm font-semibold text-gray-700 mb-1.5">Asset Type</label>
                             <select value={assetType} onChange={e => setAssetType(e.target.value as AssetType)}
@@ -223,7 +234,10 @@ export default function CapitalGainsPage() {
                 </div>
 
                 <div className="bg-gray-50 border border-gray-200 rounded-lg p-5 mt-8 text-sm text-gray-800">
-                    <strong>Disclaimer:</strong> Rates are based on <strong>FY 2026-27</strong> provisions. The calculator provides standard estimations and does not account for specific complex cases like indexation variations, surcharge, or state-level impacts. Always verify your actual tax liability with a qualified Chartered Accountant (CA) or tax professional for high-value transactions.
+                    <strong>Disclaimer:</strong> Rates are based on <strong>{rules.fyLabel} ({rules.label})</strong> provisions. The calculator provides standard estimations and does not account for specific complex cases like indexation variations, surcharge, or state-level impacts. Always verify your actual tax liability with a qualified Chartered Accountant (CA) or tax professional for high-value transactions.
+                </div>
+                <div className="mt-6">
+                    <OfficialSources note="Capital gains can involve special rules for purchase date, STT, asset type, grandfathering, indexation choices, set-off and carry-forward. Use this calculator as an educational first estimate." />
                 </div>
             </div>
         </div>

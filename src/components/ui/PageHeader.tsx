@@ -27,6 +27,9 @@ export default function PageHeader({ title, subtitle, breadcrumbs }: Props) {
         )}
         <h1 className="text-3xl sm:text-4xl font-bold">{title}</h1>
         {subtitle && <p className="mt-2 text-white/60 text-lg max-w-2xl">{subtitle}</p>}
+        <p className="mt-4 text-xs text-white/45">
+          Last reviewed: 10 June 2026 | Educational information for AY 2026-27 and AY 2027-28
+        </p>
       </div>
     </div>
   );

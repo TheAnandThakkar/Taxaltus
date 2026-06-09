@@ -112,8 +112,8 @@ export default function BudgetChanges() {
   return (
     <div>
       <PageHeader
-        title="Budget 2024-25 Changes"
-        subtitle="Key income tax changes from the Union Budget for FY 2024-25 that impact individual taxpayers."
+        title="Budget Tax Changes"
+        subtitle="Key income tax changes relevant for AY 2026-27 and AY 2027-28 individual taxpayers."
         breadcrumbs={[{ label: "Budget Changes" }]}
       />
 

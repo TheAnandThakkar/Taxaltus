@@ -1,6 +1,7 @@
 import Providers from "./providers";
 import Layout from "@/components/Layout";
 import PWARegister from "@/components/PWARegister";
+import StructuredData from "@/components/StructuredData";
 import "./globals.css";
 
 import { Metadata, Viewport } from 'next';
@@ -8,28 +9,35 @@ import { Metadata, Viewport } from 'next';
 export const metadata: Metadata = {
     metadataBase: new URL('https://taxaltus.com'),
     title: {
-        default: "Taxaltus - The Ultimate Income Tax Companion",
+        default: "Income Tax Companion for Indian Salaried Employees - Taxaltus",
         template: "%s | Taxaltus",
     },
-    description: "Taxaltus helps Indian salaried employees understand Form 16, explore deductions, compare tax regimes (Old vs New), and prepare for tax filing. Free tax calculators and guides.",
+    description: "Taxaltus is a non-profit tax education initiative and income tax companion for Indian salaried employees. Estimate tax for AY 2026-27 and AY 2027-28, compare regimes, learn HRA, Form 16 and notices.",
+    alternates: {
+        canonical: "https://taxaltus.com",
+    },
+    category: "finance",
     keywords: [
-        "Income Tax",
-        "Income Tax Companion",
-        "Tax Calculation",
-        "New Income Tax Rules",
-        "Latest Income Tax Rules",
-        "How to file ITR",
-        "Which ITR should file",
-        "What is TDS",
-        "HRA Calculations",
-        "New Tax Regime Comparision",
-        "Old vs New Tax Regime",
-        "taxaltus",
+        "income tax calculator",
+        "income tax calculator India",
+        "tax estimator",
+        "tax estimation",
+        "income tax notice",
+        "income tax notice decoder",
+        "HRA calculator",
+        "HRA calculation",
+        "Taxaltus",
         "Anand Thakkar",
-        "Form 16 guide",
+        "non-profit tax education initiative",
+        "AY 2026-27 tax calculator",
+        "AY 2027-28 tax calculator",
+        "new tax regime calculator",
+        "old vs new tax regime",
         "Section 87A rebate",
-        "Advance tax calculator",
-        "Capital gains tax calculator"
+        "Form 16 guide",
+        "advance tax calculator",
+        "How to file ITR",
+        "Which ITR should file"
     ],
     authors: [{ name: "Anand Thakkar" }],
     creator: "Anand Thakkar",
@@ -39,17 +47,26 @@ export const metadata: Metadata = {
         apple: '/icon.png',
     },
     openGraph: {
-        title: "Taxaltus - The Ultimate Income Tax Companion",
-        description: "Your trusted companion for understanding Indian income tax. Calculate your takes, find deductions, and prepare your ITR.",
+        title: "Income Tax Companion for Indian Salaried Employees - Taxaltus",
+        description: "Learn and estimate Indian income tax, compare old vs new regime, understand HRA, 87A rebate, advance tax, Form 16 and income tax notices with Taxaltus.",
         url: "https://taxaltus.com",
         siteName: "Taxaltus",
         locale: "en_IN",
         type: "website",
+        images: [
+            {
+                url: "/og-taxaltus.png",
+                width: 1200,
+                height: 630,
+                alt: "Taxaltus income tax companion for Indian salaried employees",
+            },
+        ],
     },
     twitter: {
         card: "summary_large_image",
-        title: "Taxaltus - Income Tax Companion",
-        description: "Understand Indian income tax effortlessly. Calculators, guides, and tax planning tools.",
+        title: "Income Tax Companion India - Taxaltus",
+        description: "Educational calculators and guides for Indian salaried taxpayers: AY 2026-27, AY 2027-28, HRA, Form 16, 87A and notices.",
+        images: ["/og-taxaltus.png"],
     },
     manifest: '/manifest.json',
 };
@@ -67,6 +84,7 @@ export default function RootLayout({
         <html lang="en">
             <body className="antialiased min-h-screen flex flex-col">
                 <PWARegister />
+                <StructuredData />
                 <Providers>
                     <Layout>
                         {children}

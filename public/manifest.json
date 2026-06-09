@@ -1,7 +1,7 @@
 {
     "name": "Taxaltus",
     "short_name": "Taxaltus",
-    "description": "Your trusted companion for understanding Indian income tax",
+    "description": "Educational Indian income tax companion for AY 2026-27 and AY 2027-28 with estimators, HRA, 87A rebate, Form 16, advance tax and notice guides.",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#ffffff",

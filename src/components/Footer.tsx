@@ -10,6 +10,7 @@ export default function Footer() {
               <img src="/logo.png" alt="Taxaltus" className="h-10 w-auto object-contain" />
             </Link>
             <p className="text-sm leading-relaxed">Your Tax Education Companion for Indian salaried employees.</p>
+            <p className="text-xs text-white/50 mt-2">A non-profit tax education initiative.</p>
           </div>
 
           {/* Explore + Guides stacked */}
@@ -20,6 +21,7 @@ export default function Footer() {
                 <Link href="/form16" className="block text-sm hover:text-white transition-colors">Form 16 Explorer</Link>
                 <Link href="/deductions" className="block text-sm hover:text-white transition-colors">Deductions</Link>
                 <Link href="/glossary" className="block text-sm hover:text-white transition-colors">Glossary</Link>
+                <Link href="/tax-questions" className="block text-sm hover:text-white transition-colors">Tax Questions</Link>
                 <Link href="/learn" className="block text-sm hover:text-white transition-colors">Learn</Link>
                 <Link href="/faq" className="block text-sm hover:text-white transition-colors">FAQ</Link>
               </div>
@@ -28,6 +30,7 @@ export default function Footer() {
               <h4 className="text-white font-semibold text-sm mb-3">Guides</h4>
               <div className="space-y-2">
                 <Link href="/first-time-filer" className="block text-sm hover:text-white transition-colors">First-Time Filer Guide</Link>
+                <Link href="/form16-guided" className="block text-sm hover:text-white transition-colors">I Have Form 16</Link>
                 <Link href="/salary-slip" className="block text-sm hover:text-white transition-colors">Salary Slip Explained</Link>
                 <Link href="/ais-explainer" className="block text-sm hover:text-white transition-colors">AIS / Form 26AS</Link>
                 <Link href="/form12bb" className="block text-sm hover:text-white transition-colors">Form 12BB Guide</Link>
@@ -47,6 +50,7 @@ export default function Footer() {
               <Link href="/capital-gains" className="block text-sm hover:text-white transition-colors">Capital Gains Calc</Link>
               <Link href="/advance-tax" className="block text-sm hover:text-white transition-colors">Advance Tax Calc</Link>
               <Link href="/section-87a" className="block text-sm hover:text-white transition-colors">Section 87A Checker</Link>
+              <Link href="/tax-examples" className="block text-sm hover:text-white transition-colors">Tax Examples</Link>
               <Link href="/budget-impact" className="block text-sm hover:text-white transition-colors">Budget Impact Calc</Link>
               <Link href="/hra-calculator" className="block text-sm hover:text-white transition-colors">HRA Calculator</Link>
               <Link href="/regime" className="block text-sm hover:text-white transition-colors">Regime Comparison</Link>
@@ -61,6 +65,7 @@ export default function Footer() {
               <a href="https://www.incometax.gov.in" target="_blank" rel="noopener noreferrer" className="block text-sm hover:text-white transition-colors">Income Tax Department ↗</a>
               <a href="https://www.incometax.gov.in/iec/foportal" target="_blank" rel="noopener noreferrer" className="block text-sm hover:text-white transition-colors">CBDT ↗</a>
               <a href="https://www.epfindia.gov.in" target="_blank" rel="noopener noreferrer" className="block text-sm hover:text-white transition-colors">EPFO ↗</a>
+              <Link href="/disclaimer" className="block text-sm hover:text-white transition-colors">Educational Disclaimer</Link>
             </div>
           </div>
         </div>

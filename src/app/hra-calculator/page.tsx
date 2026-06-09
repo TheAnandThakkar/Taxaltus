@@ -5,6 +5,10 @@ import PageHeader from "@/components/ui/PageHeader";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { Calculator, Info } from "lucide-react";
+import AssessmentYearSelect from "@/components/ui/AssessmentYearSelect";
+import { AssessmentYear, DEFAULT_ASSESSMENT_YEAR, getTaxYearRules } from "@/lib/taxYears";
+import OfficialSources from "@/components/ui/OfficialSources";
+import TrustBar from "@/components/ui/TrustBar";
 
 function formatCurrency(amount: number) {
     return new Intl.NumberFormat("en-IN", {
@@ -15,6 +19,7 @@ function formatCurrency(amount: number) {
 }
 
 export default function HRACalculator() {
+    const [assessmentYear, setAssessmentYear] = useState<AssessmentYear>(DEFAULT_ASSESSMENT_YEAR);
     const [basicSalary, setBasicSalary] = useState<string>("");
     const [da, setDa] = useState<string>("");
     const [hraReceived, setHraReceived] = useState<string>("");
@@ -39,12 +44,13 @@ export default function HRACalculator() {
     // Exemption is the minimum of the three
     const exemption = Math.max(0, Math.min(rule1, rule2, rule3));
     const taxableHra = Math.max(0, hraValue - exemption);
+    const rules = getTaxYearRules(assessmentYear);
 
     return (
         <div className="bg-gray-50 min-h-screen">
             <PageHeader
                 title="HRA Exemption Calculator"
-                subtitle="Calculate your tax-free House Rent Allowance under Section 10(13A)"
+                subtitle={`Calculate tax-free House Rent Allowance under Section 10(13A) for ${rules.fyLabel} (${rules.label})`}
                 breadcrumbs={[
                     { label: "Tools" },
                     { label: "HRA Calculator" },
@@ -59,6 +65,10 @@ export default function HRACalculator() {
                     </Link>
                 </div>
 
+                <div className="mb-6">
+                    <TrustBar />
+                </div>
+
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
                     {/* Inputs Section */}
@@ -71,6 +81,7 @@ export default function HRACalculator() {
                         </div>
 
                         <div className="space-y-4">
+                            <AssessmentYearSelect value={assessmentYear} onChange={setAssessmentYear} />
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1.5">
                                     Basic Salary (Annual) <span className="text-red-500">*</span>
@@ -222,11 +233,14 @@ export default function HRACalculator() {
                                 If you opt for the <strong>New Tax Regime</strong> (default since FY 2023-24), the HRA exemption is <strong>not available</strong>. This calculator is only relevant if you are filing your returns under the Old Tax Regime.
                             </p>
                             <div className="bg-white/50 border border-gold/20 rounded p-3 text-xs text-gray-800">
-                                <strong>Disclaimer:</strong> This calculator provides an estimate of HRA exemption for <strong>FY 2026-27</strong>. Please consult a qualified tax professional or Chartered Accountant for exact tax planning and compliance.
+                                <strong>Disclaimer:</strong> This calculator provides an estimate of HRA exemption for <strong>{rules.fyLabel} ({rules.label})</strong>. Please consult a qualified tax professional or Chartered Accountant for exact tax planning and compliance.
                             </div>
                         </div>
                     </div>
 
+                </div>
+                <div className="mt-8">
+                    <OfficialSources note="HRA exemption is shown using the standard Section 10(13A) rule: least of actual HRA, 40%/50% of salary, or rent paid minus 10% of salary. Keep rent receipts, rent agreement and landlord PAN where applicable." />
                 </div>
             </div>
         </div>

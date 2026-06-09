@@ -53,40 +53,48 @@ function getTaxDates() {
   // FY start year: if current month is Jan-Mar (0-2), we're still in the previous FY
   const fyStartYear = now.getMonth() <= 2 ? now.getFullYear() - 1 : now.getFullYear();
   const fyEndYear = fyStartYear + 1;
-  // e.g. "FY 26-27" after April 1 2026
-  const fyLabel = `FY ${String(fyStartYear + 1).slice(-2)}-${String(fyEndYear + 1).slice(-2)}`;
-  const ayLabel = `AY ${fyStartYear + 2}-${String(fyEndYear + 2).slice(-2)}`;
+  // e.g. FY 2026-27 and AY 2027-28 after April 1, 2026.
+  const fyLabel = `FY ${fyStartYear}-${String(fyEndYear).slice(-2)}`;
+  const ayLabel = `AY ${fyEndYear}-${String(fyEndYear + 1).slice(-2)}`;
+  const filingFyLabel = `FY ${fyStartYear - 1}-${String(fyStartYear).slice(-2)}`;
+  const filingAyLabel = `AY ${fyStartYear}-${String(fyStartYear + 1).slice(-2)}`;
 
   const dates = [
     {
       label: "Advance Tax Q1",
-      date: `Jun 15, ${fyStartYear + 1}`,
-      iso: `${fyStartYear + 1}-06-15T23:59:59+05:30`,
+      date: `Jun 15, ${fyStartYear}`,
+      iso: `${fyStartYear}-06-15T23:59:59+05:30`,
+      period: `${fyLabel} (${ayLabel})`,
     },
     {
       label: "ITR Filing Deadline",
-      date: `Jul 31, ${fyStartYear + 1}`,
-      iso: `${fyStartYear + 1}-07-31T23:59:59+05:30`,
+      date: `Jul 31, ${fyStartYear}`,
+      iso: `${fyStartYear}-07-31T23:59:59+05:30`,
+      period: `${filingFyLabel} (${filingAyLabel})`,
     },
     {
       label: "Advance Tax Q2",
-      date: `Sep 15, ${fyStartYear + 1}`,
-      iso: `${fyStartYear + 1}-09-15T23:59:59+05:30`,
+      date: `Sep 15, ${fyStartYear}`,
+      iso: `${fyStartYear}-09-15T23:59:59+05:30`,
+      period: `${fyLabel} (${ayLabel})`,
     },
     {
       label: "Advance Tax Q3",
-      date: `Dec 15, ${fyStartYear + 1}`,
-      iso: `${fyStartYear + 1}-12-15T23:59:59+05:30`,
+      date: `Dec 15, ${fyStartYear}`,
+      iso: `${fyStartYear}-12-15T23:59:59+05:30`,
+      period: `${fyLabel} (${ayLabel})`,
     },
     {
       label: "Belated Return Filing",
-      date: `Dec 31, ${fyStartYear + 1}`,
-      iso: `${fyStartYear + 1}-12-31T23:59:59+05:30`,
+      date: `Dec 31, ${fyStartYear}`,
+      iso: `${fyStartYear}-12-31T23:59:59+05:30`,
+      period: `${filingFyLabel} (${filingAyLabel})`,
     },
     {
       label: "Advance Tax Q4",
-      date: `Mar 15, ${fyEndYear + 1}`,
-      iso: `${fyEndYear + 1}-03-15T23:59:59+05:30`,
+      date: `Mar 15, ${fyEndYear}`,
+      iso: `${fyEndYear}-03-15T23:59:59+05:30`,
+      period: `${fyLabel} (${ayLabel})`,
     },
   ];
   return { dates, fyLabel, ayLabel };
@@ -140,12 +148,14 @@ function MiniCountdown({ targetIsoStr }: { targetIsoStr: string }) {
 
 const FEATURES = [
   { title: "Form 16 Explorer", desc: "Understand every field in your Form 16 with detailed explanations", path: "/form16", icon: "📋", color: "bg-teal/5 border-teal/20" },
+  { title: "I Have Form 16", desc: "Enter key Form 16 values and understand tax payable or refund before ITR filing", path: "/form16-guided", icon: "🧾", color: "bg-blue-50 border-blue-200" },
   { title: "Tax Estimator", desc: "Compare your tax under Old vs New regime with side-by-side breakdown", path: "/estimator", icon: "🧮", color: "bg-gold/10 border-gold/20" },
   { title: "CTC → Take-Home", desc: "Enter your CTC and see exactly where every rupee goes before it reaches your bank", path: "/ctc-calculator", icon: "💼", color: "bg-emerald-50 border-emerald-200" },
   { title: "Section 87A Guide", desc: "The most misunderstood rebate — with cliff effect explained and a live checker", path: "/section-87a", icon: "🚫", color: "bg-red-50 border-red-100" },
   { title: "First-Time Filer", desc: "Step-by-step ITR filing guide in plain English — no jargon, no confusion", path: "/first-time-filer", icon: "🎓", color: "bg-blue-50 border-blue-200" },
   { title: "AIS / Form 26AS", desc: "Understand every section of your Annual Information Statement", path: "/ais-explainer", icon: "📊", color: "bg-purple-50 border-purple-200" },
   { title: "Tax Notice Decoder", desc: "Got a notice from IT dept? Find out what it means and what to do", path: "/tax-notice-decoder", icon: "📬", color: "bg-amber-50 border-amber-200" },
+  { title: "Tax Questions", desc: "Search plain-language answers for HRA, 87A, Form 16, notices and filing", path: "/tax-questions", icon: "❓", color: "bg-sky-50 border-sky-200" },
   { title: "ITR Mistakes Guide", desc: "8 common mistakes salaried employees make — and how to avoid them", path: "/itr-mistakes", icon: "⚠️", color: "bg-orange-50 border-orange-200" },
   { title: "Budget Impact", desc: "See exactly how the latest Budget changed your personal tax", path: "/budget-impact", icon: "📈", color: "bg-indigo-50 border-indigo-200" },
   { title: "Deductions Guide", desc: "Explore all Chapter VI-A deductions — 80C, 80D, NPS, and more", path: "/deductions", icon: "💰", color: "bg-indigo/5 border-indigo/20" },
@@ -160,6 +170,7 @@ const QUICK_LINKS = [
   { title: "Tax Quiz", desc: "Test your tax knowledge", path: "/quiz" },
   { title: "Capital Gains Calc", desc: "Calculate STCG and LTCG on equity, property, gold", path: "/capital-gains" },
   { title: "Advance Tax Calc", desc: "Quarterly installment schedule and amounts", path: "/advance-tax" },
+  { title: "Tax Examples", desc: "Transparent public test cases", path: "/tax-examples" },
   { title: "HRA Calculator", desc: "Calculate your HRA exemption amount", path: "/hra-calculator" },
   { title: "Salary Slip Guide", desc: "CTC, HRA, PF, TDS components explained", path: "/salary-slip" },
 ];
@@ -173,19 +184,22 @@ export default function Home() {
         <div className="container-main">
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 bg-white/10 rounded-full px-4 py-1.5 mb-6">
-              <span className="text-sm font-medium text-teal">FY 2026-27</span>
+              <span className="text-sm font-medium text-teal">AY 2026-27 + AY 2027-28</span>
               <span className="text-white/40">•</span>
               <span className="text-sm text-white/60">Educational Only</span>
             </div>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">
-              Understand Your <span className="text-teal">Taxes</span>,<br />
-              Make Smarter Decisions
+              Income Tax Companion<br />
+              for Indian Salaried Employees
             </h1>
             <p className="mt-6 text-lg sm:text-xl text-white/60 max-w-2xl leading-relaxed">
-              Taxaltus helps Indian salaried employees understand Form 16, explore deductions, compare tax regimes, and prepare for tax filing — all in one place.
+              Learn income tax concepts, estimate tax for AY 2026-27 and AY 2027-28, compare old vs new regime, understand HRA, Form 16, and income tax notices for educational awareness.
+            </p>
+            <p className="mt-4 text-sm font-medium text-teal">
+              A non-profit tax education initiative.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
-              <Link href="/estimator" className="btn-primary">Try Tax Estimator</Link>
+              <Link href="/estimator" className="btn-primary">Calculate Tax</Link>
               <Link href="/first-time-filer" className="btn-outline border-white/30 text-white hover:bg-white/10">First-Time Filer Guide</Link>
             </div>
           </div>
@@ -242,13 +256,13 @@ export default function Home() {
       <section className="py-16">
         <div className="container-main text-center">
           <h2 className="section-title mb-4">Key Tax Dates</h2>
-          <p className="text-gray-500 mb-10">Important deadlines for {FY_LABEL} ({AY_LABEL})</p>
+          <p className="text-gray-500 mb-10">Current filing deadlines plus advance-tax dates for {FY_LABEL} ({AY_LABEL})</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {TAX_DATES.map((d, i) => (
               <div key={i} className="card p-5 border border-gray-100 hover:border-teal/20 transition-colors">
                 <div className="flex items-center justify-between mb-2">
                   <div className="text-lg font-bold text-navy">{d.date}</div>
-                  <div className="text-xs font-semibold bg-gray-50 text-gray-500 px-2 py-1 rounded">{FY_LABEL}</div>
+                  <div className="text-xs font-semibold bg-gray-50 text-gray-500 px-2 py-1 rounded">{d.period}</div>
                 </div>
                 <div className="text-sm font-medium text-gray-600 border-b border-gray-100 pb-3 mb-1">{d.label}</div>
                 <MiniCountdown targetIsoStr={d.iso} />

@@ -4,13 +4,14 @@ import Link from "next/link";
 import { ArrowLeft, TrendingUp, TrendingDown, Minus } from "lucide-react";
 import PageHeader from "@/components/ui/PageHeader";
 import { useState, useMemo } from "react";
+import { calculateIncomeTax } from "@/lib/taxYears";
 
 function fmt(n: number) {
     return "₹" + Math.round(Math.abs(n)).toLocaleString("en-IN");
 }
 
-// FY 2024-25 New Regime slabs (Pre-Budget 2025/2026)
-function calcOldTax(income: number) {
+// FY 2024-25 new-regime baseline before the AY 2026-27 slab expansion.
+function calcFy2024BaselineTax(income: number) {
     const std = 75000;
     const taxable = Math.max(0, income - std);
     let tax = 0;
@@ -22,23 +23,6 @@ function calcOldTax(income: number) {
     else tax = 150000 + (taxable - 1500000) * 0.3;
 
     const rebate = taxable <= 700000 ? Math.min(tax, 25000) : 0;
-    return Math.max(0, tax - rebate);
-}
-
-// FY 2026-27 New Regime slabs (Latest Budget)
-function calcNewTax(income: number) {
-    const std = 75000;
-    const taxable = Math.max(0, income - std);
-    let tax = 0;
-    if (taxable <= 400000) tax = 0;
-    else if (taxable <= 800000) tax = (taxable - 400000) * 0.05;
-    else if (taxable <= 1200000) tax = 20000 + (taxable - 800000) * 0.10;
-    else if (taxable <= 1600000) tax = 60000 + (taxable - 1200000) * 0.15;
-    else if (taxable <= 2000000) tax = 120000 + (taxable - 1600000) * 0.20;
-    else if (taxable <= 2400000) tax = 200000 + (taxable - 2000000) * 0.25;
-    else tax = 300000 + (taxable - 2400000) * 0.30;
-
-    const rebate = taxable <= 1200000 ? Math.min(tax, 60000) : 0;
     return Math.max(0, tax - rebate);
 }
 
@@ -67,15 +51,18 @@ export default function BudgetImpactPage() {
         const inc = parseFloat(salary) || 0;
         if (!inc) return null;
 
-        const oldTaxVal = calcOldTax(inc);
-        const newTaxVal = calcNewTax(inc);
+        const oldTaxVal = calcFy2024BaselineTax(inc);
+        const newTaxVal = calculateIncomeTax({
+            assessmentYear: "AY_2027_28",
+            regime: "new",
+            taxableIncome: Math.max(0, inc - 75000),
+        }).totalTax;
         const oldCess = oldTaxVal * 0.04;
-        const newCess = newTaxVal * 0.04;
-        const saving = (oldTaxVal + oldCess) - (newTaxVal + newCess);
+        const saving = (oldTaxVal + oldCess) - newTaxVal;
 
         return {
             oldTax: oldTaxVal + oldCess,
-            newTax: newTaxVal + newCess,
+            newTax: newTaxVal,
             saving,
             inc,
         };
@@ -154,7 +141,7 @@ export default function BudgetImpactPage() {
                                     </div>
                                 )}
                                 <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 text-sm text-blue-800">
-                                    <strong>Disclaimer:</strong> This calculator provides an estimate based on the <strong>FY 2026-27</strong> budget. Please consult a qualified CA for accurate guidance.
+                                    <strong>Disclaimer:</strong> This calculator provides an educational estimate based on the <strong>FY 2026-27</strong> budget. Please consult a qualified CA for personalised advice.
                                 </div>
                             </div>
                         )}

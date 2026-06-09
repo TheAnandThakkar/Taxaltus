@@ -4,12 +4,22 @@ import Link from "next/link";
 import { ArrowLeft, Info } from "lucide-react";
 import PageHeader from "@/components/ui/PageHeader";
 import { useState, useMemo } from "react";
+import AssessmentYearSelect from "@/components/ui/AssessmentYearSelect";
+import OfficialSources from "@/components/ui/OfficialSources";
+import TrustBar from "@/components/ui/TrustBar";
+import {
+    AssessmentYear,
+    DEFAULT_ASSESSMENT_YEAR,
+    calculateIncomeTax,
+    getTaxYearRules,
+} from "@/lib/taxYears";
 
 function fmt(n: number) {
     return "₹" + Math.round(n).toLocaleString("en-IN");
 }
 
 export default function CTCCalculatorPage() {
+    const [assessmentYear, setAssessmentYear] = useState<AssessmentYear>(DEFAULT_ASSESSMENT_YEAR);
     const [ctc, setCtc] = useState("");
     const [basicPct, setBasicPct] = useState("40");
     const [hraPct, setHraPct] = useState("50");
@@ -39,22 +49,14 @@ export default function CTCCalculatorPage() {
 
         // Assume TDS as rough estimate (15% of gross annual as tax)
         const annualGross = grossMonthly * 12;
-        const taxableForTds = Math.max(0, annualGross - 75000); // Standard deduction
-
-        let estimatedAnnualTax = taxableForTds > 2400000 ? (taxableForTds - 2400000) * 0.3 + 300000
-            : taxableForTds > 2000000 ? (taxableForTds - 2000000) * 0.25 + 200000
-                : taxableForTds > 1600000 ? (taxableForTds - 1600000) * 0.20 + 120000
-                    : taxableForTds > 1200000 ? (taxableForTds - 1200000) * 0.15 + 60000
-                        : taxableForTds > 800000 ? (taxableForTds - 800000) * 0.10 + 20000
-                            : taxableForTds > 400000 ? (taxableForTds - 400000) * 0.05
-                                : 0;
-
-        // Section 87A Rebate New Regime
-        if (taxableForTds <= 1200000) {
-            estimatedAnnualTax = Math.max(0, estimatedAnnualTax - 60000);
-        }
-        const cess = estimatedAnnualTax * 0.04;
-        const monthlyTDS = (estimatedAnnualTax + cess) / 12;
+        const rules = getTaxYearRules(assessmentYear);
+        const taxableForTds = Math.max(0, annualGross - rules.standardDeduction.new);
+        const estimatedTax = calculateIncomeTax({
+            assessmentYear,
+            regime: "new",
+            taxableIncome: taxableForTds,
+        });
+        const monthlyTDS = estimatedTax.totalTax / 12;
 
         const takeHome = grossMonthly - employeePF - pt - monthlyTDS;
 
@@ -73,13 +75,15 @@ export default function CTCCalculatorPage() {
             takeHome: Math.max(0, takeHome),
             employerContribs,
         };
-    }, [ctc, basicPct, hraPct, pf, gratuity]);
+    }, [assessmentYear, ctc, basicPct, hraPct, pf, gratuity]);
+
+    const rules = getTaxYearRules(assessmentYear);
 
     return (
         <div>
             <PageHeader
                 title="CTC → Take-Home Calculator"
-                subtitle="Enter your CTC and see exactly where every rupee goes — from cost to company to your bank account"
+                subtitle={`Estimate CTC to take-home using new-regime TDS for ${rules.fyLabel} (${rules.label})`}
                 breadcrumbs={[{ label: "CTC Calculator" }]}
             />
             <div className="container-main py-10 sm:py-14">
@@ -87,6 +91,10 @@ export default function CTCCalculatorPage() {
                     <Link href="/" className="inline-flex items-center gap-2 text-teal-700 hover:text-teal-800 font-medium bg-teal-50 hover:bg-teal-100 px-4 py-2 rounded-lg transition-colors">
                         <ArrowLeft className="w-4 h-4" />Back to Home
                     </Link>
+                </div>
+
+                <div className="mb-6">
+                    <TrustBar />
                 </div>
 
                 {/* Info Banner */}
@@ -101,6 +109,7 @@ export default function CTCCalculatorPage() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     {/* Inputs */}
                     <div className="space-y-5">
+                        <AssessmentYearSelect value={assessmentYear} onChange={setAssessmentYear} />
                         <div>
                             <label className="block text-sm font-semibold text-gray-700 mb-1.5">Annual CTC (₹)</label>
                             <input type="number" value={ctc} onChange={e => setCtc(e.target.value)} placeholder="e.g. 1200000"
@@ -208,7 +217,10 @@ export default function CTCCalculatorPage() {
                 </div>
 
                 <div className="bg-amber-50 border border-amber-200 rounded-lg p-5 mt-8 text-sm text-amber-800">
-                    <strong>Disclaimer:</strong> This calculator gives an estimate of your CTC breakdown and TDS applicable for <strong>FY 2026-27</strong>. Actual TDS and take-home salary may vary depending on your employer's policies, investment declarations, and other specific deductions. Consult your HR or a tax professional for precise details.
+                    <strong>Disclaimer:</strong> This calculator gives an estimate of your CTC breakdown and TDS applicable for <strong>{rules.fyLabel} ({rules.label})</strong>. Actual TDS and take-home salary may vary depending on your employer's policies, investment declarations, and other specific deductions. Consult your HR or a tax professional for precise details.
+                </div>
+                <div className="mt-6">
+                    <OfficialSources note="CTC and take-home calculations vary by employer salary structure. The TDS estimate uses Taxaltus slab rules for education only and should be reconciled with payroll, Form 16 and AIS/Form 26AS." />
                 </div>
             </div>
         </div>

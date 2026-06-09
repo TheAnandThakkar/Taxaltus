@@ -32,7 +32,7 @@ const MISTAKES = [
         who: "Almost universal among first-time filers",
         mistake: "Selecting the wrong Assessment Year when filing, leading to income being reported in wrong year.",
         consequence: "Mismatches, refund delays, and difficulty amending the return later.",
-        fix: "Rule of thumb: AY = FY + 1. For income earned Apr 2024–Mar 2025 (FY 2024-25), select AY 2025-26 on the portal.",
+        fix: "Rule of thumb: AY = FY + 1. For income earned Apr 2025–Mar 2026 (FY 2025-26), select AY 2026-27 on the portal.",
     },
     {
         n: 4,

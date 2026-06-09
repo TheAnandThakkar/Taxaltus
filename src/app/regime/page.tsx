@@ -3,6 +3,7 @@
 import PageHeader from "@/components/ui/PageHeader";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { ASSESSMENT_YEARS } from "@/lib/taxYears";
 
 const oldSlabs = [
   { range: "Up to ₹2,50,000", rate: "Nil" },
@@ -20,6 +21,8 @@ const newSlabs = [
   { range: "₹20,00,001 – ₹24,00,000", rate: "25%" },
   { range: "Above ₹24,00,000", rate: "30%" },
 ];
+
+const yearLabels = ASSESSMENT_YEARS.map((year) => `${year.fyLabel} (${year.label})`).join(" and ");
 
 const deductions = [
   { name: "Standard Deduction", old: "₹50,000", new: "₹75,000" },
@@ -41,7 +44,7 @@ export default function RegimeComparison() {
     <div>
       <PageHeader
         title="Old vs New Tax Regime"
-        subtitle="A comprehensive side-by-side comparison to help you choose the right tax regime for FY 2026-27."
+        subtitle={`A comprehensive side-by-side comparison for ${yearLabels}.`}
         breadcrumbs={[{ label: "Regime Comparison" }]}
       />
 
@@ -54,7 +57,7 @@ export default function RegimeComparison() {
         </div>
 
         <section>
-          <h2 className="text-2xl font-bold text-navy mb-6">Tax Slab Comparison – FY 2026-27</h2>
+          <h2 className="text-2xl font-bold text-navy mb-6">Tax Slab Comparison – AY 2026-27 and AY 2027-28</h2>
           <div className="grid md:grid-cols-2 gap-6">
             <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
               <div className="bg-navy text-white px-6 py-4">
@@ -225,6 +228,9 @@ export default function RegimeComparison() {
               <span className="font-semibold text-navy">Tip:</span> The New Regime is the default from FY 2023-24 onwards. You must actively opt out to choose the Old Regime. Use the{" "}
               <span className="font-semibold text-teal">Tax Estimator</span> tool to calculate your exact tax under both regimes with your actual numbers.
             </p>
+          </div>
+          <div className="mt-4 bg-blue-50 border border-blue-200 rounded-xl p-5 text-sm text-blue-800">
+            Slabs shown here are applicable for AY 2026-27 and continue for AY 2027-28 as per the official Budget 2026 FAQ for tax year FY 2026-27 onwards. Senior citizen basic exemption differences apply only under the old regime.
           </div>
         </section>
       </div>

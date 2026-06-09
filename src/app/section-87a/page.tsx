@@ -4,57 +4,57 @@ import Link from "next/link";
 import { ArrowLeft, Info, AlertTriangle } from "lucide-react";
 import PageHeader from "@/components/ui/PageHeader";
 import { useState, useMemo } from "react";
+import AssessmentYearSelect from "@/components/ui/AssessmentYearSelect";
+import OfficialSources from "@/components/ui/OfficialSources";
+import TrustBar from "@/components/ui/TrustBar";
+import {
+    AssessmentYear,
+    DEFAULT_ASSESSMENT_YEAR,
+    calculateIncomeTax,
+    getTaxYearRules,
+} from "@/lib/taxYears";
 
 function fmt(n: number) {
     return "₹" + Math.round(n).toLocaleString("en-IN");
 }
 
-function calcNewTax(income: number) {
-    if (income <= 400000) return 0;
-    if (income <= 800000) return (income - 400000) * 0.05;
-    if (income <= 1200000) return 20000 + (income - 800000) * 0.10;
-    if (income <= 1600000) return 60000 + (income - 1200000) * 0.15;
-    if (income <= 2000000) return 120000 + (income - 1600000) * 0.20;
-    if (income <= 2400000) return 200000 + (income - 2000000) * 0.25;
-    return 300000 + (income - 2400000) * 0.30;
-}
-
-function calcOldTax(income: number) {
-    if (income <= 250000) return 0;
-    if (income <= 500000) return (income - 250000) * 0.05;
-    if (income <= 1000000) return 12500 + (income - 500000) * 0.2;
-    return 112500 + (income - 1000000) * 0.3;
-}
-
 export default function Section87APage() {
+    const [assessmentYear, setAssessmentYear] = useState<AssessmentYear>(DEFAULT_ASSESSMENT_YEAR);
     const [regime, setRegime] = useState<"new" | "old">("new");
     const [income, setIncome] = useState("");
+    const rules = getTaxYearRules(assessmentYear);
 
     const result = useMemo(() => {
         const inc = parseFloat(income) || 0;
         if (!inc) return null;
 
-        const stdDed = regime === "new" ? 75000 : 50000;
+        const stdDed = rules.standardDeduction[regime];
         const taxable = Math.max(0, inc - stdDed);
 
-        const rawTax = regime === "new" ? calcNewTax(taxable) : calcOldTax(taxable);
-        const threshold = regime === "new" ? 1200000 : 500000;
-        const maxRebate = regime === "new" ? 60000 : 12500;
+        const taxCalc = calculateIncomeTax({ assessmentYear, regime, taxableIncome: taxable });
+        const threshold = rules.rebate87A[regime].incomeLimit;
 
         const qualifies = taxable <= threshold;
-        const rebate = qualifies ? Math.min(rawTax, maxRebate) : 0;
-        const taxAfterRebate = Math.max(0, rawTax - rebate);
-        const cess = taxAfterRebate * 0.04;
-        const totalTax = taxAfterRebate + cess;
 
-        return { inc, taxable, rawTax, qualifies, rebate, taxAfterRebate, cess, totalTax, threshold, stdDed };
-    }, [income, regime]);
+        return {
+            inc,
+            taxable,
+            rawTax: taxCalc.rawTax,
+            qualifies,
+            rebate: taxCalc.rebate,
+            taxAfterRebate: taxCalc.taxAfterRebate,
+            cess: taxCalc.cess,
+            totalTax: taxCalc.totalTax,
+            threshold,
+            stdDed,
+        };
+    }, [income, regime, assessmentYear, rules]);
 
     return (
         <div>
             <PageHeader
                 title="Section 87A Rebate Explained"
-                subtitle="The most misunderstood tax benefit — clearly explained with a live calculator"
+                subtitle={`The most misunderstood tax benefit, for ${rules.fyLabel} (${rules.label})`}
                 breadcrumbs={[{ label: "Section 87A" }]}
             />
             <div className="container-main py-10 sm:py-14">
@@ -62,6 +62,10 @@ export default function Section87APage() {
                     <Link href="/" className="inline-flex items-center gap-2 text-teal-700 hover:text-teal-800 font-medium bg-teal-50 hover:bg-teal-100 px-4 py-2 rounded-lg transition-colors">
                         <ArrowLeft className="w-4 h-4" />Back to Home
                     </Link>
+                </div>
+
+                <div className="mb-6">
+                    <TrustBar />
                 </div>
 
                 {/* Myth Buster Banner */}
@@ -102,6 +106,7 @@ export default function Section87APage() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <div className="space-y-5">
                         <h3 className="font-bold text-navy text-xl">Check Your Rebate</h3>
+                        <AssessmentYearSelect value={assessmentYear} onChange={setAssessmentYear} />
                         <div>
                             <label className="block text-sm font-semibold text-gray-700 mb-2">Tax Regime</label>
                             <div className="grid grid-cols-2 gap-3">
@@ -166,7 +171,10 @@ export default function Section87APage() {
                     </div>
                 </div>
                 <div className="bg-gray-50 border border-gray-200 rounded-lg p-5 mt-8 text-sm text-gray-800">
-                    <strong>Disclaimer:</strong> This calculator provides an approximate estimate of the Section 87A rebate based on the tax laws for <strong>FY 2026-27</strong>. Please consult a qualified tax professional or Chartered Accountant for precise calculations and to ensure tax compliance.
+                                <strong>Disclaimer:</strong> This calculator provides an approximate estimate of the Section 87A rebate based on the tax laws for <strong>{rules.fyLabel} ({rules.label})</strong>. Please consult a qualified tax professional or Chartered Accountant for precise calculations and to ensure tax compliance.
+                </div>
+                <div className="mt-6">
+                    <OfficialSources note="Section 87A rebate depends on residential status, total income and income taxed at normal slab rates. Some special-rate incomes may not receive the same rebate treatment." />
                 </div>
             </div>
         </div>

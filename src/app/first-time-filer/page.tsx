@@ -203,7 +203,7 @@ export default function FirstTimeFilePage() {
                 </div>
 
                 <div className="mt-8 bg-gray-50 border border-gray-200 rounded-xl p-5 text-sm text-gray-600">
-                    <strong>Deadline:</strong> ITR for FY 2024-25 must be filed by <strong>July 31, 2025</strong>. Late filing (belated return) is possible until December 31, 2025 with a late fee of ₹1,000–₹5,000.
+                    <strong>Deadline:</strong> ITR for FY 2025-26 (AY 2026-27) must be filed by <strong>July 31, 2026</strong> for most non-audit individual taxpayers. Late filing (belated return) is generally possible until December 31, 2026 with a late fee of ₹1,000–₹5,000.
                 </div>
             </div>
         </div>

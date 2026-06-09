@@ -43,7 +43,7 @@ const SALARY_COMPONENTS: SlipItem[] = [
         name: "Leave Travel Allowance (LTA)",
         key: "lta",
         typical: "1–2 months Basic/year",
-        description: "Covers travel expenses during leave. Tax-exempt for 2 journeys in a block of 4 calendar years (current block: 2022–2025). Only domestic travel by shortest route qualifies.",
+        description: "Covers travel expenses during leave. Tax-exempt for 2 journeys in a block of 4 calendar years (current block: 2026–2029). Only domestic travel by shortest route qualifies.",
         taxable: false,
         type: "earning",
     },

@@ -49,7 +49,7 @@ const SECTIONS: Section[] = [
         ],
         documents: ["Flight tickets / railway tickets", "Boarding passes", "Cab receipts if applicable"],
         notes: [
-            "Only 2 journeys in a 4-year block (current block: 2022–2025) are exempt",
+            "Only 2 journeys in a 4-year block (current block: 2026–2029) are exempt",
             "Only domestic travel qualifies — international trips not covered",
             "Exemption is for self + family members. Family = spouse, children (max 2 post-Oct 1998), dependent parents/siblings",
         ],

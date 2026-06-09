@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import FeedbackWidget from "./FeedbackWidget";
+import LeadCapturePopup from "./LeadCapturePopup";
 
 export default function Layout({ children }: { children?: React.ReactNode }) {
   const pathname = usePathname();
@@ -21,6 +22,7 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
       </main>
       <Footer />
       <FeedbackWidget />
+      <LeadCapturePopup />
     </div>
   );
 }

@@ -7,6 +7,7 @@ const NAV_LINKS = [
   { label: "Form 16", path: "/form16" },
   { label: "Deductions", path: "/deductions" },
   { label: "Glossary", path: "/glossary" },
+  { label: "Questions", path: "/tax-questions" },
   { label: "Learn", path: "/learn" },
   { label: "FAQ", path: "/faq" },
 ];
@@ -20,6 +21,8 @@ const TOOL_LINKS = [
   { label: "Budget Impact Calculator", path: "/budget-impact" },
   { label: "Section 87A Checker", path: "/section-87a" },
   { label: "ITR Form Selector", path: "/itr-selector" },
+  { label: "Form 16 Guided Entry", path: "/form16-guided" },
+  { label: "Tax Examples", path: "/tax-examples" },
   { label: "Regime Comparison", path: "/regime" },
   { label: "Tax Prep Checklist", path: "/checklist" },
   { label: "Investment Deadlines", path: "/investment-deadlines" },
@@ -31,12 +34,15 @@ const SEARCH_INDEX = [
   ...TOOL_LINKS.map(l => ({ ...l, desc: "Interactive Tool" })),
   { label: "Salary Slip Explained", path: "/salary-slip", desc: "CTC, HRA, PF, TDS and take-home breakdown" },
   { label: "Form 12BB Guide", path: "/form12bb", desc: "Investment declaration for employer TDS" },
+  { label: "I have Form 16, what next?", path: "/form16-guided", desc: "Guided Form 16 entry and ITR preparation flow" },
+  { label: "Tax Calculation Examples", path: "/tax-examples", desc: "Public tax test cases for common salaries" },
+  { label: "Search Tax Questions", path: "/tax-questions", desc: "Plain-language answers about salary tax, notices, HRA and ITR" },
   { label: "AIS / Form 26AS Explained", path: "/ais-explainer", desc: "Annual Information Statement section-by-section" },
   { label: "First-Time ITR Filer Guide", path: "/first-time-filer", desc: "Step-by-step guide for first-time ITR filers" },
   { label: "Section 87A Rebate", path: "/section-87a", desc: "Zero-tax rebate limit and cliff effect explained" },
   { label: "ITR Common Mistakes", path: "/itr-mistakes", desc: "8 mistakes salaried employees make while filing ITR" },
   { label: "Tax Notice Decoder", path: "/tax-notice-decoder", desc: "What 143(1), 148, 139(9) notices mean" },
-  { label: "Budget 2024 Impact", path: "/budget-impact", desc: "How Budget 2024 changed your tax" },
+  { label: "Budget Impact", path: "/budget-impact", desc: "How recent Budget changes affect your tax" },
   { label: "80C Deductions", path: "/deductions", desc: "Provident Fund, LIC, PPF, ELSS" },
   { label: "80D Health Insurance", path: "/deductions", desc: "Medical insurance premiums" },
   { label: "Section 10(13A) HRA", path: "/hra-calculator", desc: "House Rent Allowance calculation rules" },
@@ -47,6 +53,7 @@ const SEARCH_INDEX = [
   { label: "ITR-1 (Sahaj)", path: "/itr-selector", desc: "For individuals with salary and one house property" },
   { label: "ITR-2", path: "/itr-selector", desc: "For individuals with capital gains" },
   { label: "Advance Tax Installments", path: "/advance-tax", desc: "Quarterly advance tax payment schedule" },
+  { label: "Disclaimer", path: "/disclaimer", desc: "Educational use only, not professional advice" },
 ];
 
 export default function Navbar() {

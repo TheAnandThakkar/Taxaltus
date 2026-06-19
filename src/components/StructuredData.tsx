@@ -1,3 +1,5 @@
+import { ASSESSMENT_YEARS_AND } from "@/lib/taxYears";
+
 export default function StructuredData() {
   const baseUrl = "https://taxaltus.com";
   const graph = {
@@ -48,7 +50,7 @@ export default function StructuredData() {
           audienceType: "Indian salaried employees and individual taxpayers",
         },
         featureList: [
-          "Educational income tax estimator for AY 2026-27 and AY 2027-28",
+          `Educational income tax estimator for ${ASSESSMENT_YEARS_AND}`,
           "Old tax regime vs new tax regime comparison",
           "HRA exemption calculator",
           "Section 87A rebate calculator",

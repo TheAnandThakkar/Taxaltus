@@ -6,6 +6,7 @@ import "./globals.css";
 
 import { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
+import { ASSESSMENT_YEAR_LABELS, ASSESSMENT_YEARS_AND, ASSESSMENT_YEARS_LIST } from '@/lib/taxYears';
 
 const inter = Inter({
     subsets: ['latin'],
@@ -19,7 +20,7 @@ export const metadata: Metadata = {
         default: "Income Tax Companion for Indian Salaried Employees - Taxaltus",
         template: "%s | Taxaltus",
     },
-    description: "Taxaltus is a non-profit tax education initiative and income tax companion for Indian salaried employees. Estimate tax for AY 2026-27 and AY 2027-28, compare regimes, learn HRA, Form 16 and notices.",
+    description: `Taxaltus is a non-profit tax education initiative and income tax companion for Indian salaried employees. Estimate tax for ${ASSESSMENT_YEARS_AND}, compare regimes, learn HRA, Form 16 and notices.`,
     alternates: {
         canonical: "https://taxaltus.com",
     },
@@ -36,8 +37,7 @@ export const metadata: Metadata = {
         "Taxaltus",
         "Anand Thakkar",
         "non-profit tax education initiative",
-        "AY 2026-27 tax calculator",
-        "AY 2027-28 tax calculator",
+        ...ASSESSMENT_YEAR_LABELS.map((label) => `${label} tax calculator`),
         "new tax regime calculator",
         "old vs new tax regime",
         "Section 87A rebate",
@@ -63,8 +63,8 @@ export const metadata: Metadata = {
         images: [
             {
                 url: "/og-taxaltus.png",
-                width: 1200,
-                height: 630,
+                width: 2400,
+                height: 1260,
                 alt: "Taxaltus income tax companion for Indian salaried employees",
             },
         ],
@@ -72,7 +72,7 @@ export const metadata: Metadata = {
     twitter: {
         card: "summary_large_image",
         title: "Income Tax Companion India - Taxaltus",
-        description: "Educational calculators and guides for Indian salaried taxpayers: AY 2026-27, AY 2027-28, HRA, Form 16, 87A and notices.",
+        description: `Educational calculators and guides for Indian salaried taxpayers: ${ASSESSMENT_YEARS_LIST}, HRA, Form 16, 87A and notices.`,
         images: ["/og-taxaltus.png"],
     },
     manifest: '/manifest.json',

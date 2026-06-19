@@ -118,6 +118,12 @@ export const ASSESSMENT_YEARS: TaxYearRules[] = [
 
 export const DEFAULT_ASSESSMENT_YEAR: AssessmentYear = "AY_2026_27";
 
+// Derived labels for the supported assessment years, so prose/SEO/social text
+// never goes stale when the supported set changes — it reads from this engine.
+export const ASSESSMENT_YEAR_LABELS: string[] = ASSESSMENT_YEARS.map((year) => year.label);
+export const ASSESSMENT_YEARS_AND: string = ASSESSMENT_YEAR_LABELS.join(" and ");
+export const ASSESSMENT_YEARS_LIST: string = ASSESSMENT_YEAR_LABELS.join(", ");
+
 export function getTaxYearRules(year: AssessmentYear): TaxYearRules {
   return ASSESSMENT_YEARS.find((rules) => rules.key === year) ?? ASSESSMENT_YEARS[0];
 }

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { Clock, Bell, BellOff, Lightbulb } from "lucide-react";
 import { getJargonOfDay } from "@/data/jargon";
+import { ASSESSMENT_YEAR_LABELS, ASSESSMENT_YEARS_AND } from "@/lib/taxYears";
 
 function RemindMeButton({ label, iso }: { label: string; iso: string }) {
   const [status, setStatus] = useState<"idle" | "set" | "denied">("idle");
@@ -184,7 +185,7 @@ export default function Home() {
         <div className="container-main">
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 bg-white/10 rounded-full px-4 py-1.5 mb-6">
-              <span className="text-sm font-medium text-teal">AY 2026-27 + AY 2027-28</span>
+              <span className="text-sm font-medium text-teal">{ASSESSMENT_YEAR_LABELS.join(" + ")}</span>
               <span className="text-white/40">•</span>
               <span className="text-sm text-white/60">Educational Only</span>
             </div>
@@ -193,7 +194,7 @@ export default function Home() {
               for Indian Salaried Employees
             </h1>
             <p className="mt-6 text-lg sm:text-xl text-white/60 max-w-2xl leading-relaxed">
-              Learn income tax concepts, estimate tax for AY 2026-27 and AY 2027-28, compare old vs new regime, understand HRA, Form 16, and income tax notices for educational awareness.
+              Learn income tax concepts, estimate tax for {ASSESSMENT_YEARS_AND}, compare old vs new regime, understand HRA, Form 16, and income tax notices for educational awareness.
             </p>
             <p className="mt-4 text-sm font-medium text-teal">
               A non-profit tax education initiative.

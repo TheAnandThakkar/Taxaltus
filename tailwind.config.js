@@ -10,7 +10,7 @@ module.exports = {
         indigo: { DEFAULT: "#6366F1", light: "#6366F115" },
       },
       fontFamily: {
-        sans: ["Inter", "system-ui", "sans-serif"],
+        sans: ["var(--font-inter)", "Inter", "system-ui", "sans-serif"],
       },
     },
   },

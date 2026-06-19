@@ -7,6 +7,8 @@ import { useState, useMemo } from "react";
 import AssessmentYearSelect from "@/components/ui/AssessmentYearSelect";
 import OfficialSources from "@/components/ui/OfficialSources";
 import TrustBar from "@/components/ui/TrustBar";
+import TaxPayableVerdict from "@/components/ui/TaxPayableVerdict";
+import TaxBreakdown from "@/components/ui/TaxBreakdown";
 import {
     AssessmentYear,
     DEFAULT_ASSESSMENT_YEAR,
@@ -42,8 +44,13 @@ export default function Section87APage() {
             rawTax: taxCalc.rawTax,
             qualifies,
             rebate: taxCalc.rebate,
+            marginalRelief: taxCalc.marginalRelief,
+            surcharge: taxCalc.surcharge,
+            surchargeRate: taxCalc.surchargeRate,
             taxAfterRebate: taxCalc.taxAfterRebate,
             cess: taxCalc.cess,
+            cessRate: taxCalc.cessRate,
+            slabBreakdown: taxCalc.slabBreakdown,
             totalTax: taxCalc.totalTax,
             threshold,
             stdDed,
@@ -149,6 +156,7 @@ export default function Section87APage() {
                                             { label: "Tax Before Rebate", value: fmt(result.rawTax) },
                                             { label: "87A Rebate", value: result.rebate > 0 ? `-${fmt(result.rebate)}` : "---" },
                                             { label: "Tax After Rebate", value: fmt(result.taxAfterRebate) },
+                                            ...(result.surcharge > 0 ? [{ label: `Surcharge (${(result.surchargeRate * 100).toFixed(0)}%)`, value: `+${fmt(result.surcharge)}` }] : []),
                                             { label: "Health & Education Cess (4%)", value: fmt(result.cess) },
                                             { label: "Total Tax Payable", value: fmt(result.totalTax), bold: true },
                                         ].map((row, i) => (
@@ -159,6 +167,29 @@ export default function Section87APage() {
                                         ))}
                                     </div>
                                 </div>
+
+                                <TaxPayableVerdict
+                                    totalTax={result.totalTax}
+                                    regimeLabel={regime === "new" ? "New Regime" : "Old Regime"}
+                                    reason={
+                                        result.totalTax > 0
+                                            ? `Your taxable income (${fmt(result.taxable)}) is above the Section 87A limit of ${fmt(result.threshold)}, so the rebate does not fully wipe out your tax.`
+                                            : `Your taxable income (${fmt(result.taxable)}) is within the Section 87A limit of ${fmt(result.threshold)}, so the rebate brings your tax down to nil. You may still need to file your ITR.`
+                                    }
+                                />
+
+                                <TaxBreakdown
+                                    slabBreakdown={result.slabBreakdown}
+                                    rawTax={result.rawTax}
+                                    rebate={result.rebate}
+                                    marginalRelief={result.marginalRelief}
+                                    taxAfterRebate={result.taxAfterRebate}
+                                    surcharge={result.surcharge}
+                                    surchargeRate={result.surchargeRate}
+                                    cess={result.cess}
+                                    cessRate={result.cessRate}
+                                    totalTax={result.totalTax}
+                                />
 
                                 {!result.qualifies && (
                                     <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-800 flex gap-2">

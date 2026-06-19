@@ -230,7 +230,7 @@ export default function RegimeComparison() {
             </p>
           </div>
           <div className="mt-4 bg-blue-50 border border-blue-200 rounded-xl p-5 text-sm text-blue-800">
-            Slabs shown here are applicable for AY 2026-27 and continue for AY 2027-28 as per the official Budget 2026 FAQ for tax year FY 2026-27 onwards. Senior citizen basic exemption differences apply only under the old regime.
+            Slabs shown here are applicable for AY 2026-27 and are shown as continuing for AY 2027-28 (tax year FY 2026-27); please confirm against the latest Finance Act and official notification before filing. Senior citizen basic exemption differences apply only under the old regime.
           </div>
         </section>
       </div>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import FeedbackTrigger from "./FeedbackTrigger";
 
 export default function Footer() {
   return (
@@ -24,6 +25,7 @@ export default function Footer() {
                 <Link href="/tax-questions" className="block text-sm hover:text-white transition-colors">Tax Questions</Link>
                 <Link href="/learn" className="block text-sm hover:text-white transition-colors">Learn</Link>
                 <Link href="/faq" className="block text-sm hover:text-white transition-colors">FAQ</Link>
+                <FeedbackTrigger className="block text-sm hover:text-white transition-colors text-left" />
               </div>
             </div>
             <div>
@@ -72,7 +74,13 @@ export default function Footer() {
 
         <div className="border-t border-white/10 mt-8 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-center sm:text-left">This website provides educational information only and does not offer tax advice. Consult a qualified professional for personal tax decisions.</p>
-          <p className="text-xs shrink-0">© {new Date().getFullYear()} Taxaltus</p>
+          <div className="flex items-center gap-4 shrink-0">
+            <FeedbackTrigger
+              withIcon
+              className="inline-flex items-center gap-1.5 text-xs font-medium text-white/80 hover:text-white transition-colors"
+            />
+            <p className="text-xs">© {new Date().getFullYear()} Taxaltus</p>
+          </div>
         </div>
       </div>
     </footer>

@@ -46,7 +46,7 @@ const SEARCH_INDEX = [
   { label: "80C Deductions", path: "/deductions", desc: "Provident Fund, LIC, PPF, ELSS" },
   { label: "80D Health Insurance", path: "/deductions", desc: "Medical insurance premiums" },
   { label: "Section 10(13A) HRA", path: "/hra-calculator", desc: "House Rent Allowance calculation rules" },
-  { label: "New Tax Regime Slabs", path: "/regime", desc: "Latest tax slabs and rates for FY 24-25" },
+  { label: "New Tax Regime Slabs", path: "/regime", desc: "Latest tax slabs and rates for FY 2025-26 onwards (AY 2026-27)" },
   { label: "Old Tax Regime Slabs", path: "/regime", desc: "Traditional tax regime with deductions" },
   { label: "Capital Gains (STCG/LTCG)", path: "/capital-gains", desc: "Taxation on shares, property, and mutual funds" },
   { label: "Form 26AS / AIS", path: "/ais-explainer", desc: "Annual consolidated tax statement details" },

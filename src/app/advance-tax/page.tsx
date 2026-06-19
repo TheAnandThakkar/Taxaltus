@@ -7,6 +7,7 @@ import { ArrowLeft, CalendarDays, Info } from "lucide-react";
 import AssessmentYearSelect from "@/components/ui/AssessmentYearSelect";
 import OfficialSources from "@/components/ui/OfficialSources";
 import TrustBar from "@/components/ui/TrustBar";
+import TaxPayableVerdict from "@/components/ui/TaxPayableVerdict";
 import {
     AGE_GROUP_LABELS,
     AgeGroup,
@@ -155,7 +156,18 @@ export default function AdvanceTaxPage() {
                     </div>
 
                     {/* Results */}
-                    <div>
+                    <div className="space-y-4">
+                        {result && (
+                            <TaxPayableVerdict
+                                totalTax={result.annualTax}
+                                regimeLabel={regime === "new" ? "New Regime" : "Old Regime"}
+                                reason={
+                                    result.annualTax > 0
+                                        ? `Your estimated annual income tax (incl. cess) is ${fmt(result.annualTax)}. After TDS of ${fmt(result.tds)}, advance tax of ${fmt(result.advanceTaxPayable)} ${result.needsAdvanceTax ? "is due in instalments below." : "remains — below the ₹10,000 advance-tax threshold."}`
+                                        : "On this income no income tax is payable after the standard deduction and Section 87A rebate, so no advance tax arises."
+                                }
+                            />
+                        )}
                         {!result ? (
                             <div className="rounded-2xl border-2 border-dashed border-gray-200 h-full flex items-center justify-center min-h-[300px]">
                                 <p className="text-gray-400 text-sm text-center px-8">Enter your projected income details to see your advance tax installment schedule.</p>
@@ -177,7 +189,7 @@ export default function AdvanceTaxPage() {
                                         {[
                                             { label: "Gross Income", value: fmt(result.gross) },
                                             { label: "Taxable Income", value: fmt(result.taxableIncome) },
-                                            { label: "Annual Tax + Cess", value: fmt(result.annualTax) },
+                                            { label: "Annual Tax (incl. surcharge + cess)", value: fmt(result.annualTax) },
                                             { label: "Less: TDS Deducted", value: `-${fmt(result.tds)}` },
                                         ].map((r, i) => (
                                             <div key={i} className="flex justify-between px-5 py-2.5">

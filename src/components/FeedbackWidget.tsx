@@ -1,7 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { MessageSquare, X, Send, Loader2, CheckCircle2 } from "lucide-react";
+
+// Other components (e.g. the footer link) open this modal by dispatching
+// `window.dispatchEvent(new Event("open-feedback"))`.
+export const FEEDBACK_EVENT = "open-feedback";
 
 export default function FeedbackWidget() {
     const [isOpen, setIsOpen] = useState(false);
@@ -40,17 +44,14 @@ export default function FeedbackWidget() {
         }
     };
 
+    useEffect(() => {
+        const handler = () => setIsOpen(true);
+        window.addEventListener(FEEDBACK_EVENT, handler);
+        return () => window.removeEventListener(FEEDBACK_EVENT, handler);
+    }, []);
+
     return (
         <>
-            {/* Floating Button */}
-            <button
-                onClick={() => setIsOpen(true)}
-                className="fixed bottom-6 right-6 z-[60] p-4 bg-teal-500 hover:bg-teal-600 text-white rounded-full shadow-lg transition-transform hover:scale-105 active:scale-95 flex items-center justify-center cursor-pointer group"
-                aria-label="Feedback"
-            >
-                <MessageSquare className="w-6 h-6 group-hover:animate-pulse" />
-            </button>
-
             {/* Modal Overlay */}
             {isOpen && (
                 <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 sm:p-0">

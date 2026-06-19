@@ -8,11 +8,14 @@ import Link from "next/link";
 import OfficialSources from "@/components/ui/OfficialSources";
 import TrustBar from "@/components/ui/TrustBar";
 import AssessmentYearSelect from "@/components/ui/AssessmentYearSelect";
+import TaxPayableVerdict from "@/components/ui/TaxPayableVerdict";
+import TaxBreakdown from "@/components/ui/TaxBreakdown";
 import {
   AGE_GROUP_LABELS,
   AgeGroup,
   AssessmentYear,
   DEFAULT_ASSESSMENT_YEAR,
+  SlabBreakdownRow,
   calculateIncomeTax,
   getTaxYearRules,
 } from "@/lib/taxYears";
@@ -40,6 +43,13 @@ interface TaxResult {
   tax: number;
   cess: number;
   totalTax: number;
+  rawTax: number;
+  rebate: number;
+  marginalRelief: number;
+  surcharge: number;
+  surchargeRate: number;
+  cessRate: number;
+  slabBreakdown: SlabBreakdownRow[];
 }
 
 export default function Estimator() {
@@ -88,6 +98,13 @@ export default function Estimator() {
       tax: oldTaxCalc.taxAfterRebate,
       cess: oldTaxCalc.cess,
       totalTax: oldTaxCalc.totalTax,
+      rawTax: oldTaxCalc.rawTax,
+      rebate: oldTaxCalc.rebate,
+      marginalRelief: oldTaxCalc.marginalRelief,
+      surcharge: oldTaxCalc.surcharge,
+      surchargeRate: oldTaxCalc.surchargeRate,
+      cessRate: oldTaxCalc.cessRate,
+      slabBreakdown: oldTaxCalc.slabBreakdown,
     });
 
     setNewResult({
@@ -98,6 +115,13 @@ export default function Estimator() {
       tax: newTaxCalc.taxAfterRebate,
       cess: newTaxCalc.cess,
       totalTax: newTaxCalc.totalTax,
+      rawTax: newTaxCalc.rawTax,
+      rebate: newTaxCalc.rebate,
+      marginalRelief: newTaxCalc.marginalRelief,
+      surcharge: newTaxCalc.surcharge,
+      surchargeRate: newTaxCalc.surchargeRate,
+      cessRate: newTaxCalc.cessRate,
+      slabBreakdown: newTaxCalc.slabBreakdown,
     });
   };
 
@@ -142,6 +166,7 @@ export default function Estimator() {
       `Other Deductions: ${formatIndian(oldResult.otherDeductions)}`,
       `Taxable Income: ${formatIndian(oldResult.taxableIncome)}`,
       `Tax after rebate: ${formatIndian(oldResult.tax)}`,
+      ...(oldResult.surcharge > 0 ? [`Surcharge: ${formatIndian(oldResult.surcharge)}`] : []),
       `Cess: ${formatIndian(oldResult.cess)}`,
       `Total Tax: ${formatIndian(oldResult.totalTax)}`,
       "",
@@ -149,6 +174,7 @@ export default function Estimator() {
       `Standard Deduction: ${formatIndian(newResult.standardDeduction)}`,
       `Taxable Income: ${formatIndian(newResult.taxableIncome)}`,
       `Tax after rebate: ${formatIndian(newResult.tax)}`,
+      ...(newResult.surcharge > 0 ? [`Surcharge: ${formatIndian(newResult.surcharge)}`] : []),
       `Cess: ${formatIndian(newResult.cess)}`,
       `Total Tax: ${formatIndian(newResult.totalTax)}`,
       "",
@@ -320,8 +346,38 @@ export default function Estimator() {
         {oldResult && newResult && (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-              <ResultCard title="Old Regime" result={oldResult} highlight={betterRegime === "Old"} />
-              <ResultCard title="New Regime" result={newResult} highlight={betterRegime === "New"} />
+              <div className="space-y-3">
+                <ResultCard title="Old Regime" result={oldResult} highlight={betterRegime === "Old"} />
+                <TaxPayableVerdict totalTax={oldResult.totalTax} regimeLabel="Old Regime" />
+                <TaxBreakdown
+                  slabBreakdown={oldResult.slabBreakdown}
+                  rawTax={oldResult.rawTax}
+                  rebate={oldResult.rebate}
+                  marginalRelief={oldResult.marginalRelief}
+                  taxAfterRebate={oldResult.tax}
+                  surcharge={oldResult.surcharge}
+                  surchargeRate={oldResult.surchargeRate}
+                  cess={oldResult.cess}
+                  cessRate={oldResult.cessRate}
+                  totalTax={oldResult.totalTax}
+                />
+              </div>
+              <div className="space-y-3">
+                <ResultCard title="New Regime" result={newResult} highlight={betterRegime === "New"} />
+                <TaxPayableVerdict totalTax={newResult.totalTax} regimeLabel="New Regime" />
+                <TaxBreakdown
+                  slabBreakdown={newResult.slabBreakdown}
+                  rawTax={newResult.rawTax}
+                  rebate={newResult.rebate}
+                  marginalRelief={newResult.marginalRelief}
+                  taxAfterRebate={newResult.tax}
+                  surcharge={newResult.surcharge}
+                  surchargeRate={newResult.surchargeRate}
+                  cess={newResult.cess}
+                  cessRate={newResult.cessRate}
+                  totalTax={newResult.totalTax}
+                />
+              </div>
             </div>
 
             <div
@@ -373,11 +429,12 @@ export default function Estimator() {
 
         <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mt-10 text-sm text-gray-600">
           <strong>Note:</strong> This estimator accounts for standard deduction,
-          slab tax, Section 87A rebate, cess, and new-regime marginal relief for
-          the supported years. It does not cover every special case such as all
-          special-rate income, surcharge, agricultural income integration, or
-          non-resident restrictions. Always verify with the latest official rules
-          and consult a CA for personalised advice.
+          slab tax, Section 87A rebate, surcharge (with marginal relief) on
+          normal income above ₹50 lakh, cess, and new-regime marginal relief for
+          the supported years. It does not cover every special case such as the
+          15% surcharge cap on capital-gains/dividend income, agricultural income
+          integration, or non-resident restrictions. Always verify with the
+          latest official rules and consult a CA for personalised advice.
         </div>
         <div className="mt-6">
           <OfficialSources />
@@ -402,6 +459,9 @@ function ResultCard({
     { label: "Other Deductions", value: result.otherDeductions },
     { label: "Taxable Income", value: result.taxableIncome },
     { label: "Tax", value: result.tax },
+    ...(result.surcharge > 0
+      ? [{ label: `Surcharge (${(result.surchargeRate * 100).toFixed(0)}%)`, value: result.surcharge }]
+      : []),
     { label: "Cess (4%)", value: result.cess },
     { label: "Total Tax Payable", value: result.totalTax, bold: true },
   ];

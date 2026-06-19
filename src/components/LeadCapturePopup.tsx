@@ -20,7 +20,9 @@ export default function LeadCapturePopup() {
       return;
     }
     if (localStorage.getItem(STORAGE_KEY)) return;
-    const timer = window.setTimeout(() => setOpen(true), 5000);
+    // Wait until the visitor has had time to engage with the content before
+    // surfacing the lead form, rather than interrupting on arrival.
+    const timer = window.setTimeout(() => setOpen(true), 30000);
     return () => window.clearTimeout(timer);
   }, []);
 

@@ -7,6 +7,7 @@ import { useState, useMemo } from "react";
 import AssessmentYearSelect from "@/components/ui/AssessmentYearSelect";
 import OfficialSources from "@/components/ui/OfficialSources";
 import TrustBar from "@/components/ui/TrustBar";
+import TaxPayableVerdict from "@/components/ui/TaxPayableVerdict";
 import {
     AssessmentYear,
     DEFAULT_ASSESSMENT_YEAR,
@@ -72,6 +73,7 @@ export default function CTCCalculatorPage() {
             gratuityAmt,
             pt,
             monthlyTDS,
+            annualTax: estimatedTax.totalTax,
             takeHome: Math.max(0, takeHome),
             employerContribs,
         };
@@ -211,6 +213,15 @@ export default function CTCCalculatorPage() {
                                     </div>
                                 ))}
                             </div>
+                            <TaxPayableVerdict
+                                totalTax={result.annualTax}
+                                regimeLabel="New Regime"
+                                reason={
+                                    result.annualTax > 0
+                                        ? `Estimated annual income tax of ${fmt(Math.round(result.annualTax))} (about ${fmt(Math.round(result.monthlyTDS))}/month TDS) is built into your take-home above. Actual TDS varies with your investment declarations.`
+                                        : "On this CTC the New Regime leaves no income tax payable after the standard deduction and Section 87A rebate, so no TDS is deducted for tax."
+                                }
+                            />
                             <p className="text-xs text-gray-400 text-center">*TDS estimate based on New Regime. Actual will vary based on investments and declarations.</p>
                         </div>
                     )}

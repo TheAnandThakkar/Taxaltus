@@ -5,6 +5,13 @@ import StructuredData from "@/components/StructuredData";
 import "./globals.css";
 
 import { Metadata, Viewport } from 'next';
+import { Inter } from 'next/font/google';
+
+const inter = Inter({
+    subsets: ['latin'],
+    variable: '--font-inter',
+    display: 'swap',
+});
 
 export const metadata: Metadata = {
     metadataBase: new URL('https://taxaltus.com'),
@@ -81,8 +88,8 @@ export default function RootLayout({
     children: React.ReactNode;
 }) {
     return (
-        <html lang="en">
-            <body className="antialiased min-h-screen flex flex-col">
+        <html lang="en" className={inter.variable}>
+            <body className="font-sans antialiased min-h-screen flex flex-col">
                 <PWARegister />
                 <StructuredData />
                 <Providers>

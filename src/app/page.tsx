@@ -148,6 +148,7 @@ function MiniCountdown({ targetIsoStr }: { targetIsoStr: string }) {
 }
 
 const FEATURES = [
+  { title: "Full Income Tax Calculator", desc: "All income heads — salary, house property, capital gains & more — compared across old vs new regime", path: "/income-tax-calculator", icon: "🧮", color: "bg-teal/5 border-teal/20" },
   { title: "Form 16 Explorer", desc: "Understand every field in your Form 16 with detailed explanations", path: "/form16", icon: "📋", color: "bg-teal/5 border-teal/20" },
   { title: "I Have Form 16", desc: "Enter key Form 16 values and understand tax payable or refund before ITR filing", path: "/form16-guided", icon: "🧾", color: "bg-blue-50 border-blue-200" },
   { title: "Tax Estimator", desc: "Compare your tax under Old vs New regime with side-by-side breakdown", path: "/estimator", icon: "🧮", color: "bg-gold/10 border-gold/20" },

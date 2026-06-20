@@ -13,6 +13,7 @@ const NAV_LINKS = [
 ];
 
 const TOOL_LINKS = [
+  { label: "Full Income Tax Calculator", path: "/income-tax-calculator" },
   { label: "Tax Estimator", path: "/estimator" },
   { label: "HRA Calculator", path: "/hra-calculator" },
   { label: "Capital Gains Calculator", path: "/capital-gains" },

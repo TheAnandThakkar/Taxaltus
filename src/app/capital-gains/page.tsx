@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import AssessmentYearSelect from "@/components/ui/AssessmentYearSelect";
 import { AssessmentYear, DEFAULT_ASSESSMENT_YEAR, getTaxYearRules } from "@/lib/taxYears";
+import { EQUITY_STCG_RATE, EQUITY_LTCG_RATE, EQUITY_LTCG_EXEMPTION } from "@/lib/capitalGains";
 import OfficialSources from "@/components/ui/OfficialSources";
 import TrustBar from "@/components/ui/TrustBar";
 
@@ -15,17 +16,17 @@ const ASSET_INFO: Record<AssetType, { label: string; stcgMonths: number; stcgRat
     equity: {
         label: "Listed Equity Shares",
         stcgMonths: 12,
-        stcgRate: 20,
-        ltcgRate: 12.5,
-        ltcgExemption: 125000,
+        stcgRate: EQUITY_STCG_RATE,
+        ltcgRate: EQUITY_LTCG_RATE,
+        ltcgExemption: EQUITY_LTCG_EXEMPTION,
         note: "Traded on recognised stock exchange (STT paid). LTCG exempt up to ₹1.25L per year.",
     },
     equity_mf: {
         label: "Equity Mutual Funds",
         stcgMonths: 12,
-        stcgRate: 20,
-        ltcgRate: 12.5,
-        ltcgExemption: 125000,
+        stcgRate: EQUITY_STCG_RATE,
+        ltcgRate: EQUITY_LTCG_RATE,
+        ltcgExemption: EQUITY_LTCG_EXEMPTION,
         note: "Equity-oriented funds (65%+ equity). Same rates as direct equity post-Budget 2024.",
     },
     debt_mf: {

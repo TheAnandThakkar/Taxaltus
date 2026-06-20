@@ -63,11 +63,22 @@ export default function AdvanceTaxPage() {
         const annualTax = taxCalc.totalTax;
         const advanceTaxPayable = Math.max(0, annualTax - tds);
 
+        // Educational interest estimate under s.234C (deferment) and s.234B
+        // (short payment), assuming NO advance tax is paid during the year and
+        // the dues are cleared when filing by 31 July of the assessment year.
+        // 234C @1%/month on the cumulative shortfall at each quarter
+        // (15%×3 + 45%×3 + 75%×3 + 100%×1) = 5.05% of the assessed shortfall.
+        // 234B @1%/month for ~4 months (Apr–Jul) when < 90% is paid = 4%.
+        const interest234C = Math.round(advanceTaxPayable * 0.0505);
+        const interest234B = Math.round(advanceTaxPayable * 0.04);
+
         return {
             gross, taxableIncome, rawTax: taxCalc.rawTax, rebate: taxCalc.rebate, taxAfterRebate: taxCalc.taxAfterRebate, cess: taxCalc.cess, annualTax, tds,
             advanceTaxPayable,
             installments: getInstallments(advanceTaxPayable, assessmentYear),
             needsAdvanceTax: advanceTaxPayable > 10000,
+            interest234B,
+            interest234C,
         };
     }, [assessmentYear, regime, ageGroup, income, deductions80c, otherDeductions, tdsAlreadyDeducted]);
 
@@ -216,6 +227,30 @@ export default function AdvanceTaxPage() {
                                         </div>
                                     </div>
                                 ))}
+
+                                {/* Interest under Section 234B / 234C */}
+                                <div className="bg-white border-2 border-amber-200 rounded-2xl overflow-hidden">
+                                    <div className="bg-amber-500/10 px-5 py-3 border-b border-amber-200">
+                                        <p className="font-bold text-amber-800 text-sm">If you skip advance tax — estimated interest</p>
+                                    </div>
+                                    <div className="divide-y divide-gray-100 text-sm">
+                                        <div className="flex justify-between px-5 py-2.5">
+                                            <span className="text-gray-500">Section 234C (deferment, ~1%/mo)</span>
+                                            <span className="font-medium text-navy">{fmt(result.interest234C)}</span>
+                                        </div>
+                                        <div className="flex justify-between px-5 py-2.5">
+                                            <span className="text-gray-500">Section 234B (short payment, ~1%/mo to 31 Jul)</span>
+                                            <span className="font-medium text-navy">{fmt(result.interest234B)}</span>
+                                        </div>
+                                        <div className="flex justify-between px-5 py-2.5 bg-amber-50 font-bold">
+                                            <span className="text-amber-800">Total interest if fully deferred</span>
+                                            <span className="text-amber-800">{fmt(result.interest234B + result.interest234C)}</span>
+                                        </div>
+                                    </div>
+                                    <p className="text-xs text-gray-400 px-5 py-3">
+                                        Worst-case estimate assuming nil advance tax paid and dues cleared on filing by 31 July. Actual 234B/234C interest depends on the exact dates and amounts you pay.
+                                    </p>
+                                </div>
                             </div>
                         )}
                     </div>

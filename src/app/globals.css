@@ -46,13 +46,32 @@ body {
     display: none !important;
   }
   
+  /* Reserve a bottom margin on every printed page for the repeating footer. */
+  @page {
+    margin: 12mm 12mm 20mm 12mm;
+  }
+
   body, main {
     background: white !important;
     margin: 0 !important;
     padding: 0 !important;
-    width: 100vw !important;
-    height: 100vh !important;
+    width: auto !important;
+    height: auto !important;
     overflow: visible !important;
+  }
+
+  /* Repeating disclaimer footer — appears at the bottom of every printed page. */
+  .print-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    font-size: 8px;
+    line-height: 1.45;
+    color: #6b7280;
+    border-top: 1px solid #e5e7eb;
+    padding: 5px 2px 0;
+    background: white;
   }
 
   .container-main {

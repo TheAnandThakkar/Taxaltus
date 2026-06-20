@@ -29,6 +29,76 @@ interface RowDef {
   nwText?: string;
 }
 
+function WorkRow({ label, value, kind = "add" }: { label: string; value: number; kind?: "add" | "less" | "sub" | "total" }) {
+  const isTotal = kind === "total";
+  const isSub = kind === "sub";
+  const isLess = kind === "less";
+  return (
+    <div className={`flex justify-between py-1.5 text-sm ${isTotal ? "font-bold border-t-2 border-teal-200 mt-1 pt-2" : isSub ? "font-semibold border-t border-gray-100" : ""}`}>
+      <span className={isTotal || isSub ? "text-navy" : isLess ? "text-gray-500" : "text-gray-600"}>{label}</span>
+      <span className={`tabular-nums ${isTotal ? "text-teal-700" : isLess ? "text-emerald-600" : "text-navy"}`}>
+        {isLess ? "(" : ""}{f(value)}{isLess ? ")" : ""}
+      </span>
+    </div>
+  );
+}
+
+// Per-regime "how the tax is calculated" working: slab-by-slab bands, then the
+// build-up through special-rate tax, rebate, surcharge and cess. Mirrors the
+// /estimator TaxBreakdown, extended for capital gains.
+function RegimeWorking({ r, label, better }: { r: RegimeResult; label: string; better: boolean }) {
+  const taxed = r.slabBreakdown.filter((s) => s.amountTaxed > 0);
+  return (
+    <div className={`rounded-lg border overflow-hidden break-inside-avoid ${better ? "border-teal-300" : "border-gray-200"}`}>
+      <div className={`px-4 py-2 text-sm font-bold border-b ${better ? "bg-teal-50 text-teal-800 border-teal-200" : "bg-gray-50 text-navy border-gray-200"}`}>
+        {label} — tax working{better && <span className="ml-2 text-xs font-semibold">✓ recommended</span>}
+      </div>
+      <div className="p-4">
+        {taxed.length === 0 ? (
+          <p className="text-sm text-gray-500 mb-2">Slab income is within the nil-rate band, so slab tax is ₹0.</p>
+        ) : (
+          <table className="w-full text-sm mb-2">
+            <thead>
+              <tr className="text-left text-gray-500 border-b border-gray-100">
+                <th className="py-1.5 pr-3 font-semibold">Income slab</th>
+                <th className="py-1.5 px-3 font-semibold text-right">Amount taxed</th>
+                <th className="py-1.5 px-3 font-semibold text-right">Rate</th>
+                <th className="py-1.5 pl-3 font-semibold text-right">Tax</th>
+              </tr>
+            </thead>
+            <tbody>
+              {taxed.map((s, i) => (
+                <tr key={i} className="border-b border-gray-50">
+                  <td className="py-1.5 pr-3 text-gray-700">{s.range}</td>
+                  <td className="py-1.5 px-3 text-right text-gray-700 tabular-nums">{f(s.amountTaxed)}</td>
+                  <td className="py-1.5 px-3 text-right text-gray-700">{(s.rate * 100).toFixed(0)}%</td>
+                  <td className="py-1.5 pl-3 text-right font-medium text-navy tabular-nums">{f(s.taxForSlab)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+        <WorkRow label="Tax on slab income" value={r.slabTax} />
+        {r.stcgTax > 0 && <WorkRow label="Add: Tax on STCG @ 20% (Sec 111A)" value={r.stcgTax} />}
+        {r.ltcgTax > 0 && <WorkRow label="Add: Tax on LTCG @ 12.5% (Sec 112A)" value={r.ltcgTax} />}
+        {r.rebate87A > 0 && <WorkRow label="Less: Rebate u/s 87A" value={r.rebate87A} kind="less" />}
+        {r.rebateMarginalRelief > 0 && <WorkRow label="Less: Marginal relief (87A)" value={r.rebateMarginalRelief} kind="less" />}
+        <WorkRow label="Tax after rebate" value={r.taxAfterRebate} kind="sub" />
+        {r.surcharge > 0 ? (
+          <WorkRow label={`Add: Surcharge @ ${(r.surchargeRate * 100).toFixed(0)}% (CG portion capped 15%${r.surchargeMarginalRelief > 0 ? ", after marginal relief" : ""})`} value={r.surcharge} />
+        ) : (
+          <div className="flex justify-between py-1.5 text-sm">
+            <span className="text-gray-500">Surcharge</span>
+            <span className="text-gray-400">Nil (income ≤ ₹50 lakh)</span>
+          </div>
+        )}
+        <WorkRow label="Add: Health & Education Cess @ 4%" value={r.cess} />
+        <WorkRow label="Total Tax Payable" value={r.totalTax} kind="total" />
+      </div>
+    </div>
+  );
+}
+
 export default function ComputationSheet({
   result,
   ayLabel,
@@ -208,6 +278,32 @@ export default function ComputationSheet({
           </p>
         )}
       </div>
+
+      {/* How the tax is calculated — slab-wise working for both regimes.
+          In print: New regime starts page 2, Old regime starts page 3.
+          In the UI: always visible (not collapsible), Old then New. */}
+      {print ? (
+        <>
+          <div className="px-5 pt-4 print:break-before-page">
+            <h4 className="font-bold text-navy text-base mb-3">How the tax is calculated — New Regime</h4>
+            <RegimeWorking r={n} label="New Regime" better={better === "new"} />
+          </div>
+          <div className="px-5 pt-4 pb-2 print:break-before-page">
+            <h4 className="font-bold text-navy text-base mb-3">How the tax is calculated — Old Regime</h4>
+            <RegimeWorking r={o} label="Old Regime" better={better === "old"} />
+          </div>
+        </>
+      ) : (
+        <div className="border-t">
+          <div className="px-5 pt-4 pb-1">
+            <span className="font-semibold text-navy text-sm">How the tax is calculated (slab-wise)</span>
+          </div>
+          <div className="space-y-4 px-5 pb-5 pt-2">
+            <RegimeWorking r={o} label="Old Regime" better={better === "old"} />
+            <RegimeWorking r={n} label="New Regime" better={better === "new"} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

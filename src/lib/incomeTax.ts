@@ -67,7 +67,13 @@ export interface DeductionLine {
 export interface RegimeResult {
   regime: TaxRegime;
   // Income build-up
+  salaryGross: number;
+  salaryExempt: number;
+  salaryStandardDeduction: number;
   salaryIncome: number;
+  hpAnnualValue: number; // net annual value (let-out) or 0
+  hpStandardDeduction: number; // 30% of NAV
+  hpInterest: number; // housing-loan interest considered (after caps)
   housePropertyIncome: number; // after set-off rules (can be negative under old)
   businessIncome: number;
   otherSourcesIncome: number;
@@ -122,12 +128,18 @@ function computeRegime(input: ComprehensiveInput, regime: TaxRegime): RegimeResu
 
   // ---- 2. House property ----
   let housePropertyIncome = 0;
+  let hpAnnualValue = 0;
+  let hpStandardDeduction = 0;
+  let hpInterest = 0;
   if (input.housePropertyType === "self") {
     // Self-occupied: only home-loan interest, capped ₹2L — old regime only.
-    housePropertyIncome = regime === "old" ? -Math.min(input.homeLoanInterest, 200000) : 0;
+    hpInterest = regime === "old" ? Math.min(input.homeLoanInterest, 200000) : 0;
+    housePropertyIncome = -hpInterest;
   } else if (input.housePropertyType === "letout") {
-    const nav = Math.max(0, input.rentReceived - input.municipalTaxes);
-    housePropertyIncome = nav - 0.3 * nav - input.homeLoanInterest;
+    hpAnnualValue = Math.max(0, input.rentReceived - input.municipalTaxes);
+    hpStandardDeduction = 0.3 * hpAnnualValue;
+    hpInterest = input.homeLoanInterest;
+    housePropertyIncome = hpAnnualValue - hpStandardDeduction - hpInterest;
   }
   // Set-off rules: old regime caps HP loss set-off at ₹2L; new regime does not
   // allow HP loss to be set off against other heads at all.
@@ -248,7 +260,13 @@ function computeRegime(input: ComprehensiveInput, regime: TaxRegime): RegimeResu
 
   return {
     regime,
+    salaryGross: input.grossSalary,
+    salaryExempt: exemptions,
+    salaryStandardDeduction: stdDed,
     salaryIncome,
+    hpAnnualValue,
+    hpStandardDeduction,
+    hpInterest,
     housePropertyIncome,
     businessIncome,
     otherSourcesIncome,

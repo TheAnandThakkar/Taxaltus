@@ -67,4 +67,11 @@ body {
     margin: 0 !important;
     padding: 0 !important;
   }
+
+  /* Force brand background colours (navy letterhead, teal totals) to render in
+     the saved PDF even when the browser's "background graphics" is off. */
+  .print-exact, .print-exact * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
 }

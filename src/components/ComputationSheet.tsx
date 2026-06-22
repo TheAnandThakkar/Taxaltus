@@ -79,10 +79,10 @@ function RegimeWorking({ r, label, better }: { r: RegimeResult; label: string; b
           </table>
         )}
         <WorkRow label="Tax on slab income" value={r.slabTax} />
-        {r.stcgTax > 0 && <WorkRow label="Add: Tax on STCG @ 20% (Sec 111A)" value={r.stcgTax} />}
-        {r.ltcgTax > 0 && <WorkRow label="Add: Tax on LTCG @ 12.5% (Sec 112A)" value={r.ltcgTax} />}
-        {r.rebate87A > 0 && <WorkRow label="Less: Rebate u/s 87A" value={r.rebate87A} kind="less" />}
-        {r.rebateMarginalRelief > 0 && <WorkRow label="Less: Marginal relief (87A)" value={r.rebateMarginalRelief} kind="less" />}
+        {r.stcgTax > 0 && <WorkRow label={`Add: Tax on STCG @ 20% (Sec ${r.sections.stcgEquity})`} value={r.stcgTax} />}
+        {r.ltcgTax > 0 && <WorkRow label={`Add: Tax on LTCG @ 12.5% (Sec ${r.sections.ltcgEquity})`} value={r.ltcgTax} />}
+        {r.rebate87A > 0 && <WorkRow label={`Less: Rebate u/s ${r.sections.rebate}`} value={r.rebate87A} kind="less" />}
+        {r.rebateMarginalRelief > 0 && <WorkRow label={`Less: Marginal relief (Sec ${r.sections.rebate})`} value={r.rebateMarginalRelief} kind="less" />}
         <WorkRow label="Tax after rebate" value={r.taxAfterRebate} kind="sub" />
         {r.surcharge > 0 ? (
           <WorkRow label={`Add: Surcharge @ ${(r.surchargeRate * 100).toFixed(0)}% (CG portion capped 15%${r.surchargeMarginalRelief > 0 ? ", after marginal relief" : ""})`} value={r.surcharge} />
@@ -104,17 +104,20 @@ export default function ComputationSheet({
   ayLabel,
   fyLabel,
   ageLabel,
+  actLabel,
   print = false,
 }: {
   result: ComprehensiveResult;
   ayLabel: string;
   fyLabel: string;
   ageLabel: string;
+  actLabel?: string;
   print?: boolean;
 }) {
   const o = result.old;
   const n = result.new;
   const better = result.betterRegime;
+  const S = n.sections; // both regimes share the year's section vocabulary
 
   const hasHP = o.housePropertyIncome !== 0 || n.housePropertyIncome !== 0;
   const hasBiz = o.businessIncome > 0 || n.businessIncome > 0;
@@ -148,7 +151,7 @@ export default function ComputationSheet({
 
     { label: "Gross Total Income (normal rate)", old: o.normalIncomeBeforeDeductions, nw: n.normalIncomeBeforeDeductions, kind: "total" },
 
-    { label: "Less: Chapter VI-A Deductions", kind: "section", show: hasDed },
+    { label: `Less: ${S.chapterVIA} Deductions`, kind: "section", show: hasDed },
     ...dedLabels.map((label): RowDef => ({
       label,
       old: dedOf(o, label),
@@ -161,8 +164,8 @@ export default function ComputationSheet({
     { label: "Total Income at Slab Rates", old: o.taxableNormalIncome, nw: n.taxableNormalIncome, kind: "total" },
 
     { label: "Add: Capital Gains (special rates)", kind: "section", show: hasCG },
-    { label: "STCG u/s 111A (taxable)", old: o.stcgTaxable, nw: n.stcgTaxable, kind: "line", show: hasStcg },
-    { label: "LTCG u/s 112A — net of ₹1.25L exemption", old: o.ltcgTaxable, nw: n.ltcgTaxable, kind: "line", show: hasLtcg },
+    { label: `STCG u/s ${S.stcgEquity} (taxable)`, old: o.stcgTaxable, nw: n.stcgTaxable, kind: "line", show: hasStcg },
+    { label: `LTCG u/s ${S.ltcgEquity} — net of ₹1.25L exemption`, old: o.ltcgTaxable, nw: n.ltcgTaxable, kind: "line", show: hasLtcg },
 
     { label: "Total Income", old: o.totalIncome, nw: n.totalIncome, kind: "total" },
   ];
@@ -171,8 +174,8 @@ export default function ComputationSheet({
     { label: "Tax on slab income", old: o.slabTax, nw: n.slabTax, kind: "line" },
     { label: "Tax on STCG @ 20%", old: o.stcgTax, nw: n.stcgTax, kind: "line", show: hasStcg },
     { label: "Tax on LTCG @ 12.5%", old: o.ltcgTax, nw: n.ltcgTax, kind: "line", show: hasLtcg },
-    { label: "Less: Rebate u/s 87A", old: o.rebate87A, nw: n.rebate87A, kind: "less", show: o.rebate87A > 0 || n.rebate87A > 0 },
-    { label: "Less: Marginal relief (87A)", old: o.rebateMarginalRelief, nw: n.rebateMarginalRelief, kind: "less", show: o.rebateMarginalRelief > 0 || n.rebateMarginalRelief > 0 },
+    { label: `Less: Rebate u/s ${S.rebate}`, old: o.rebate87A, nw: n.rebate87A, kind: "less", show: o.rebate87A > 0 || n.rebate87A > 0 },
+    { label: `Less: Marginal relief (${S.rebate})`, old: o.rebateMarginalRelief, nw: n.rebateMarginalRelief, kind: "less", show: o.rebateMarginalRelief > 0 || n.rebateMarginalRelief > 0 },
     { label: "Tax after rebate", old: o.taxAfterRebate, nw: n.taxAfterRebate, kind: "subtotal" },
     { label: "Add: Surcharge (CG portion capped 15%)", old: o.surcharge, nw: n.surcharge, kind: "line", show: o.surcharge > 0 || n.surcharge > 0 },
     { label: "Add: Health & Education Cess @ 4%", old: o.cess, nw: n.cess, kind: "line" },
@@ -240,7 +243,7 @@ export default function ComputationSheet({
           <span className={`text-xs ${print ? "text-gray-500" : "text-white/70"}`}>{ageLabel}</span>
         </div>
         <p className={`text-xs mt-0.5 ${print ? "text-gray-500" : "text-white/70"}`}>
-          {ayLabel} · {fyLabel} · Resident Individual · all figures in ₹
+          {ayLabel} · {actLabel ?? fyLabel} · Resident Individual · all figures in ₹
         </p>
       </div>
 

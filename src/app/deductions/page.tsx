@@ -6,6 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 import { sections } from "@/data/content";
 import { ArrowLeft } from "lucide-react";
 import PageHeader from "@/components/ui/PageHeader";
+import ActNote from "@/components/ui/ActNote";
 import SearchInput from "@/components/ui/SearchInput";
 
 export default function Deductions() {
@@ -32,6 +33,9 @@ export default function Deductions() {
             Back to Home
           </Link>
         </div>
+          <ActNote>
+            From FY 2026-27, Chapter VI-A deductions move to <strong>Chapter VIII</strong> of the Income-tax Act, 2025 — e.g. 80C → Section 123 (list now in Schedule XV), 80D → 126, 80CCD → 124, 80TTA/80TTB → 153. The limits and conditions are unchanged.
+          </ActNote>
           <div className="mb-8">
             <SearchInput
               value={search}

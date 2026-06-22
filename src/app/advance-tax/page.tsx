@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import PageHeader from "@/components/ui/PageHeader";
+import ActNote from "@/components/ui/ActNote";
 import Link from "next/link";
 import { ArrowLeft, CalendarDays, Info } from "lucide-react";
 import AssessmentYearSelect from "@/components/ui/AssessmentYearSelect";
@@ -102,6 +103,10 @@ export default function AdvanceTaxPage() {
                 <div className="mb-6">
                     <TrustBar />
                 </div>
+
+                <ActNote>
+                    From FY 2026-27, advance tax falls under <strong>Chapter XIX-C</strong> of the Income-tax Act, 2025, and the year is simply the <strong>Tax Year</strong> (no separate assessment year). The instalment due dates and Section 234B/234C interest are unchanged.
+                </ActNote>
 
                 <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-8 text-sm text-blue-800 flex gap-3">
                     <Info className="w-4 h-4 mt-0.5 shrink-0 text-blue-600" />

@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import PageHeader from "@/components/ui/PageHeader";
+import ActNote from "@/components/ui/ActNote";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import AssessmentYearSelect from "@/components/ui/AssessmentYearSelect";
@@ -137,6 +138,10 @@ export default function CapitalGainsPage() {
                 <div className="mb-6">
                     <TrustBar />
                 </div>
+
+                <ActNote>
+                    From FY 2026-27, equity STCG moves to <strong>Section 196</strong> (formerly 111A) and equity LTCG to <strong>Section 198</strong> (formerly 112A) of the Income-tax Act, 2025. The 20% / 12.5% rates and the ₹1.25 lakh LTCG exemption are unchanged.
+                </ActNote>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     {/* Inputs */}

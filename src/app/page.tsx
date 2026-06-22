@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { Clock, Bell, BellOff, Lightbulb } from "lucide-react";
+import { Clock, Bell, BellOff, Lightbulb, Landmark, ArrowRight } from "lucide-react";
 import { getJargonOfDay } from "@/data/jargon";
 import { ASSESSMENT_YEAR_LABELS, ASSESSMENT_YEARS_AND } from "@/lib/taxYears";
 
@@ -221,6 +221,31 @@ export default function Home() {
               <span className="text-gray-600 text-sm">{JOTD.short}</span>
             </div>
             <Link href="/glossary" className="text-xs text-teal font-semibold hover:underline shrink-0">See full glossary →</Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Income-tax Act 2025 highlight */}
+      <section className="py-8 sm:py-10 bg-navy">
+        <div className="container-main">
+          <div className="flex flex-col md:flex-row md:items-center gap-5">
+            <div className="shrink-0 w-14 h-14 rounded-2xl bg-teal/20 flex items-center justify-center">
+              <Landmark className="w-7 h-7 text-teal" />
+            </div>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+                <span className="badge bg-teal text-white">NEW LAW</span>
+                <span className="text-white/50 text-xs">In force 1 April 2026 · {ASSESSMENT_YEAR_LABELS[1]} onward</span>
+              </div>
+              <h2 className="text-xl sm:text-2xl font-bold text-white">The Income-tax Act, 2025 has replaced the 1961 Act</h2>
+              <p className="text-white/70 text-sm mt-1.5 max-w-2xl leading-relaxed">
+                Every section is renumbered (80C → 123, 87A → 156, 115BAC → 202) and a single “Tax Year” replaces the old
+                assessment-year system. The tax you actually pay is unchanged — see exactly what’s different and why.
+              </p>
+            </div>
+            <Link href="/income-tax-act-2025" className="shrink-0 inline-flex items-center justify-center gap-2 bg-teal text-white font-semibold px-6 py-3 rounded-xl hover:bg-teal/90 transition-colors">
+              Explore what’s new <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
         </div>
       </section>

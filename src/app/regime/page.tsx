@@ -1,6 +1,7 @@
 "use client";
 
 import PageHeader from "@/components/ui/PageHeader";
+import ActNote from "@/components/ui/ActNote";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { ASSESSMENT_YEARS } from "@/lib/taxYears";
@@ -55,6 +56,10 @@ export default function RegimeComparison() {
             Back to Home
           </Link>
         </div>
+
+        <ActNote>
+          From FY 2026-27, the new regime is the default under <strong>Section 202</strong> of the Income-tax Act, 2025 (formerly 115BAC). The slabs, the ₹75,000 standard deduction and your right to choose the old regime are unchanged.
+        </ActNote>
 
         <section>
           <h2 className="text-2xl font-bold text-navy mb-6">Tax Slab Comparison – AY 2026-27 and AY 2027-28</h2>

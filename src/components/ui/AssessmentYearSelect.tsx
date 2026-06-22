@@ -14,7 +14,7 @@ export default function AssessmentYearSelect({
   return (
     <div className={className}>
       <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-        Assessment Year
+        Tax Year
       </label>
       <select
         value={value}
@@ -23,7 +23,7 @@ export default function AssessmentYearSelect({
       >
         {ASSESSMENT_YEARS.map((year) => (
           <option key={year.key} value={year.key}>
-            {year.label} ({year.fyLabel})
+            {year.label} · {year.act}
           </option>
         ))}
       </select>

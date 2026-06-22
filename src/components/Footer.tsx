@@ -19,6 +19,7 @@ export default function Footer() {
             <div>
               <h4 className="text-white font-semibold text-sm mb-3">Explore</h4>
               <div className="space-y-2">
+                <Link href="/income-tax-act-2025" className="block text-sm text-teal-300 font-medium hover:text-white transition-colors">Income-tax Act 2025 ★</Link>
                 <Link href="/form16" className="block text-sm hover:text-white transition-colors">Form 16 Explorer</Link>
                 <Link href="/deductions" className="block text-sm hover:text-white transition-colors">Deductions</Link>
                 <Link href="/glossary" className="block text-sm hover:text-white transition-colors">Glossary</Link>

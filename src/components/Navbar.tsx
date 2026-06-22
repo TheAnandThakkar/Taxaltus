@@ -40,6 +40,7 @@ const SEARCH_INDEX = [
   { label: "Search Tax Questions", path: "/tax-questions", desc: "Plain-language answers about salary tax, notices, HRA and ITR" },
   { label: "AIS / Form 26AS Explained", path: "/ais-explainer", desc: "Annual Information Statement section-by-section" },
   { label: "First-Time ITR Filer Guide", path: "/first-time-filer", desc: "Step-by-step guide for first-time ITR filers" },
+  { label: "Income-tax Act 2025", path: "/income-tax-act-2025", desc: "What's new, section renumbering (80C→123, 87A→156), and the Tax Year concept" },
   { label: "Section 87A Rebate", path: "/section-87a", desc: "Zero-tax rebate limit and cliff effect explained" },
   { label: "ITR Common Mistakes", path: "/itr-mistakes", desc: "8 mistakes salaried employees make while filing ITR" },
   { label: "Tax Notice Decoder", path: "/tax-notice-decoder", desc: "What 143(1), 148, 139(9) notices mean" },

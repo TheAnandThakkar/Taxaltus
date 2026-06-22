@@ -7,10 +7,76 @@ export interface TaxSlab {
   rate: number;
 }
 
+// Section citations differ by tax year: the Income-tax Act, 1961 governs income
+// up to FY 2025-26, while the new Income-tax Act, 2025 (in force 1 April 2026)
+// renumbers every section from FY 2026-27 onward (e.g. 80C → 123, 87A → 156,
+// 115BAC → 202). Each value is a display-ready token; the new-Act values keep the
+// familiar 1961 number in parentheses for continuity during the transition.
+export interface SectionRefs {
+  newRegime: string;
+  rebate: string;
+  standardDeduction: string;
+  housePropertyDeduction: string;
+  homeLoanInterest: string;
+  stcgEquity: string;
+  ltcgEquity: string;
+  capitalGainsHead: string;
+  d80C: string;
+  d80CCD1B: string;
+  d80CCD2: string;
+  d80D: string;
+  d80TTA_TTB: string;
+  d80G: string;
+  chapterVIA: string;
+}
+
+// Income-tax Act, 1961 (governs FY 2025-26 and earlier).
+const SECTIONS_1961: SectionRefs = {
+  newRegime: "115BAC",
+  rebate: "87A",
+  standardDeduction: "16(ia)",
+  housePropertyDeduction: "24(a)",
+  homeLoanInterest: "24(b)",
+  stcgEquity: "111A",
+  ltcgEquity: "112A",
+  capitalGainsHead: "45",
+  d80C: "80C",
+  d80CCD1B: "80CCD(1B)",
+  d80CCD2: "80CCD(2)",
+  d80D: "80D",
+  d80TTA_TTB: "80TTA / 80TTB",
+  d80G: "80G",
+  chapterVIA: "Chapter VI-A",
+};
+
+// Income-tax Act, 2025 (governs FY 2026-27 onward). Numbers verified against the
+// Act PDF; familiar 1961 references kept in parentheses for continuity.
+const SECTIONS_2025: SectionRefs = {
+  newRegime: "202",
+  rebate: "156 (87A)",
+  standardDeduction: "19",
+  housePropertyDeduction: "22(1)(a)",
+  homeLoanInterest: "22(1)(b)",
+  stcgEquity: "196 (111A)",
+  ltcgEquity: "198 (112A)",
+  capitalGainsHead: "67",
+  d80C: "123 (80C)",
+  d80CCD1B: "124 (80CCD 1B)",
+  d80CCD2: "124(2) (80CCD 2)",
+  d80D: "126 (80D)",
+  d80TTA_TTB: "153 (80TTA/TTB)",
+  d80G: "133 (80G)",
+  chapterVIA: "Chapter VIII",
+};
+
 export interface TaxYearRules {
   key: AssessmentYear;
-  label: string;
+  label: string; // "Tax Year 2026-27" — the Act's term (= the financial year)
   fyLabel: string;
+  assessmentYearLabel: string; // legacy "AY 2027-28", for the 1961-Act year
+  act: string;
+  usesNewAct: boolean;
+  sections: SectionRefs;
   returnDueDate: string;
   lawReference: string;
   newRegimeSlabs: TaxSlab[];
@@ -24,8 +90,12 @@ export interface TaxYearRules {
 export const ASSESSMENT_YEARS: TaxYearRules[] = [
   {
     key: "AY_2026_27",
-    label: "AY 2026-27",
+    label: "Tax Year 2025-26",
     fyLabel: "FY 2025-26",
+    assessmentYearLabel: "AY 2026-27",
+    act: "Income-tax Act, 1961",
+    usesNewAct: false,
+    sections: SECTIONS_1961,
     returnDueDate: "31 July 2026",
     lawReference: "Income-tax Act, 1961, as amended by Finance Act, 2025",
     newRegimeSlabs: [
@@ -63,6 +133,7 @@ export const ASSESSMENT_YEARS: TaxYearRules[] = [
     },
     cessRate: 0.04,
     notes: [
+      "Governed by the Income-tax Act, 1961 (the new Income-tax Act, 2025 applies only from FY 2026-27).",
       "New regime is the default regime.",
       "New-regime Section 87A rebate is available only to resident individuals and not against income taxed at special rates.",
       "New-regime marginal relief is applied for resident individuals with normal slab income marginally above Rs 12,00,000.",
@@ -70,10 +141,14 @@ export const ASSESSMENT_YEARS: TaxYearRules[] = [
   },
   {
     key: "AY_2027_28",
-    label: "AY 2027-28",
+    label: "Tax Year 2026-27",
     fyLabel: "FY 2026-27",
+    assessmentYearLabel: "AY 2027-28",
+    act: "Income-tax Act, 2025",
+    usesNewAct: true,
+    sections: SECTIONS_2025,
     returnDueDate: "31 July 2027",
-    lawReference: "Income-tax Act, 2025 (effective FY 2026-27); rates per the applicable Finance Act — verify with the latest official notification",
+    lawReference: "Income-tax Act, 2025 [30 of 2025], in force 1 April 2026; rates per the applicable Finance Act — verify with the latest official notification",
     newRegimeSlabs: [
       { upTo: 400000, rate: 0 },
       { upTo: 800000, rate: 0.05 },
@@ -109,14 +184,17 @@ export const ASSESSMENT_YEARS: TaxYearRules[] = [
     },
     cessRate: 0.04,
     notes: [
-      "New-regime slab rates are shown as continuing from AY 2026-27 for tax year FY 2026-27; confirm against the latest Finance Act before filing.",
-      "New-regime Section 87A rebate is available only to resident individuals and not against income taxed at special rates.",
+      "Governed by the new Income-tax Act, 2025 (in force 1 April 2026) — sections are renumbered (e.g. 80C → 123, 87A → 156, 115BAC → 202). Tax figures are unchanged from the Finance Act 2025 values.",
+      "New regime is the default regime.",
+      "New-regime Section 156 (formerly 87A) rebate is available only to resident individuals and not against income taxed at special rates.",
       "New-regime marginal relief is applied for resident individuals with normal slab income marginally above Rs 12,00,000.",
     ],
   },
 ];
 
-export const DEFAULT_ASSESSMENT_YEAR: AssessmentYear = "AY_2026_27";
+// FY 2026-27 (Tax Year 2026-27) is the current running year and the first year
+// under the Income-tax Act, 2025, so it is the default.
+export const DEFAULT_ASSESSMENT_YEAR: AssessmentYear = "AY_2027_28";
 
 // Derived labels for the supported assessment years, so prose/SEO/social text
 // never goes stale when the supported set changes — it reads from this engine.

@@ -1,6 +1,14 @@
 // Central jargon data store — used by TaxTerm tooltip and Jargon of the Day widget
 
 export const JARGON: Record<string, { short: string; detail?: string }> = {
+    "Tax Year": {
+        short: "The single year concept in the Income-tax Act, 2025 — the financial year (1 April–31 March) in which you earn income. It replaces the old 'previous year' and 'assessment year'.",
+        detail: "Defined in Section 3 of the new Act. Income earned in FY 2026-27 is simply 'Tax Year 2026-27' — there is no separate assessment year to track. A newly set-up business has a shorter first tax year from the date it starts."
+    },
+    "Income-tax Act, 2025": {
+        short: "India's new income tax law, in force from 1 April 2026, replacing the 63-year-old Income-tax Act, 1961. It renumbers every section and introduces the 'Tax Year'.",
+        detail: "Applies from FY 2026-27 onward. Tax rates, rebate, standard deduction, surcharge and cess are unchanged; sections are renumbered (80C→123, 80D→126, 87A→156, 115BAC→202) and Chapter VI-A deductions move to Chapter VIII."
+    },
     "TDS": {
         short: "Tax Deducted at Source. Your employer subtracts tax directly from your salary before paying you.",
         detail: "TDS is advance tax collected by the payer (your employer) on behalf of the government. The amount deducted is credited to your PAN and can be claimed when you file your ITR."

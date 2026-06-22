@@ -20,6 +20,7 @@ import {
   AgeGroup,
   TaxSlab,
   SlabBreakdownRow,
+  SectionRefs,
   getTaxYearRules,
   calculateSlabTax,
   getSlabBreakdown,
@@ -105,6 +106,7 @@ export interface RegimeResult {
   cessRate: number;
   totalTax: number;
   effectiveRate: number; // totalTax / grossTotalIncome
+  sections: SectionRefs; // year-aware section citations (1961 vs 2025 Act)
 }
 
 const round10 = (n: number) => Math.round(n / 10) * 10;
@@ -117,6 +119,7 @@ function basicExemptionOf(slabs: TaxSlab[]): number {
 
 function computeRegime(input: ComprehensiveInput, regime: TaxRegime): RegimeResult {
   const rules = getTaxYearRules(input.assessmentYear);
+  const S = rules.sections;
   const resident = input.residentIndividual ?? true;
   const slabs = regime === "new" ? rules.newRegimeSlabs : rules.oldRegimeSlabs[input.ageGroup];
   const cessRate = rules.cessRate;
@@ -165,23 +168,23 @@ function computeRegime(input: ComprehensiveInput, regime: TaxRegime): RegimeResu
   if (regime === "new") {
     // Only employer NPS 80CCD(2) (up to 14% of salary) survives in the new regime.
     const cap = 0.14 * input.grossSalary;
-    deductionsSum += add("80CCD(2) Employer NPS", input.ded80CCD2, Math.min(input.ded80CCD2, cap));
+    deductionsSum += add(`${S.d80CCD2} Employer NPS`, input.ded80CCD2, Math.min(input.ded80CCD2, cap));
   } else {
-    deductionsSum += add("80C", input.ded80C, Math.min(input.ded80C, 150000));
-    deductionsSum += add("80CCD(1B) NPS", input.ded80CCD1B, Math.min(input.ded80CCD1B, 50000));
+    deductionsSum += add(S.d80C, input.ded80C, Math.min(input.ded80C, 150000));
+    deductionsSum += add(`${S.d80CCD1B} NPS`, input.ded80CCD1B, Math.min(input.ded80CCD1B, 50000));
     deductionsSum += add(
-      "80CCD(2) Employer NPS",
+      `${S.d80CCD2} Employer NPS`,
       input.ded80CCD2,
       Math.min(input.ded80CCD2, 0.1 * input.grossSalary)
     );
-    deductionsSum += add("80D Mediclaim", input.ded80D, Math.min(input.ded80D, 100000));
+    deductionsSum += add(`${S.d80D} Mediclaim`, input.ded80D, Math.min(input.ded80D, 100000));
     const ttaCap = input.ageGroup === "below60" ? 10000 : 50000;
     deductionsSum += add(
-      "80TTA / 80TTB",
+      S.d80TTA_TTB,
       input.ded80TTA_TTB,
       Math.min(input.ded80TTA_TTB, ttaCap)
     );
-    deductionsSum += add("80G Donations", input.ded80G, Math.max(0, input.ded80G));
+    deductionsSum += add(`${S.d80G} Donations`, input.ded80G, Math.max(0, input.ded80G));
     deductionsSum += add("Other deductions", input.dedOther, Math.max(0, input.dedOther));
   }
 
@@ -296,6 +299,7 @@ function computeRegime(input: ComprehensiveInput, regime: TaxRegime): RegimeResu
     cessRate,
     totalTax,
     effectiveRate,
+    sections: S,
   };
 }
 

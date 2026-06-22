@@ -118,7 +118,7 @@ export default function IncomeTaxCalculator() {
     const line = (r: RegimeResult) => `  Total income ${fmt(r.totalIncome)} · Total tax ${fmt(r.totalTax)}`;
     return [
       "Taxaltus — Income Tax Computation (educational estimate)",
-      `${rules.label} (${rules.fyLabel}) · ${AGE_GROUP_LABELS[ageGroup]}`,
+      `${rules.label} · ${rules.act} · ${AGE_GROUP_LABELS[ageGroup]}`,
       "", "OLD REGIME", line(result.old), "NEW REGIME", line(result.new), "",
       `Recommended: ${result.betterRegime === "equal" ? "Both equal" : result.betterRegime.toUpperCase() + " regime"}${result.saving ? ` (saves ${fmt(result.saving)})` : ""}`,
       "", "https://taxaltus.com/income-tax-calculator",
@@ -133,7 +133,7 @@ export default function IncomeTaxCalculator() {
       <div className="print:hidden">
         <PageHeader
           title="Full Income Tax Calculator"
-          subtitle={`Enter your details on the left — a live computation builds on the right for ${rules.fyLabel} (${rules.label})`}
+          subtitle={`Enter your details on the left — a live computation builds on the right for ${rules.label} under the ${rules.act}`}
           breadcrumbs={[{ label: "Full Income Tax Calculator" }]}
         />
 
@@ -189,18 +189,18 @@ export default function IncomeTaxCalculator() {
               </Section>
 
               <Section title="Capital Gains (Equity)" summary={sum.cg} open={open.cg} onToggle={() => toggle("cg")}>
-                <MoneyInput label="Short-Term — Sec 111A" value={f.stcg111A} onChange={set("stcg111A")} hint="Taxed at 20%" />
-                <MoneyInput label="Long-Term — Sec 112A" value={f.ltcg112A} onChange={set("ltcg112A")} hint="12.5% after ₹1.25L exemption" />
+                <MoneyInput label={`Short-Term — Sec ${rules.sections.stcgEquity}`} value={f.stcg111A} onChange={set("stcg111A")} hint="Taxed at 20%" />
+                <MoneyInput label={`Long-Term — Sec ${rules.sections.ltcgEquity}`} value={f.ltcg112A} onChange={set("ltcg112A")} hint="12.5% after ₹1.25L exemption" />
               </Section>
 
               <Section title="Deductions" summary={sum.ded} open={open.ded} onToggle={() => toggle("ded")}>
-                <p className="text-xs text-gray-400 -mt-1">Old regime only, except 80CCD(2) which applies to both.</p>
-                <MoneyInput label="80C" value={f.ded80C} onChange={set("ded80C")} cap={150000} />
-                <MoneyInput label="80CCD(1B) NPS" value={f.ded80CCD1B} onChange={set("ded80CCD1B")} cap={50000} />
-                <MoneyInput label="80CCD(2) Employer NPS" value={f.ded80CCD2} onChange={set("ded80CCD2")} hint="≤10% old / 14% new of salary" />
-                <MoneyInput label="80D Mediclaim" value={f.ded80D} onChange={set("ded80D")} cap={100000} />
-                <MoneyInput label="80TTA / 80TTB" value={f.ded80TTA_TTB} onChange={set("ded80TTA_TTB")} cap={ageGroup === "below60" ? 10000 : 50000} />
-                <MoneyInput label="80G Donations" value={f.ded80G} onChange={set("ded80G")} />
+                <p className="text-xs text-gray-400 -mt-1">Old regime only, except {rules.sections.d80CCD2} which applies to both.</p>
+                <MoneyInput label={rules.sections.d80C} value={f.ded80C} onChange={set("ded80C")} cap={150000} />
+                <MoneyInput label={`${rules.sections.d80CCD1B} NPS`} value={f.ded80CCD1B} onChange={set("ded80CCD1B")} cap={50000} />
+                <MoneyInput label={`${rules.sections.d80CCD2} Employer NPS`} value={f.ded80CCD2} onChange={set("ded80CCD2")} hint="≤10% old / 14% new of salary" />
+                <MoneyInput label={`${rules.sections.d80D} Mediclaim`} value={f.ded80D} onChange={set("ded80D")} cap={100000} />
+                <MoneyInput label={rules.sections.d80TTA_TTB} value={f.ded80TTA_TTB} onChange={set("ded80TTA_TTB")} cap={ageGroup === "below60" ? 10000 : 50000} />
+                <MoneyInput label={`${rules.sections.d80G} Donations`} value={f.ded80G} onChange={set("ded80G")} />
                 <MoneyInput label="Other deductions" value={f.dedOther} onChange={set("dedOther")} />
               </Section>
 
@@ -226,9 +226,15 @@ export default function IncomeTaxCalculator() {
                     </button>
                     <span className="text-xs text-gray-400 self-center">PDF opens your print dialog — choose “Save as PDF”.</span>
                   </div>
-                  <ComputationSheet result={result} ayLabel={rules.label} fyLabel={rules.fyLabel} ageLabel={AGE_GROUP_LABELS[ageGroup]} />
+                  <ComputationSheet result={result} ayLabel={rules.label} fyLabel={rules.fyLabel} actLabel={rules.act} ageLabel={AGE_GROUP_LABELS[ageGroup]} />
+                  {rules.usesNewAct && (
+                    <div className="bg-teal-50 border border-teal-200 rounded-lg p-4 text-xs text-teal-900">
+                      <strong>New law:</strong> {rules.fyLabel} is the first year under the <strong>{rules.act}</strong>, which renumbers every section (e.g. 80C → 123, 87A → 156, 115BAC → 202). The tax figures are unchanged from the Finance Act 2025 values; only the citations differ.{" "}
+                      <Link href="/income-tax-act-2025" className="font-semibold underline">What’s new →</Link>
+                    </div>
+                  )}
                   <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 text-xs text-amber-800">
-                    <strong>Scope:</strong> educational estimate for resident individuals — covers salary, house property, business, other sources and equity capital gains with all deductions, 87A, surcharge (15% CG cap) with marginal relief and cess. It does not model non-residents, AMT, dividend surcharge cap, clubbing of others’ income, or inter-year loss carry-forward. Verify with Form 16, AIS/26AS and a qualified professional.
+                    <strong>Scope:</strong> educational estimate for resident individuals — covers salary, house property, business, other sources and equity capital gains with all deductions, {rules.sections.rebate}, surcharge (15% CG cap) with marginal relief and cess. It does not model non-residents, AMT, dividend surcharge cap, clubbing of others’ income, or inter-year loss carry-forward. Verify with Form 16, AIS/26AS and a qualified professional.
                   </div>
                   <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 text-sm text-gray-600">
                     Go deeper: <Link href="/regime" className="text-teal-700 font-medium hover:underline">regime comparison</Link>,{" "}
@@ -240,7 +246,7 @@ export default function IncomeTaxCalculator() {
             </div>
           </div>
 
-          <div className="mt-8"><OfficialSources note="Surcharge on equity capital-gains tax (111A/112A) is capped at 15%. Section 87A rebate applies to slab income only. Verify against the latest official rules." /></div>
+          <div className="mt-8"><OfficialSources note={`Surcharge on equity capital-gains tax (Sec ${rules.sections.stcgEquity}/${rules.sections.ltcgEquity}) is capped at 15%. Section ${rules.sections.rebate} rebate applies to slab income only. Verify against the latest official rules.`} /></div>
         </div>
       </div>
 
@@ -255,13 +261,13 @@ export default function IncomeTaxCalculator() {
             </div>
           </div>
           <div className="px-8 py-6">
-            <ComputationSheet result={result} ayLabel={rules.label} fyLabel={rules.fyLabel} ageLabel={AGE_GROUP_LABELS[ageGroup]} print />
+            <ComputationSheet result={result} ayLabel={rules.label} fyLabel={rules.fyLabel} actLabel={rules.act} ageLabel={AGE_GROUP_LABELS[ageGroup]} print />
           </div>
 
           {/* Repeating disclaimer — fixed to the bottom of every printed page. */}
           <div className="print-footer">
             <strong>Disclaimer:</strong> Generated by Taxaltus, a non-profit tax-education initiative, for educational purposes
-            only — not tax advice. Estimate for a resident individual under {rules.label} ({rules.fyLabel}); does not model
+            only — not tax advice. Estimate for a resident individual under {rules.label} ({rules.act}); does not model
             non-residents, AMT, the 15% surcharge cap on dividends, clubbing of others’ income, or inter-year loss carry-forward.
             Verify against your Form 16, AIS/Form 26AS and the latest rules at incometax.gov.in, and consult a qualified
             Chartered Accountant before filing. © {new Date().getFullYear()} Taxaltus · taxaltus.com

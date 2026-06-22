@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ArrowLeft, Info, AlertTriangle } from "lucide-react";
 import PageHeader from "@/components/ui/PageHeader";
+import ActNote from "@/components/ui/ActNote";
 import { useState, useMemo } from "react";
 import AssessmentYearSelect from "@/components/ui/AssessmentYearSelect";
 import OfficialSources from "@/components/ui/OfficialSources";
@@ -70,6 +71,10 @@ export default function Section87APage() {
                         <ArrowLeft className="w-4 h-4" />Back to Home
                     </Link>
                 </div>
+
+                <ActNote>
+                    From FY 2026-27 (Tax Year 2026-27), the Section 87A rebate is renumbered to <strong>Section 156</strong>. The ₹12 lakh / ₹60,000 rebate and the cliff effect are unchanged — only the citation moves.
+                </ActNote>
 
                 <div className="mb-6">
                     <TrustBar />

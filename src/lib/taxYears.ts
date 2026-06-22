@@ -16,8 +16,12 @@ export interface SectionRefs {
   newRegime: string;
   rebate: string;
   standardDeduction: string;
+  salaryHead: string;
+  housePropertyHead: string;
   housePropertyDeduction: string;
   homeLoanInterest: string;
+  businessHead: string;
+  otherSourcesHead: string;
   stcgEquity: string;
   ltcgEquity: string;
   capitalGainsHead: string;
@@ -35,8 +39,12 @@ const SECTIONS_1961: SectionRefs = {
   newRegime: "115BAC",
   rebate: "87A",
   standardDeduction: "16(ia)",
+  salaryHead: "15",
+  housePropertyHead: "22",
   housePropertyDeduction: "24(a)",
   homeLoanInterest: "24(b)",
+  businessHead: "28",
+  otherSourcesHead: "56",
   stcgEquity: "111A",
   ltcgEquity: "112A",
   capitalGainsHead: "45",
@@ -55,8 +63,12 @@ const SECTIONS_2025: SectionRefs = {
   newRegime: "202",
   rebate: "156 (87A)",
   standardDeduction: "19",
+  salaryHead: "15",
+  housePropertyHead: "20",
   housePropertyDeduction: "22(1)(a)",
   homeLoanInterest: "22(1)(b)",
+  businessHead: "26",
+  otherSourcesHead: "92",
   stcgEquity: "196 (111A)",
   ltcgEquity: "198 (112A)",
   capitalGainsHead: "67",

@@ -134,20 +134,20 @@ export default function ComputationSheet({
   const hasDed = o.totalDeductions > 0 || n.totalDeductions > 0;
 
   const rows: RowDef[] = [
-    { label: "1.  Income from Salary", kind: "section", show: o.salaryGross > 0 },
+    { label: `1.  Income from Salary (Sec ${S.salaryHead})`, kind: "section", show: o.salaryGross > 0 },
     { label: "Gross salary", old: o.salaryGross, nw: n.salaryGross, kind: "line", show: o.salaryGross > 0 },
     { label: "Less: Exempt allowances (HRA/LTA)", old: o.salaryExempt, nw: n.salaryExempt, kind: "less", show: o.salaryGross > 0 && (o.salaryExempt > 0 || n.salaryExempt > 0) },
-    { label: "Less: Standard deduction", old: o.salaryStandardDeduction, nw: n.salaryStandardDeduction, kind: "less", show: o.salaryGross > 0 },
+    { label: `Less: Standard deduction (Sec ${S.standardDeduction})`, old: o.salaryStandardDeduction, nw: n.salaryStandardDeduction, kind: "less", show: o.salaryGross > 0 },
     { label: "Income from Salary", old: o.salaryIncome, nw: n.salaryIncome, kind: "subtotal", show: o.salaryGross > 0 },
 
-    { label: "2.  Income from House Property", kind: "section", show: hasHP },
+    { label: `2.  Income from House Property (Sec ${S.housePropertyHead})`, kind: "section", show: hasHP },
     { label: "Net annual value", old: o.hpAnnualValue, nw: n.hpAnnualValue, kind: "line", show: hasHP && (o.hpAnnualValue > 0 || n.hpAnnualValue > 0) },
-    { label: "Less: Standard deduction @ 30%", old: o.hpStandardDeduction, nw: n.hpStandardDeduction, kind: "less", show: hasHP && (o.hpStandardDeduction > 0 || n.hpStandardDeduction > 0) },
-    { label: "Less: Interest on housing loan", old: o.hpInterest, nw: n.hpInterest, kind: "less", show: hasHP },
+    { label: `Less: Standard deduction @ 30% (Sec ${S.housePropertyDeduction})`, old: o.hpStandardDeduction, nw: n.hpStandardDeduction, kind: "less", show: hasHP && (o.hpStandardDeduction > 0 || n.hpStandardDeduction > 0) },
+    { label: `Less: Interest on housing loan (Sec ${S.homeLoanInterest})`, old: o.hpInterest, nw: n.hpInterest, kind: "less", show: hasHP },
     { label: "Income from House Property", old: o.housePropertyIncome, nw: n.housePropertyIncome, kind: "subtotal", show: hasHP },
 
-    { label: "3.  Profits & Gains of Business / Profession", old: o.businessIncome, nw: n.businessIncome, kind: "subtotal", show: hasBiz },
-    { label: "4.  Income from Other Sources", old: o.otherSourcesIncome, nw: n.otherSourcesIncome, kind: "subtotal", show: hasOther },
+    { label: `3.  Profits & Gains of Business / Profession (Sec ${S.businessHead})`, old: o.businessIncome, nw: n.businessIncome, kind: "subtotal", show: hasBiz },
+    { label: `4.  Income from Other Sources (Sec ${S.otherSourcesHead})`, old: o.otherSourcesIncome, nw: n.otherSourcesIncome, kind: "subtotal", show: hasOther },
 
     { label: "Gross Total Income (normal rate)", old: o.normalIncomeBeforeDeductions, nw: n.normalIncomeBeforeDeductions, kind: "total" },
 
@@ -163,7 +163,7 @@ export default function ComputationSheet({
 
     { label: "Total Income at Slab Rates", old: o.taxableNormalIncome, nw: n.taxableNormalIncome, kind: "total" },
 
-    { label: "Add: Capital Gains (special rates)", kind: "section", show: hasCG },
+    { label: `Add: Capital Gains (special rates · Sec ${S.capitalGainsHead})`, kind: "section", show: hasCG },
     { label: `STCG u/s ${S.stcgEquity} (taxable)`, old: o.stcgTaxable, nw: n.stcgTaxable, kind: "line", show: hasStcg },
     { label: `LTCG u/s ${S.ltcgEquity} — net of ₹1.25L exemption`, old: o.ltcgTaxable, nw: n.ltcgTaxable, kind: "line", show: hasLtcg },
 
